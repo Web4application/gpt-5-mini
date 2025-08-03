@@ -1,3 +1,2 @@
-from . import xresnet
-from . import unet
-from .tvm import *
+__version__ = "2.7.17"
+
