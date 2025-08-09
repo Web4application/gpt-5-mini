@@ -49,13 +49,13 @@ echo "📦 Installing openai + axios in gpt-pilot..."
 cd "$GP"
 npm install openai axios --no-audit --no-fund
 
-echo "🛠 Creating src/gpt5.js..."
+echo "🛠 Creating src/chatgpt-5.js..."
 mkdir -p src
 
 cat > src/gpt5.js <<'JS'
 /**
  * GPT-5 integration route
- * POST /api/gpt5
+ * POST /api/chatgpt-5
  * Body: { prompt: string, max_tokens?: number, temperature?: number, verbosity?: string }
  */
 import express from "express";
@@ -66,13 +66,13 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-router.post("/api/gpt5", async (req, res) => {
+router.post("/api/chatgpt-5", async (req, res) => {
   try {
     const { prompt, max_tokens = 800, temperature = 0.2, verbosity } = req.body;
     if (!prompt) return res.status(400).json({ error: "Missing prompt" });
 
     const response = await client.responses.create({
-      model: "gpt-5",
+      model: "chatgpt-5",
       input: prompt,
       max_output_tokens: Number(max_tokens),
       temperature: Number(temperature),
@@ -194,3 +194,21 @@ echo "  import gpt5Router from './src/gpt5.js';"
 echo "  app.use(gpt5Router);"
 
 exit 0
+c
+# add your API key to .env
+cp .env.example .env
+# edit .env -> set OPENAI_API_KEY
+docker compose up --build -d
+
+cd gpt-pilot
+export OPENAI_API_KEY="sk-xxxx"    # or source .env
+npm start
+# then:
+curl -s -X POST http://localhost:4000/api/chatgpt-5 \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Say hi in an epic poetic line","max_tokens":50}'
+
+  
+
+chmod +x patch_gpt5.sh
+./chatgpt-5.sh
