@@ -1,3 +1,4 @@
+```bash
 /prompts.json,142085
 /robots.txt,73
 /serviceWorker.js,386
