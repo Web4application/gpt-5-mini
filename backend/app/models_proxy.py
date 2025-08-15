@@ -1,21 +1,31 @@
-# backend/app/models_proxy.py
-from fastapi import APIRouter, Depends, HTTPException
-import requests, os
+from fastapi import APIRouter, Depends, Header, HTTPException
+import os, requests
+from .auth import verify_token
+from .watermark import make_signature, nudge_token_probs  # implement watermark helpers
 
 router = APIRouter()
 
+def get_current_user(authorization: str = Header(None)):
+    if not authorization: raise HTTPException(401, "Missing auth")
+    token = authorization.split(" ")[1]
+    payload = verify_token(token)
+    if not payload: raise HTTPException(401, "Invalid token")
+    return payload
+
 @router.post("/generate")
-def generate(prompt: dict, user=Depends(get_current_user)):
-    # server-side: authenticate, rate-limit, watermark, log
-    payload = {"prompt": prompt["text"], "max_tokens": 512}
-    # Example: call your SageMaker endpoint (or OpenAI)
-    resp = requests.post(
-        os.environ["SAGEMAKER_ENDPOINT_URL"],
-        json=payload,
-        headers={"Authorization": f"Bearer {os.environ['INTERNAL_MODEL_KEY']}"}
+def generate(payload: dict, user=Depends(get_current_user)):
+    prompt = payload.get("prompt")
+    # create signature and store log
+    sig, sigdata = make_signature(prompt, user.get("sub"))
+    # prepare model call with logit bias (if supported)
+    logit_bias = {}  # compute with nudge_token_probs
+    model_resp = requests.post(
+        os.environ["MODEL_PROXY_URL"],
+        json={"prompt": prompt, "logit_bias": logit_bias},
+        headers={"Authorization": f"Bearer {os.environ['MODEL_PROXY_KEY']}"}
     )
-    if resp.status_code != 200:
-        raise HTTPException(status_code=502, detail="Model error")
-    generated = resp.json()
-    # store log: prompt hash, timestamp, user_id, model_version
-    return {"output": generated}
+    if model_resp.status_code != 200:
+        raise HTTPException(502, "Model error")
+    result = model_resp.json()
+    # store log to S3 (boto3) — omitted here; add in production
+    return {"output": result, "watermark_sig": sig}
