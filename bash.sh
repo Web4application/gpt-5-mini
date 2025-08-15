@@ -1,4 +1,15 @@
-'''
+# Install BFG if not installed
+brew install bfg
+
+# Remove all instances of the old key from history
+bfg --replace-text <(printf '%s\n' 'ZK1XXchhqBKOltJ87RMqghmUVI_M4qL-bZxuXA05f1A==[REDACTED]')
+
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push origin --force --all
+
+
+
 # install bfg
 bfg --delete-files id_rsa
 git reflog expire --expire=now --all
