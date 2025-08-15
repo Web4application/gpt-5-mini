@@ -53,3 +53,15 @@ my-project/
 
 # Move gpt-pilot and AI-webapp and web4app4 into QUBUHUB or link them
 mv gpt-pilot AI-webapp/gpt-pilot
+
+chmod +x setup.sh
+./setup.sh
+
+chmod +x setup.sh
+./setup.sh
+docker compose up --buildchmod +x setup.sh
+./setup.sh
+
+chmod +x setup.sh
+./setup.sh
+docker compose up --build
