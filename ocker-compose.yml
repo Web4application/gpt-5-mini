@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  web:
+    build: ./web
+    ports: ["3000:3000"]
+  backend:
+    build: ./backend
+    ports: ["8000:8000"]
+    environment:
+      - MODEL_PROXY_URL=http://model-proxy.local/generate
+      - MODEL_PROXY_KEY=replace_me
