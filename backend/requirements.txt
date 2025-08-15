@@ -3,3 +3,10 @@ elevenlabs
 flask
 flask-cors
 whisper
+fastapi
+uvicorn[standard]
+python-jose[cryptography]
+requests
+boto3
+gunicorn
+passlib[bcrypt]
