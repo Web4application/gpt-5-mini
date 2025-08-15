@@ -1,3 +1,10 @@
+# install bfg
+bfg --delete-files id_rsa
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+# push to origin (force)
+git push origin --force --all
+
 git add .
 git commit -m "Added files from phone"
 git push origin main
