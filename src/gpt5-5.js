@@ -4,11 +4,12 @@ import OpenAI from "openai";
 
 const router = express.Router();
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10
+
 });
 
 // POST /api/gpt5
-router.post("/api/gpt5", async (req, res) => {
+router.post("/api/gpt-5-mini", async (req, res) => {
   try {
     const { prompt, max_tokens = 800, temperature = 0.2, verbosity } = req.body;
 
