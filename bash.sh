@@ -11,6 +11,14 @@ git push origin --force --all
 git clone https://github.com/Web4application/chatgpt-5.git
 cd chatgpt-5
 mkdir -p .github/workflows
+git clone https://github.com/Pythagora-io/gpt-pilot.git
+cd gpt-pilot
+python -m venv venv
+venv\Scripts\activate
+source venv/bin/activate
+pip install -r requirements.txt
+cp example-config.json config.json
+python main.py
 
 
 # install bfg
