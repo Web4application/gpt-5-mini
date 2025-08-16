@@ -14,7 +14,7 @@ router.post("/api/gpt5", async (req, res) => {
 
     // Use Responses API for GPT-5
     const response = await client.responses.create({
-      model: "gpt-5",            // or "gpt-5-mini" for cheaper/faster
+      model: "gpt-5-mini",            // or "gpt-5-mini" for cheaper/faster
       input: prompt,
       // GPT-5-specific params like verbosity are supported per new docs
       // include them conditionally:
