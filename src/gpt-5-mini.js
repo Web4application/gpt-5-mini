@@ -1,4 +1,4 @@
-// src/gpt5.js
+// src/chatgpt5.js
 import express from "express";
 import OpenAI from "openai";
 
@@ -7,7 +7,7 @@ const client = new OpenAI({
   apiKey: process.env.sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10
 });
 
-// POST /api/gpt5
+// POST /api/chatgpt5
 router.post("/api/gpt-5-mini", async (req, res) => {
   try {
     const { prompt, max_tokens = 800, temperature = 0.2, verbosity } = req.body;
