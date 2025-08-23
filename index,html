@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatGPT5 mini</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; margin:0; padding:0; }
+    .hero { text-align:center; padding:60px 20px; background:linear-gradient(to right,#6a11cb,#2575fc); color:white; }
+    .cta-button { background:white; color:#2575fc; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:bold; }
+    #chat-preview { padding:40px 20px; text-align:center; }
+    .chat-box { background:#f4f4f4; padding:20px; border-radius:10px; max-width:400px; margin:auto; }
+    .user-msg { font-weight:bold; }
+    .ai-msg { margin-top:10px; color:#2575fc; }
+    footer { text-align:center; padding:20px; background:#eee; }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <h1>Welcome to ChatGPT5 mini</h1>
+    <p>Your AI companion for writing, learning, and productivity.</p>
+    <a href="#chat-preview" class="cta-button">Try It Now</a>
+  </section>
+
+  <section id="chat-preview">
+    <h2>Try ChatGPT5 mini</h2>
+    <div class="chat-box" id="chat-box">
+      <div class="user-msg">You: <span id="user-input"></span></div>
+      <div class="ai-msg">AI: <span id="ai-response">Ask me something 👇</span></div>
+    </div>
+    <br />
+    <input type="text" id="message" placeholder="Type a question..." />
+    <button onclick="sendMessage()">Send</button>
+  </section>
+
+  <footer>
+    <p>We respect your privacy. No data is stored without your consent.</p>
+  </footer>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById("message").value;
+      document.getElementById("user-input").textContent = message;
+      document.getElementById("ai-response").textContent = "Thinking... ⏳";
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        document.getElementById("ai-response").textContent = data.reply;
+      } catch (err) {
+        document.getElementById("ai-response").textContent = "⚠️ Error connecting to AI";
+      }
+    }
+  </script>
+</body>
+</html>
