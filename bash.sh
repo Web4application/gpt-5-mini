@@ -106,3 +106,5 @@ docker compose up --buildchmod +x setup.sh
 chmod +x setup.sh
 ./setup.sh
 docker compose up --build
+
+%pip install --upgrade "openai>=1.88" "openai-agents>=0.0.19"
