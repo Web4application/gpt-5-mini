@@ -5,7 +5,6 @@ import OpenAI from "openai";
 const router = express.Router();
 const client = new OpenAI({
   apiKey: process.env.sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10
-
 });
 
 // POST /api/gpt5
