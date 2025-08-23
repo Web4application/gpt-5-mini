@@ -2,7 +2,7 @@ const nock = require('nock');
 
 nock('http://example.com', {
   reqheaders: {
-    'authorization': 'AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10',
+    'authorization': 'sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10',
     'content-type': 'application/json'
   }
 })
