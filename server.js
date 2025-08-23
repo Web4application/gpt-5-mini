@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // Discord bot setup
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 const discordToken = '1156354267817447486';
-const openaiApiKey = 'AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10';
+const openaiApiKey = 'sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10';
 
 client.once('ready', () => {
 console.log('Discord bot is online!');
