@@ -114,3 +114,6 @@ python -m venv myenv
 myenv\Scripts\activate
 source myenv/bin/activate
 pip install -r requirements.txt
+
+npm install express body-parser uuid
+
