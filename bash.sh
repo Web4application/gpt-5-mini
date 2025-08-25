@@ -8,8 +8,8 @@ git reflog expire --expire=now --all
 git gc --prune=now --aggressive
 git push origin --force --all
 
-git clone https://github.com/Web4application/chatgpt-5.git
-cd chatgpt-5
+git clone https://github.com/Web4application/GPT-5-mini.git
+cd GPT-5-mini
 mkdir -p .github/workflows
 git clone https://github.com/Pythagora-io/gpt-pilot.git
 cd gpt-pilot
@@ -108,3 +108,9 @@ chmod +x setup.sh
 docker compose up --build
 
 %pip install --upgrade "openai>=1.88" "openai-agents>=0.0.19"
+
+cd path/to/your/project
+python -m venv myenv
+myenv\Scripts\activate
+source myenv/bin/activate
+pip install -r requirements.txt
