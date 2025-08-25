@@ -1,64 +1,79 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
-const { Client, GatewayIntentBits } = require('discord.js');
+import express from "express";
+import dotenv from "dotenv";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import { openai, defaultAIConfig } from "./config/ai.js";
+import { addMessage, getHistory } from "./chatStore.js";
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+app.use(express.json());
 
-app.use(bodyParser.json());
+const server = createServer(app);
+const wss = new WebSocketServer({ server });
 
-// Discord bot setup
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-const discordToken = '1156354267817447486';
-const openaiApiKey = 'sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10';
+// --- WebSocket Chat with persistence ---
+wss.on("connection", (ws) => {
+  console.log("🔗 WebSocket client connected");
 
-client.once('ready', () => {
-console.log('Discord bot is online!');
+  ws.on("message", async (msg) => {
+    try {
+      const data = JSON.parse(msg.toString());
+      const { sessionId = "default", message, variables = {}, tools = [] } = data;
+
+      if (!message) {
+        ws.send(JSON.stringify({ error: "Message is required" }));
+        return;
+      }
+
+      // Get persisted history or bootstrap
+      let chatHistory = getHistory(sessionId);
+      if (chatHistory.length === 0) {
+        addMessage(sessionId, "system", "You are GPT-5-mini, a helpful assistant.");
+        addMessage(sessionId, "developer", `Use verbosity=${defaultAIConfig.text.verbosity}, reasoning effort=${defaultAIConfig.reasoning.effort}`);
+      }
+
+      // Add user message
+      addMessage(sessionId, "user", message);
+      if (Object.keys(variables).length > 0) {
+        addMessage(sessionId, "user", `Context: ${JSON.stringify(variables)}`);
+      }
+
+      // Stream response
+      const stream = await openai.responses.stream({
+        ...defaultAIConfig,
+        tools,
+        input: getHistory(sessionId),
+      });
+
+      let assistantReply = "";
+
+      for await (const event of stream) {
+        if (event.type === "response.output_text.delta") {
+          assistantReply += event.delta;
+          ws.send(JSON.stringify({ token: event.delta }));
+        } else if (event.type === "response.completed") {
+          addMessage(sessionId, "assistant", assistantReply);
+          ws.send(JSON.stringify({ event: "end" }));
+        }
+      }
+    } catch (err) {
+      console.error("❌ WS error:", err);
+      ws.send(JSON.stringify({ error: "AI request failed" }));
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("❌ WebSocket client disconnected");
+  });
 });
 
-client.on('messageCreate', async message => {
-if (message.author.bot) return;
+// --- Basic REST endpoint ---
+app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-if (message.content.startsWith('!analyze')) {
-const text = message.content.slice(9).trim();
-if (!text) {
-return message.channel.send('Please provide some text to analyze.');
-}
-
-try {
-const response = await axios.post('http://localhost:3000/api/analyze', { text });
-const result = response.data;
-message.channel.send(`Analysis result: ${result.analysis}`);
-} catch (error) {
-console.error('Error analyzing text:', error);
-message.channel.send('Sorry, I couldn\'t analyze the text at the moment.');
-}
-}
-});
-
-client.login(discordToken);
-
-// API endpoint for AI analysis
-app.post('/api/analyze', async (req, res) => {
-const { text } = req.body;
-try {
-const response = await axios.post('https://api.openai.com/v1/engines/davinci-codex/completions', {
-prompt: `Analyze the following text: ${text}`,
-max_tokens: 50
-}, {
-headers: {
-'Authorization': `Bearer ${openaiApiKey}`
-}
-});
-const analysis = response.data.choices[0].text.trim();
-res.json({ analysis });
-} catch (error) {
-console.error('Error analyzing text with OpenAI:', error);
-res.status(500).json({ error: 'Failed to analyze text' });
-}
-});
-
-app.listen(port, () => {
-console.log(`Web app listening at http://localhost:${3000}`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🔌 WebSocket available at ws://localhost:${PORT}`);
 });
