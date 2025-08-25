@@ -1,47 +1,110 @@
 import express from "express";
-import fetch from "node-fetch";
 import dotenv from "dotenv";
+import { openai, defaultAIConfig } from "./config/ai.js";
 
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 
-// 🔑 Use your API key from .env (never hardcode it!)
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-app.post("/chat", async (req, res) => {
-  const userMessage = req.body.message;
-
-  if (!userMessage) {
-    return res.status(400).json({ error: "Message is required" });
-  }
-
+/**
+ * GET /api/chat
+ * Simple EventSource (useful for browsers)
+ * Example: new EventSource("/api/chat?message=Hello")
+ */
+app.get("/api/chat", async (req, res) => {
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-5-mini", // or whichever you want
-        messages: [
-          { role: "system", content: "You are ChatGPT5 mini, a helpful AI." },
-          { role: "user", content: userMessage },
-        ],
-      }),
+    const message = req.query.message;
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    const promptMessages = [
+      { role: "system", content: "You are GPT-5-mini, a helpful assistant." },
+      { role: "developer", content: "Follow medium verbosity and reasoning effort." },
+      { role: "user", content: message },
+    ];
+
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const stream = await openai.responses.stream({
+      ...defaultAIConfig,
+      input: promptMessages,
     });
 
-    const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "⚠️ No reply";
-
-    res.json({ reply });
+    for await (const event of stream) {
+      if (event.type === "response.output_text.delta") {
+        res.write(`data: ${event.delta}\n\n`);
+      } else if (event.type === "response.completed") {
+        res.write("data: [END]\n\n");
+        res.end();
+      }
+    }
   } catch (err) {
-    console.error("❌ Error:", err);
-    res.status(500).json({ error: "Server error" });
+    console.error("❌ GET SSE error:", err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "AI request failed." });
+    } else {
+      res.end();
+    }
+  }
+});
+
+/**
+ * POST /api/chat
+ * JSON body (supports variables, tools, dev messages)
+ * Example:
+ * {
+ *   "message": "Explain blockchain",
+ *   "variables": {"userId": "123"},
+ *   "tools": []
+ * }
+ */
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message, variables = {}, tools = [] } = req.body;
+
+    if (!message) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
+    const promptMessages = [
+      { role: "system", content: "You are GPT-5-mini, a helpful assistant." },
+      { role: "developer", content: `Use verbosity=${defaultAIConfig.text.verbosity}, reasoning effort=${defaultAIConfig.reasoning.effort}` },
+      { role: "user", content: message },
+      { role: "user", content: `Context: ${JSON.stringify(variables)}` },
+    ];
+
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const stream = await openai.responses.stream({
+      ...defaultAIConfig,
+      tools,
+      input: promptMessages,
+    });
+
+    for await (const event of stream) {
+      if (event.type === "response.output_text.delta") {
+        res.write(`data: ${event.delta}\n\n`);
+      } else if (event.type === "response.completed") {
+        res.write("data: [END]\n\n");
+        res.end();
+      }
+    }
+  } catch (err) {
+    console.error("❌ POST SSE error:", err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "AI request failed." });
+    } else {
+      res.end();
+    }
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 SSE server running at http://localhost:${PORT}`);
+});
