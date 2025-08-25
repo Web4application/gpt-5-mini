@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive. Free to use and easy to try." />
+  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot, writing help, brainstorm tool" />
+  <meta property="og:title" content="GPT-5 mini" />
+  <meta property="og:description" content="A conversational AI system that listens, learns, and challenges" />
+  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
+  <meta property="og:url" content="https://GPT-5-mini.com/" />
+  <link rel="canonical" href="https://GPT-5-mini.com/" />
+  <link rel="icon" href="favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <title>ChatGPT5 mini</title>
+
+  <style>
+    :root{
+      --primary:#2575fc;
+      --accent:#6a11cb;
+      --bg:#fff;
+      --muted:#f4f4f4;
+      --text:#222;
+      --card:#f4f4f4;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+      font-family: 'Inter',sans-serif;
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition:background .25s,color .25s;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+
+    header.hero {
+      text-align:center;
+      padding:56px 20px;
+      background:linear-gradient(90deg,var(--accent),var(--primary));
+      color:#fff;
+    }
+    header.hero img { height:64px; display:block; margin:0 auto 16px; }
+    .cta-button {
+      display:inline-block;
+      margin-top:12px;
+      background:#fff;
+      color:var(--primary);
+      padding:10px 20px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    main { flex:1; width:100%; max-width:1100px; margin:0 auto; padding:24px; }
+
+    .controls { display:flex; justify-content:center; gap:12px; margin:12px 0 24px; }
+    .controls button { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; background:var(--primary); color:white; font-weight:600; }
+    .controls .ghost { background:#fff; color:var(--primary); border:1px solid rgba(0,0,0,.06); }
+
+    #chat-wrapper { max-width:640px; margin:0 auto; }
+    #chat-container {
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      height:420px;
+      overflow:hidden;
+    }
+    #messages {
+      flex:1;
+      overflow:auto;
+      padding:8px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .msg {
+      max-width:80%;
+      padding:10px 14px;
+      border-radius:12px;
+      line-height:1.4;
+      word-break:break-word;
+    }
+    .msg.user { align-self:flex-end; background:var(--primary); color:#fff; }
+    .msg.ai { align-self:flex-start; background:#e9e9e9; color:var(--text); }
+    .input-row { display:flex; gap:8px; margin-top:12px; }
+    .input-row input[type="text"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #ddd;
+      outline:none;
+      font-size:1rem;
+    }
+    .input-row button { padding:10px 16px; border-radius:8px; border:0; background:var(--primary); color:#fff; cursor:pointer; }
+
+    .testimonials {
+      padding:28px 16px;
+      background:#fafafa;
+      margin-top:28px;
+      border-radius:8px;
+      text-align:center;
+    }
+    footer {
+      text-align:center;
+      padding:16px;
+      background:#eee;
+      margin-top:28px;
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      --bg:#0f1113;
+      --text:#e6e6e6;
+      --card:#161719;
+    }
+    .dark-mode header.hero { color:#fff; }
+    .dark-mode .msg.ai { background:#222; color:#eaeaea; }
+
+    @media (max-width:720px){
+      header.hero{padding:28px 16px}
+      #chat-container{height:360px}
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" role="banner">
+    <img src="logo.png" alt="ChatGPT5 mini logo" />
+    <h1>Welcome to ChatGPT5 mini</h1>
+    <p>Your AI companion for writing, learning, and productivity.</p>
+    <a class="cta-button" href="#chat">Try It Now</a>
+  </header>
+
+  <main>
+    <div class="controls" aria-hidden="false">
+      <button id="toggle-dark" type="button" aria-pressed="false">Toggle Dark Mode</button>
+      <button id="clear-chat" class="ghost" type="button">Clear Chat</button>
+    </div>
+
+    <section id="chat-wrapper" aria-labelledby="chat-heading">
+      <h2 id="chat-heading" style="text-align:center">See ChatGPT5 mini in Action</h2>
+
+      <div id="chat-container" aria-live="polite" aria-atomic="false">
+        <div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+        <form id="chat-form" class="input-row" aria-label="Chat form">
+          <label for="message" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Message</label>
+          <input id="message" name="message" type="text" autocomplete="off" placeholder="Type your message and press Enter" required />
+          <button id="send" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="testimonials" aria-hidden="false">
+      <h3>Why People Love ChatGPT5 mini</h3>
+      <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+      <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
+    </section>
+  </main>
+
+  <footer>
+    <p>We respect your privacy. No data is stored without your consent.</p>
+    <p><a href="https://github.com/Web4application/roupg" target="_blank" rel="noopener">View Source on GitHub</a></p>
+  </footer>
+
+  <script>
+    // Graceful client behavior:
+    // 1) Try server-sent events streaming at /api/stream?message=...
+    // 2) Fall back to a JSON POST to /api/chat if streaming is not available.
+
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('message');
+    const toggleDark = document.getElementById('toggle-dark');
+    const clearBtn = document.getElementById('clear-chat');
+
+    function appendMessage(text, cls) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + cls;
+      // always use textContent to avoid XSS
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function clearMessages(){
+      messagesEl.innerHTML = '';
+      input.focus();
+    }
+
+    toggleDark.addEventListener('click', () => {
+      const pressed = document.body.classList.toggle('dark-mode');
+      toggleDark.setAttribute('aria-pressed', String(pressed));
+    });
+
+    clearBtn.addEventListener('click', clearMessages);
+
+    async function postChatMessage(text){
+      // fallback non-streaming request
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        return data.reply || data.message || '';
+      } catch (err) {
+        console.error('POST /api/chat failed', err);
+        throw err;
+      }
+    }
+
+    function streamChatMessage(text){
+      // Returns a promise that resolves with the final text, and streams partial data into the UI.
+      return new Promise((resolve, reject) => {
+        // Use same-origin EventSource endpoint if available.
+        // Note: EventSource doesn't support POST or request bodies; we encode message into querystring.
+        const url = '/api/stream?message=' + encodeURIComponent(text);
+        let finalText = '';
+        let es;
+        try {
+          es = new EventSource(url);
+        } catch (e) {
+          return reject(e);
+        }
+
+        es.onmessage = (evt) => {
+          if (!evt.data) return;
+          if (evt.data === '[END]') {
+            es.close();
+            resolve(finalText);
+            return;
+          }
+          // Append chunk
+          finalText += evt.data;
+          // Update the last AI message or create one
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = finalText;
+          } else {
+            appendMessage(finalText, 'ai');
+          }
+        };
+
+        es.onerror = (err) => {
+          es.close();
+          reject(err);
+        };
+      });
+    }
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      appendMessage('You: ' + text, 'user');
+      input.value = '';
+      input.disabled = true;
+      // optimistic AI placeholder
+      appendMessage('...', 'ai');
+
+      // Try streaming first; if it fails, try POST fallback.
+      try {
+        await streamChatMessage(text);
+      } catch (streamErr) {
+        console.warn('Streaming failed, falling back to POST:', streamErr);
+        try {
+          const reply = await postChatMessage(text);
+          // replace last AI message (which may be '...') with reply
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = reply;
+          } else {
+            appendMessage(reply, 'ai');
+          }
+        } catch (postErr) {
+          // show error message
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = '⚠️ Error connecting to backend';
+          } else {
+            appendMessage('⚠️ Error connecting to backend', 'ai');
+          }
+        }
+      } finally {
+        input.disabled = false;
+        input.focus();
+      }
+    });
+
+    // keyboard accessibility: focus input on load
+    window.addEventListener('load', () => input.focus());
+  </script>
+</body>
+</html>
