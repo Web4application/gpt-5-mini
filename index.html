@@ -143,11 +143,26 @@
     <div id="chat-container">
       <div id="chat"></div>
       <div id="input-bar">
-        <input id="input" type="text" placeholder="Say something…" />
-        <button id="send">Send</button>
-      </div>
-    </div>
-  </section>
+        <input id="input" placeholder="Type your message" />
+<button id="send">Send</button>
+<div id="output"></div>
+
+<script>
+  document.querySelector("#send").addEventListener("click", () => {
+    const message = document.querySelector("#input").value;
+    document.querySelector("#output").textContent = "";
+
+    const es = new EventSource(`/api/chat?message=${encodeURIComponent(message)}`);
+
+    es.onmessage = (event) => {
+      if (event.data === "[END]") {
+        es.close();
+      } else {
+        document.querySelector("#output").textContent += event.data;
+      }
+    };
+  });
+</script>
 
   <!-- Testimonials -->
   <section class="testimonials">
