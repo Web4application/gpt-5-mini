@@ -1,218 +1,180 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive. Free to use and easy to try." />
-  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot, writing help, brainstorm tool" />
-  <meta property="og:title" content="GPT-5 mini" />
-  <meta property="og:description" content="A conversational AI system that listens, learns, and challenges" />
-  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
-  <meta property="og:url" content="https://GPT-5-mini.com/" />
-  <link rel="canonical" href="https://GPT-5-mini.com/" />
-  <link rel="icon" href="favicon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
-  <title>ChatGPT5 mini</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatGPT5 mini</title>
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #222;
-      transition: background 0.3s, color 0.3s;
-    }
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
 
-    /* Hero */
-    .hero {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: white;
-    }
-    .hero img {
-      height: 64px;
-      margin-bottom: 20px;
-    }
-    .cta-button {
-      background: white;
-      color: #2575fc;
-      padding: 12px 24px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
+<!-- Styles -->
+<style>
+  /* Base */
+  body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#fff; color:#222; transition:0.3s; }
+  body.dark-mode { background:#121212; color:#f0f0f0; }
+  h1,h2,p { margin:0; }
 
-    /* Chat Section */
-    #chat-preview {
-      padding: 40px 20px;
-      text-align: center;
-    }
-    #chat-container {
-      max-width: 600px;
-      margin: 20px auto;
-      background: #f4f4f4;
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      height: 400px;
-    }
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-    .msg {
-      margin: 8px 0;
-      padding: 10px 14px;
-      border-radius: 10px;
-      line-height: 1.4;
-      max-width: 80%;
-    }
-    .user { background: #2575fc; color: #fff; margin-left: auto; }
-    .ai { background: #e0e0e0; color: #222; margin-right: auto; }
-    #input-bar {
-      display: flex;
-    }
-    #input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px 0 0 8px;
-    }
-    #send {
-      background: #2575fc;
-      border: none;
-      color: white;
-      padding: 0 20px;
-      border-radius: 0 8px 8px 0;
-      cursor: pointer;
-    }
+  /* Hero */
+  .hero { text-align:center; padding:60px 20px; background:linear-gradient(to right,#6a11cb,#2575fc); color:white; }
+  .hero img { height:64px; margin-bottom:20px; }
+  .cta-button { background:white; color:#2575fc; padding:12px 24px; border-radius:8px; text-decoration:none; font-weight:bold; display:inline-block; margin-top:20px; }
 
-    /* Testimonials */
-    .testimonials {
-      padding: 40px 20px;
-      background: #fafafa;
-      text-align: center;
-    }
-    .testimonials blockquote {
-      font-style: italic;
-      margin: 10px 0;
-    }
+  /* Chat Section */
+  #chat-section { max-width:600px; margin:20px auto; display:flex; flex-direction:column; }
+  #chat-container { flex:1; background:#f4f4f4; border-radius:12px; padding:20px; height:400px; overflow-y:auto; }
+  body.dark-mode #chat-container { background:#1e1e1e; }
+  .msg { margin:8px 0; padding:10px 14px; border-radius:10px; line-height:1.4; max-width:80%; word-wrap:break-word; position:relative; }
+  .user { background:#2575fc; color:white; margin-left:auto; }
+  .ai { background:#e0e0e0; color:#222; margin-right:auto; }
+  body.dark-mode .ai { background:#333; color:#f0f0f0; }
 
-    /* Dark mode */
-    .dark-mode {
-      background-color: #121212;
-      color: #f0f0f0;
-    }
-    .dark-mode #chat-container { background: #1e1e1e; }
-    .dark-mode .ai { background: #333; color: #f0f0f0; }
+  /* Blinking cursor */
+  .cursor::after { content:"|"; display:inline-block; margin-left:2px; animation:blink 1s infinite; }
+  @keyframes blink { 0%,50%,100% { opacity:1; } 25%,75% { opacity:0; } }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #eee;
-    }
+  /* Input Bar */
+  #input-bar { display:flex; margin-top:10px; }
+  #input { flex:1; padding:10px; border:none; border-radius:8px 0 0 8px; }
+  #send { background:#2575fc; border:none; color:white; padding:0 20px; border-radius:0 8px 8px 0; cursor:pointer; }
 
-    @media (max-width: 768px) {
-      .hero, #chat-container, .testimonials {
-        padding: 20px;
-        font-size: 16px;
-      }
-    }
-  </style>
+  /* Speed control */
+  #speed-control { display:flex; align-items:center; justify-content:center; margin:10px 0; }
+  #speed-control input { margin-left:10px; }
+
+  /* Dark mode button */
+  #dark-toggle { position:fixed; top:10px; right:10px; padding:8px 12px; border:none; border-radius:6px; cursor:pointer; }
+
+  /* Testimonials */
+  .testimonials { padding:40px 20px; background:#fafafa; text-align:center; }
+  body.dark-mode .testimonials { background:#1e1e1e; color:#f0f0f0; }
+  .testimonials blockquote { font-style:italic; margin:10px 0; }
+
+  /* Footer */
+  footer { text-align:center; padding:20px; background:#eee; }
+  body.dark-mode footer { background:#222; color:#f0f0f0; }
+
+  /* Responsive */
+  @media(max-width:768px){
+    .hero, #chat-section, .testimonials { padding:20px; font-size:16px; height:auto; }
+  }
+</style>
 </head>
 
 <body>
-  <section class="hero">
-    <img src="logo.png" alt="ChatGPT5 mini logo" />
-    <h1>Welcome to ChatGPT5 mini</h1>
-    <p>Your AI companion for writing, learning, and productivity.</p>
-    <a href="#chat-preview" class="cta-button">Try It Now</a>
-  </section>
 
-  <button onclick="document.body.classList.toggle('dark-mode')">Toggle Dark Mode</button>
+<!-- Dark Mode Toggle -->
+<button id="dark-toggle">Toggle Dark Mode</button>
 
-  <!-- Chat Section -->
-  <section id="chat-preview">
-    <h2>See ChatGPT5 mini in Action</h2>
-    <div id="chat-container">
-      <div id="chat"></div>
-      <div id="input-bar">
-        <input id="input" placeholder="Type your message" />
-<button id="send">Send</button>
-<div id="output"></div>
+<!-- Hero Section -->
+<section class="hero">
+  <img src="logo.png" alt="ChatGPT5 mini logo" />
+  <h1>Welcome to ChatGPT5 mini</h1>
+  <p>Your AI companion for writing, learning, and productivity.</p>
+  <a href="#chat-section" class="cta-button">Try It Now</a>
+</section>
 
+<!-- Typing Speed Slider -->
+<div id="speed-control">
+  <label for="speed">Typing speed (ms per char):</label>
+  <input type="range" id="speed" min="5" max="100" value="25">
+  <span id="speed-value">25</span>
+</div>
+
+<!-- Chat Section -->
+<section id="chat-section">
+  <div id="chat-container"></div>
+  <div id="input-bar">
+    <input id="input" placeholder="Type your message" autocomplete="off"/>
+    <button id="send">Send</button>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <h2>Why People Love ChatGPT5 mini</h2>
+  <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+  <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>We respect your privacy. No data is stored without your consent.</p>
+  <a href="https://github.com/Web4application/roupg" target="_blank">View Source on GitHub</a>
+</footer>
+
+<!-- Scripts -->
 <script>
-  document.querySelector("#send").addEventListener("click", () => {
-    const message = document.querySelector("#input").value;
-    document.querySelector("#output").textContent = "";
+const chat = document.getElementById("chat-container");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("send");
+const darkToggle = document.getElementById("dark-toggle");
+const speedSlider = document.getElementById("speed");
+const speedValue = document.getElementById("speed-value");
 
-    const es = new EventSource(`/api/chat?message=${encodeURIComponent(message)}`);
+let typingSpeed = parseInt(speedSlider.value, 10);
+speedSlider.addEventListener("input", ()=>{
+  typingSpeed = parseInt(speedSlider.value, 10);
+  speedValue.textContent = typingSpeed;
+});
 
-    es.onmessage = (event) => {
-      if (event.data === "[END]") {
-        es.close();
-      } else {
-        document.querySelector("#output").textContent += event.data;
-      }
-    };
-  });
+// Dark mode persistence
+if(localStorage.getItem("dark-mode")==="true") document.body.classList.add("dark-mode");
+darkToggle.addEventListener("click", ()=>{
+  document.body.classList.toggle("dark-mode");
+  localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+});
+
+// Add message bubble
+function addMessage(text, cls){
+  const msg = document.createElement("div");
+  msg.className = `msg ${cls}`;
+  msg.textContent = text;
+  if(cls === "ai") msg.classList.add("cursor");
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+  return msg;
+}
+
+// Human-like typing function
+async function typeText(element, text, speed){
+  element.classList.add("cursor");
+  for(let i=0; i<text.length; i++){
+    element.textContent += text[i];
+    chat.scrollTop = chat.scrollHeight;
+    await new Promise(r => setTimeout(r, speed));
+  }
+  element.classList.remove("cursor");
+}
+
+// Send message to backend
+async function sendMessage(){
+  const text = input.value.trim();
+  if(!text) return;
+  addMessage(text, "user");
+  input.value = "";
+
+  const aiMsg = addMessage("", "ai");
+
+  try{
+    const res = await fetch("http://localhost:3000/chat", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await res.json();
+    const aiText = data.reply || "⚠️ No response received.";
+    await typeText(aiMsg, aiText, typingSpeed);
+  } catch(err){
+    aiMsg.textContent = "⚠️ Error connecting to backend";
+    aiMsg.classList.remove("cursor");
+    console.error(err);
+  }
+}
+
+sendBtn.addEventListener("click", sendMessage);
+input.addEventListener("keypress", e => { if(e.key === "Enter") sendMessage(); });
 </script>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <h2>Why People Love ChatGPT5 mini</h2>
-    <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
-    <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
-  </section>
-
-  <footer>
-    <p>We respect your privacy. No data is stored without your consent.</p>
-    <a href="https://github.com/Web4application/web.chatgpt-5mini" target="_blank">View Source on GitHub</a>
-  </footer>
-
-  <!-- Chat Logic -->
-  <script>
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("input");
-    const sendBtn = document.getElementById("send");
-
-    async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage("You: " + text, "user");
-      input.value = "";
-
-      try {
-        const res = await fetch("http://localhost:3000/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-        const data = await res.json();
-        addMessage("AI: " + data.reply, "ai");
-      } catch (err) {
-        addMessage("⚠️ Error connecting to backend", "ai");
-      }
-    }
-
-    function addMessage(text, cls) {
-      const msg = document.createElement("div");
-      msg.className = `msg ${cls}`;
-      msg.textContent = text;
-      chat.appendChild(msg);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    sendBtn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") sendMessage();
-    });
-  </script>
 </body>
 </html>
