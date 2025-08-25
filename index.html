@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>ChatGPT5 + JokeBox</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root{
-      --bg:#fdfdfd; --surface:#f4f4f4; --text:#111827;
-      --muted:#6b7280; --brand:#2575fc; --brand-contrast:#fff;
-      --user-bg:var(--brand); --ai-bg:#e6e9ee; --radius:12px; --ui-gap:16px;
-    }
-    @media (prefers-color-scheme: dark){
-      :root{--bg:#0b0b0c; --surface:#131416; --text:#e6eef6; --muted:#9aa4b2; --ai-bg:#1f2226;}
-    }
-    *{box-sizing:border-box;} html,body{margin:0;height:100%; font-family:'Inter',sans-serif; display:flex; flex-direction:column; background:var(--bg); color:var(--text);}
-    header{padding:16px 24px; display:flex; justify-content:space-between; align-items:center; background:var(--surface);}
-    .brand{display:flex; flex-direction:column;}
-    main{display:grid; grid-template-columns:1fr 380px; gap:24px; padding:24px; flex:1;}
-    @media(max-width:900px){main{grid-template-columns:1fr;}}
-    .panel{background:var(--surface); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; min-height:360px;}
-    #chat-log, #joke-output{flex:1; overflow:auto; margin-bottom:12px; padding-right:4px;}
-    .message{max-width:80%; padding:10px 14px; border-radius:12px; line-height:1.4; word-break:break-word; margin:6px 0;}
-    .message.user{margin-left:auto; background:var(--user-bg); color:var(--brand-contrast);}
-    .message.ai{margin-right:auto; background:var(--ai-bg); color:var(--text);}
-    form.chat-form{display:flex; gap:8px;}
-    textarea#user-input{flex:1; border:none; resize:none; padding:8px; border-radius:10px; font:inherit; background:transparent; color:inherit;}
-    button{padding:8px 12px; border:none; border-radius:10px; cursor:pointer; font-weight:600;}
-    button#send{background:var(--brand); color:var(--brand-contrast);}
-    button:disabled{opacity:0.6; cursor:progress;}
-    .joke-controls{display:flex; gap:6px; margin-bottom:8px;}
-    .status{font-size:0.8rem; color:var(--muted);}
-    footer{text-align:center; padding:12px; font-size:0.85rem; color:var(--muted);}
-    .toggle{background:transparent;border:1px solid var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--muted);}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ChatGPT5</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#fdfdfd; --surface:#f4f4f4; --text:#111827;
+  --muted:#6b7280; --brand:#2575fc; --brand-contrast:#fff;
+  --user-bg:var(--brand); --ai-bg:#e6e9ee; --radius:12px; --ui-gap:16px;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0b0b0c; --surface:#131416; --text:#e6eef6; --muted:#9aa4b2; --ai-bg:#1f2226;}
+}
+*{box-sizing:border-box;} 
+html,body{margin:0;height:100%; font-family:'Inter',sans-serif; display:flex; flex-direction:column; background:var(--bg); color:var(--text);}
+header{padding:16px 24px; display:flex; justify-content:space-between; align-items:center; background:var(--surface);}
+.brand{display:flex; flex-direction:column;}
+main{display:grid; grid-template-columns:1fr 380px; gap:24px; padding:24px; flex:1;}
+@media(max-width:900px){main{grid-template-columns:1fr;}}
+.panel{background:var(--surface); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; min-height:360px;}
+#chat-log, #joke-output{flex:1; overflow:auto; margin-bottom:12px; padding-right:4px;}
+.message{max-width:80%; padding:10px 14px; border-radius:12px; line-height:1.4; word-break:break-word; margin:6px 0;}
+.message.user{margin-left:auto; background:var(--user-bg); color:var(--brand-contrast);}
+.message.ai{margin-right:auto; background:var(--ai-bg); color:var(--text);}
+form.chat-form{display:flex; gap:8px;}
+textarea#user-input{flex:1; border:none; resize:none; padding:8px; border-radius:10px; font:inherit; background:transparent; color:inherit;}
+button{padding:8px 12px; border:none; border-radius:10px; cursor:pointer; font-weight:600;}
+button#send{background:var(--brand); color:var(--brand-contrast);}
+button:disabled{opacity:0.6; cursor:progress;}
+.joke-controls{display:flex; gap:6px; margin-bottom:8px;}
+.status{font-size:0.8rem; color:var(--muted);}
+footer{text-align:center; padding:12px; font-size:0.85rem; color:var(--muted);}
+.toggle{background:transparent;border:1px solid var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--muted);}
+.voice-controls{margin-top:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.voice-controls label{display:flex; align-items:center; gap:4px;}
+</style>
 </head>
 <body>
+
 <header>
   <div class="brand">
     <h1>ChatGPT5 + JokeBox</h1>
@@ -70,6 +74,11 @@
       <button id="btn-joke">Get Joke</button>
     </div>
     <div id="joke-output" aria-live="polite">Press "Get Joke" to start.</div>
+    <div class="voice-controls">
+      <button id="stop-speech" class="btn">Stop AI Speech</button>
+      <label for="speech-rate">Speed: <span id="rate-display">1.0</span>x</label>
+      <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="1">
+    </div>
     <div class="status" id="joke-status"></div>
   </aside>
 </main>
@@ -79,133 +88,69 @@
 </footer>
 
 <script>
-  // ===== Theme Toggle =====
-  const themeToggle = document.getElementById('theme-toggle');
-  let dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  function applyTheme(isDark){
-    if(isDark){ document.body.style.background='#0b0b0c'; document.body.style.color='#e6eef6'; }
-    else { document.body.style.background=''; document.body.style.color=''; }
-  }
-  applyTheme(dark);
-  themeToggle.addEventListener('click',()=>{ dark=!dark; applyTheme(dark); });
+// ===== Theme Toggle =====
+const themeToggle = document.getElementById('theme-toggle');
+let dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+function applyTheme(isDark){
+  if(isDark){ document.body.style.background='#0b0b0c'; document.body.style.color='#e6eef6'; }
+  else { document.body.style.background=''; document.body.style.color=''; }
+}
+applyTheme(dark);
+themeToggle.addEventListener('click',()=>{ dark=!dark; applyTheme(dark); });
 
-  // ===== ChatGPT SSE + Fetch =====
-  const chatLog = document.getElementById('chat-log');
-  const chatForm = document.getElementById('chat-form');
-  const chatInput = document.getElementById('user-input');
-  const chatSend = document.getElementById('send');
+// ===== ChatGPT SSE + Fetch =====
+const chatLog = document.getElementById('chat-log');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('user-input');
+const chatSend = document.getElementById('send');
 
-  let currentAIElement = null;
-
-  function appendMessage(text, who='ai'){
-    const el = document.createElement('div');
-    el.className = `message ${who}`;
-    el.textContent = text;
-    chatLog.appendChild(el);
-    el.scrollIntoView({behavior:'smooth'});
-    return el;
-  }
-
-  async function fetchPost(message){
-    try{
-      const res = await fetch('/api/chat',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message})});
-      const data = await res.json();
-      return {reply:data.reply||'', streamed:false};
-    } catch(err){ return {error: err.message||String(err)}; }
-  }
-
-  async function streamOrFetch(message){
-    const sseUrl=`/api/chat/stream?message=${encodeURIComponent(message)}`;
-    let es, usedSSE=false;
-    try { es=new EventSource(sseUrl); } catch(e){ return fetchPost(message); }
-    return new Promise(resolve=>{
-      const collected={text:''};
-      es.onmessage=(ev)=>{
-        if(ev.data==='[END]'){ es.close(); resolve({reply:collected.text, streamed:true}); return; }
-        collected.text+=ev.data;
-        if(!currentAIElement) currentAIElement=appendMessage('', 'ai');
-        currentAIElement.textContent=collected.text;
-        usedSSE=true;
-      };
-      es.onerror=async()=>{ es.close(); if(!usedSSE){ const res=await fetchPost(message); resolve(res); } };
-    });
-  }
-
-  async function sendMessage(message){
-    if(!message) return;
-    chatSend.disabled=true;
-    appendMessage(message,'user');
-    currentAIElement=appendMessage('','ai');
-    try{
-      const res=await streamOrFetch(message);
-      if(res.error) currentAIElement.textContent=`⚠️ ${res.error}`;
-      else if(!res.streamed) currentAIElement.textContent=res.reply;
-    } catch(err){ currentAIElement.textContent=`⚠️ ${err.message||err}`; }
-    finally{ chatSend.disabled=false; chatInput.value=''; chatInput.focus(); currentAIElement=null; }
-  }
-
-  chatForm.addEventListener('submit', e=>{ e.preventDefault(); sendMessage(chatInput.value.trim()); });
-  chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); chatForm.requestSubmit(); } });
-
-  // ===== JokeBox with Speech =====
-  const btnJoke=document.getElementById('btn-joke');
-  const jokeOutput=document.getElementById('joke-output');
-  const jokeStatus=document.getElementById('joke-status');
-  const categorySelect=document.getElementById('category');
-
-  async function fetchJoke(){
-    jokeStatus.textContent='Loading joke...';
-    try{
-      const category=categorySelect.value;
-      const res=await fetch(`https://v2.jokeapi.dev/joke/${category}?type=single`);
-      const data=await res.json();
-      const joke=data.joke || `${data.setup} ... ${data.delivery}`;
-      jokeOutput.textContent=joke;
-      jokeStatus.textContent='';
-      // Speak the joke
-      const utter=new SpeechSynthesisUtterance(joke);
-      speechSynthesis.speak(utter);
-    } catch(err){
-      jokeStatus.textContent=`Error: ${err.message}`;
-    }
-  }
-
-  const stopBtn = document.getElementById('stop-speech');
-const rateSlider = document.getElementById('speech-rate');
-const rateDisplay = document.getElementById('rate-display');
-
+let currentAIElement = null;
 let currentUtterance = null;
+
+function appendMessage(text, who='ai'){
+  const el = document.createElement('div');
+  el.className = `message ${who}`;
+  el.textContent = text;
+  chatLog.appendChild(el);
+  el.scrollIntoView({behavior:'smooth'});
+  return el;
+}
+
+async function fetchPost(message){
+  try{
+    const res = await fetch('/api/chat',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message})});
+    const data = await res.json();
+    return {reply:data.reply||'', streamed:false};
+  } catch(err){ return {error: err.message||String(err)}; }
+}
+
+async function streamOrFetch(message){
+  const sseUrl=`/api/chat/stream?message=${encodeURIComponent(message)}`;
+  let es, usedSSE=false;
+  try { es=new EventSource(sseUrl); } catch(e){ return fetchPost(message); }
+  return new Promise(resolve=>{
+    const collected={text:''};
+    es.onmessage=(ev)=>{
+      if(ev.data==='[END]'){ es.close(); resolve({reply:collected.text, streamed:true}); return; }
+      collected.text+=ev.data;
+      if(!currentAIElement) currentAIElement=appendMessage('', 'ai');
+      currentAIElement.textContent=collected.text;
+      usedSSE=true;
+    };
+    es.onerror=async()=>{ es.close(); if(!usedSSE){ const res=await fetchPost(message); resolve(res); } };
+  });
+}
 
 function speakMessage(text){
   if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel(); // Stop any previous speech
+  window.speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.rate = parseFloat(rateSlider.value);
+  utter.lang = 'en-US';
   currentUtterance = utter;
   window.speechSynthesis.speak(utter);
 }
 
-// Stop button
-stopBtn.addEventListener('click', () => {
-  window.speechSynthesis.cancel();
-  currentAIElement && (currentAIElement.textContent += ' [speech stopped]');
-});
-
-// Update rate display dynamically
-rateSlider.addEventListener('input', () => {
-  rateDisplay.textContent = rateSlider.value;
-});
-
-  btnJoke.addEventListener('click', fetchJoke);
-// ===== AI Speech for Chat =====
-function speakMessage(text){
-  if(!window.speechSynthesis) return; // TTS not supported
-  const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='en-US';
-  window.speechSynthesis.speak(utter);
-}
-
-// Modify sendMessage to speak AI replies
 async function sendMessage(message){
   if(!message) return;
   chatSend.disabled=true;
@@ -217,19 +162,45 @@ async function sendMessage(message){
     else {
       const replyText=res.streamed ? currentAIElement.textContent : res.reply;
       currentAIElement.textContent=replyText;
-      speakMessage(replyText); // Speak the AI response
+      speakMessage(replyText);
     }
   } catch(err){ currentAIElement.textContent=`⚠️ ${err.message||err}`; }
   finally{ chatSend.disabled=false; chatInput.value=''; chatInput.focus(); currentAIElement=null; }
 }
 
-  <!-- Voice Controls -->
-<div class="voice-controls">
-  <button id="stop-speech" class="btn">Stop AI Speech</button>
-  <label for="speech-rate">Speed: <span id="rate-display">1.0</span>x</label>
-  <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="1">
-</div>
+chatForm.addEventListener('submit', e=>{ e.preventDefault(); sendMessage(chatInput.value.trim()); });
+chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); chatForm.requestSubmit(); } });
 
+// ===== JokeBox with Speech =====
+const btnJoke=document.getElementById('btn-joke');
+const jokeOutput=document.getElementById('joke-output');
+const jokeStatus=document.getElementById('joke-status');
+const categorySelect=document.getElementById('category');
+const stopBtn = document.getElementById('stop-speech');
+const rateSlider = document.getElementById('speech-rate');
+const rateDisplay = document.getElementById('rate-display');
+
+btnJoke.addEventListener('click', async()=>{
+  jokeStatus.textContent='Loading joke...';
+  try{
+    const category=categorySelect.value;
+    const res=await fetch(`https://v2.jokeapi.dev/joke/${category}?type=single`);
+    const data=await res.json();
+    const joke=data.joke || `${data.setup} ... ${data.delivery}`;
+    jokeOutput.textContent=joke;
+    jokeStatus.textContent='';
+    speakMessage(joke);
+  } catch(err){ jokeStatus.textContent=`Error: ${err.message}`; }
+});
+
+// Stop speech
+stopBtn.addEventListener('click', ()=>{
+  window.speechSynthesis.cancel();
+  if(currentAIElement) currentAIElement.textContent += ' [speech stopped]';
+});
+
+// Rate slider
+rateSlider.addEventListener('input', ()=>{ rateDisplay.textContent = rateSlider.value; });
 </script>
 </body>
 </html>
