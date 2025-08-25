@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive. Free to use and easy to try." />
   <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot, writing help, brainstorm tool" />
-  <meta property="og:title" content="ChatGPT5 mini" />
+  <meta property="og:title" content="GPT-5 mini" />
   <meta property="og:description" content="A conversational AI system that listens, learns, and challenges" />
   <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
-  <meta property="og:url" content="https://chatgpt5.com/" />
-  <link rel="canonical" href="https://chatgpt.com/" />
+  <meta property="og:url" content="https://GPT-5-mini.com/" />
+  <link rel="canonical" href="https://GPT-5-mini.com/" />
   <link rel="icon" href="favicon.png" sizes="32x32" />
   <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
