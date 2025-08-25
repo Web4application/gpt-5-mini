@@ -4,7 +4,7 @@
 
 **ChatGPT5 Mini** is a lightweight, interactive AI assistant web app. Built with **Node.js** and a modern frontend, it offers conversational AI features with a secure backend.
 
-💻 **Live Demo:** [https://Web4application.github.io/chatgpt5-mini](https://yourusername.github.io/chatgpt5-mini)
+💻 **Live Demo:** [https://Web4application.github.io/GPT-5-mini](https://Web4application.github.io/GPT-5-mini)
 
 ---
 
