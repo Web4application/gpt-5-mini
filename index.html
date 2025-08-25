@@ -1,45 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ChatGPT5 Mini + Talking JokeBox</title>
-<style>
-body { font-family:sans-serif; margin:0; padding:0; display:flex; flex-direction:column; min-height:100vh; background:#f8fafc; }
-header, footer { background:#2575fc; color:white; padding:12px 20px; text-align:center; }
-main { flex:1; display:flex; flex-direction:column; gap:12px; padding:12px 20px; }
-#chat-log, #joke-log { flex:1; overflow:auto; display:flex; flex-direction:column; gap:6px; border:1px solid #ddd; padding:8px; border-radius:8px; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-.message, .joke { max-width:80%; padding:8px 12px; border-radius:10px; font-size:1rem; }
-.user { align-self:flex-end; background:#2575fc; color:white; }
-.ai, .joke-ai { align-self:flex-start; background:#e0e0e0; color:#222; }
-#input-bar, #joke-bar { display:flex; gap:8px; margin-top:8px; }
-input, select { flex:1; padding:8px; font-size:1rem; }
-button { padding:8px 12px; cursor:pointer; border:none; border-radius:6px; background:#2575fc; color:white; font-weight:600; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ChatGPT5 + JokeBox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#fdfdfd; --surface:#f4f4f4; --text:#111827;
+      --muted:#6b7280; --brand:#2575fc; --brand-contrast:#fff;
+      --user-bg:var(--brand); --ai-bg:#e6e9ee; --radius:12px; --ui-gap:16px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0b0c; --surface:#131416; --text:#e6eef6; --muted:#9aa4b2; --ai-bg:#1f2226;}
+    }
+    *{box-sizing:border-box;} html,body{margin:0;height:100%; font-family:'Inter',sans-serif; display:flex; flex-direction:column; background:var(--bg); color:var(--text);}
+    header{padding:16px 24px; display:flex; justify-content:space-between; align-items:center; background:var(--surface);}
+    .brand{display:flex; flex-direction:column;}
+    main{display:grid; grid-template-columns:1fr 380px; gap:24px; padding:24px; flex:1;}
+    @media(max-width:900px){main{grid-template-columns:1fr;}}
+    .panel{background:var(--surface); border-radius:var(--radius); padding:16px; display:flex; flex-direction:column; min-height:360px;}
+    #chat-log, #joke-output{flex:1; overflow:auto; margin-bottom:12px; padding-right:4px;}
+    .message{max-width:80%; padding:10px 14px; border-radius:12px; line-height:1.4; word-break:break-word; margin:6px 0;}
+    .message.user{margin-left:auto; background:var(--user-bg); color:var(--brand-contrast);}
+    .message.ai{margin-right:auto; background:var(--ai-bg); color:var(--text);}
+    form.chat-form{display:flex; gap:8px;}
+    textarea#user-input{flex:1; border:none; resize:none; padding:8px; border-radius:10px; font:inherit; background:transparent; color:inherit;}
+    button{padding:8px 12px; border:none; border-radius:10px; cursor:pointer; font-weight:600;}
+    button#send{background:var(--brand); color:var(--brand-contrast);}
+    button:disabled{opacity:0.6; cursor:progress;}
+    .joke-controls{display:flex; gap:6px; margin-bottom:8px;}
+    .status{font-size:0.8rem; color:var(--muted);}
+    footer{text-align:center; padding:12px; font-size:0.85rem; color:var(--muted);}
+    .toggle{background:transparent;border:1px solid var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;color:var(--muted);}
+  </style>
 </head>
 <body>
-
 <header>
-<h1>ChatGPT5 Mini + Talking JokeBox</h1>
-<p>AI chat and jokes, typed and read aloud like a real conversation!</p>
+  <div class="brand">
+    <h1>ChatGPT5 + JokeBox</h1>
+    <small>Interactive AI & Fun Jokes</small>
+  </div>
+  <div>
+    <button id="theme-toggle" class="toggle">Toggle Theme</button>
+  </div>
 </header>
 
 <main>
-  <!-- Chat Section -->
-  <section>
-    <h2>Chat with AI</h2>
-    <div id="chat-log"></div>
-    <div id="input-bar">
-      <input type="text" id="user-input" placeholder="Type your message"/>
-      <button id="send">Send</button>
-    </div>
-  </section>
+  <!-- Chat Panel -->
+  <aside class="panel" id="chat-panel">
+    <div id="chat-log" role="log" aria-live="polite"></div>
+    <form id="chat-form" class="chat-form" autocomplete="off">
+      <textarea id="user-input" placeholder="Type your message and press Enter" rows="1" required></textarea>
+      <button type="submit" id="send">Send</button>
+    </form>
+    <div id="chat-status" class="status"></div>
+  </aside>
 
-  <!-- Joke Section -->
-  <section>
-    <h2>Random Joke</h2>
-    <div id="joke-log"></div>
-    <div id="joke-bar">
+  <!-- Joke Panel -->
+  <aside class="panel" id="joke-panel">
+    <div class="joke-controls">
       <select id="category">
         <option value="Any">Any</option>
         <option value="Programming">Programming</option>
@@ -47,110 +67,169 @@ button { padding:8px 12px; cursor:pointer; border:none; border-radius:6px; backg
         <option value="Dark">Dark</option>
         <option value="Pun">Pun</option>
       </select>
-      <button id="get-joke">Get Joke</button>
+      <button id="btn-joke">Get Joke</button>
     </div>
-  </section>
+    <div id="joke-output" aria-live="polite">Press "Get Joke" to start.</div>
+    <div class="status" id="joke-status"></div>
+  </aside>
 </main>
 
 <footer>
-<small>Jokes powered by JokeAPI, with cinematic speech and typewriter effect!</small>
+  <small>Powered by JokeAPI v2 & SSE AI Streaming</small>
 </footer>
 
 <script>
-// --- Utilities ---
-function appendMessage(container,text,cls){ 
-  const div=document.createElement('div'); 
-  div.className=cls; 
-  div.textContent=''; // will type dynamically
-  container.appendChild(div); 
-  div.scrollIntoView({behavior:'smooth'});
-  return div;
-}
-
-let synth = window.speechSynthesis;
-
-// --- Function to speak with natural pauses ---
-async function speakCinematic(text){
-  if(synth.speaking) synth.cancel();
-  let i=0;
-  const chunkSize=30;
-  while(i<text.length){
-    let chunk = text.slice(i,i+chunkSize);
-    let utter = new SpeechSynthesisUtterance(chunk);
-    utter.rate = 1; 
-    utter.pitch = 1;
-    synth.speak(utter);
-    await new Promise(r=>setTimeout(r,chunk.length*30)); // delay based on characters
-    i+=chunkSize;
+  // ===== Theme Toggle =====
+  const themeToggle = document.getElementById('theme-toggle');
+  let dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  function applyTheme(isDark){
+    if(isDark){ document.body.style.background='#0b0b0c'; document.body.style.color='#e6eef6'; }
+    else { document.body.style.background=''; document.body.style.color=''; }
   }
-}
+  applyTheme(dark);
+  themeToggle.addEventListener('click',()=>{ dark=!dark; applyTheme(dark); });
 
-// --- Typewriter effect with live speech ---
-async function typeAndSpeak(text, container){
-  container.textContent='';
-  for(let i=0;i<text.length;i++){
-    container.textContent+=text[i];
-    container.scrollIntoView({behavior:'smooth'});
-    // small pause and speak partial
-    if(text[i]===' ' || text[i]==='.' || text[i]==',' || text[i]==='!'){
-      const partial = container.textContent;
-      const utter = new SpeechSynthesisUtterance(partial.slice(-30));
-      utter.rate=1; utter.pitch=1;
-      synth.speak(utter);
-    }
-    await new Promise(r=>setTimeout(r,25 + Math.random()*25)); // jittered for realistic typing
+  // ===== ChatGPT SSE + Fetch =====
+  const chatLog = document.getElementById('chat-log');
+  const chatForm = document.getElementById('chat-form');
+  const chatInput = document.getElementById('user-input');
+  const chatSend = document.getElementById('send');
+
+  let currentAIElement = null;
+
+  function appendMessage(text, who='ai'){
+    const el = document.createElement('div');
+    el.className = `message ${who}`;
+    el.textContent = text;
+    chatLog.appendChild(el);
+    el.scrollIntoView({behavior:'smooth'});
+    return el;
   }
-}
 
-// --- ChatGPT ---
-const chatLog=document.getElementById('chat-log');
-const input=document.getElementById('user-input');
-const sendBtn=document.getElementById('send');
+  async function fetchPost(message){
+    try{
+      const res = await fetch('/api/chat',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message})});
+      const data = await res.json();
+      return {reply:data.reply||'', streamed:false};
+    } catch(err){ return {error: err.message||String(err)}; }
+  }
 
-async function sendMessage(){
-  const msg=input.value.trim(); if(!msg) return;
-  appendMessage(chatLog,msg,'user'); 
-  input.value='';
-  const aiDiv=appendMessage(chatLog,'','ai');
-
-  try{
-    const res = await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({message:msg})
+  async function streamOrFetch(message){
+    const sseUrl=`/api/chat/stream?message=${encodeURIComponent(message)}`;
+    let es, usedSSE=false;
+    try { es=new EventSource(sseUrl); } catch(e){ return fetchPost(message); }
+    return new Promise(resolve=>{
+      const collected={text:''};
+      es.onmessage=(ev)=>{
+        if(ev.data==='[END]'){ es.close(); resolve({reply:collected.text, streamed:true}); return; }
+        collected.text+=ev.data;
+        if(!currentAIElement) currentAIElement=appendMessage('', 'ai');
+        currentAIElement.textContent=collected.text;
+        usedSSE=true;
+      };
+      es.onerror=async()=>{ es.close(); if(!usedSSE){ const res=await fetchPost(message); resolve(res); } };
     });
-    const data = await res.json();
-    await typeAndSpeak(data.reply||'Oops, no reply',aiDiv);
-  } catch(err){
-    aiDiv.textContent=`⚠️ Error: ${err}`;
   }
+
+  async function sendMessage(message){
+    if(!message) return;
+    chatSend.disabled=true;
+    appendMessage(message,'user');
+    currentAIElement=appendMessage('','ai');
+    try{
+      const res=await streamOrFetch(message);
+      if(res.error) currentAIElement.textContent=`⚠️ ${res.error}`;
+      else if(!res.streamed) currentAIElement.textContent=res.reply;
+    } catch(err){ currentAIElement.textContent=`⚠️ ${err.message||err}`; }
+    finally{ chatSend.disabled=false; chatInput.value=''; chatInput.focus(); currentAIElement=null; }
+  }
+
+  chatForm.addEventListener('submit', e=>{ e.preventDefault(); sendMessage(chatInput.value.trim()); });
+  chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); chatForm.requestSubmit(); } });
+
+  // ===== JokeBox with Speech =====
+  const btnJoke=document.getElementById('btn-joke');
+  const jokeOutput=document.getElementById('joke-output');
+  const jokeStatus=document.getElementById('joke-status');
+  const categorySelect=document.getElementById('category');
+
+  async function fetchJoke(){
+    jokeStatus.textContent='Loading joke...';
+    try{
+      const category=categorySelect.value;
+      const res=await fetch(`https://v2.jokeapi.dev/joke/${category}?type=single`);
+      const data=await res.json();
+      const joke=data.joke || `${data.setup} ... ${data.delivery}`;
+      jokeOutput.textContent=joke;
+      jokeStatus.textContent='';
+      // Speak the joke
+      const utter=new SpeechSynthesisUtterance(joke);
+      speechSynthesis.speak(utter);
+    } catch(err){
+      jokeStatus.textContent=`Error: ${err.message}`;
+    }
+  }
+
+  const stopBtn = document.getElementById('stop-speech');
+const rateSlider = document.getElementById('speech-rate');
+const rateDisplay = document.getElementById('rate-display');
+
+let currentUtterance = null;
+
+function speakMessage(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel(); // Stop any previous speech
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = parseFloat(rateSlider.value);
+  currentUtterance = utter;
+  window.speechSynthesis.speak(utter);
 }
 
-sendBtn.addEventListener('click',sendMessage);
-input.addEventListener('keypress',e=>{ if(e.key==='Enter') sendMessage(); });
+// Stop button
+stopBtn.addEventListener('click', () => {
+  window.speechSynthesis.cancel();
+  currentAIElement && (currentAIElement.textContent += ' [speech stopped]');
+});
 
-// --- JokeBox ---
-const jokeLog=document.getElementById('joke-log');
-const getJokeBtn=document.getElementById('get-joke');
-const categorySelect=document.getElementById('category');
+// Update rate display dynamically
+rateSlider.addEventListener('input', () => {
+  rateDisplay.textContent = rateSlider.value;
+});
 
-async function fetchJoke(){
-  const cat=categorySelect.value;
+  btnJoke.addEventListener('click', fetchJoke);
+// ===== AI Speech for Chat =====
+function speakMessage(text){
+  if(!window.speechSynthesis) return; // TTS not supported
+  const utter=new SpeechSynthesisUtterance(text);
+  utter.lang='en-US';
+  window.speechSynthesis.speak(utter);
+}
+
+// Modify sendMessage to speak AI replies
+async function sendMessage(message){
+  if(!message) return;
+  chatSend.disabled=true;
+  appendMessage(message,'user');
+  currentAIElement=appendMessage('','ai');
   try{
-    const res=await fetch(`https://v2.jokeapi.dev/joke/${cat}`);
-    const data=await res.json();
-    let text='';
-    if(data.type==='single'){ text=data.joke; }
-    else{ text=data.setup+' ... '+data.delivery; }
-    const jokeDiv=appendMessage(jokeLog,'','joke-ai');
-    await typeAndSpeak(text,jokeDiv);
-  } catch(err){
-    appendMessage(jokeLog,'⚠️ Could not fetch joke','joke-ai');
-  }
+    const res=await streamOrFetch(message);
+    if(res.error) currentAIElement.textContent=`⚠️ ${res.error}`;
+    else {
+      const replyText=res.streamed ? currentAIElement.textContent : res.reply;
+      currentAIElement.textContent=replyText;
+      speakMessage(replyText); // Speak the AI response
+    }
+  } catch(err){ currentAIElement.textContent=`⚠️ ${err.message||err}`; }
+  finally{ chatSend.disabled=false; chatInput.value=''; chatInput.focus(); currentAIElement=null; }
 }
 
-getJokeBtn.addEventListener('click',fetchJoke);
-</script>
+  <!-- Voice Controls -->
+<div class="voice-controls">
+  <button id="stop-speech" class="btn">Stop AI Speech</button>
+  <label for="speech-rate">Speed: <span id="rate-display">1.0</span>x</label>
+  <input type="range" id="speech-rate" min="0.5" max="2" step="0.1" value="1">
+</div>
 
+</script>
 </body>
 </html>
