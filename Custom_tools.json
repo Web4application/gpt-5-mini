@@ -1,0 +1,35 @@
+[
+  {
+    "name": "codeRunner",
+    "description": "Execute short code snippets in multiple languages (JavaScript, TypeScript, Python, Kotlin, MATLAB/Octave, R, C++, C#, Jupyter notebooks). Use this tool when the user asks to run or test code. Execution is sandboxed, limited to 5 seconds, no internet access, and outputs are truncated if too long.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": [
+            "javascript",
+            "typescript",
+            "python",
+            "kotlin",
+            "matlab",
+            "notebook",
+            "r",
+            "cpp",
+            "csharp"
+          ],
+          "description": "Programming language/runtime to use"
+        },
+        "code": {
+          "type": "string",
+          "description": "The code snippet to execute. For 'notebook', provide full .ipynb JSON as a string."
+        },
+        "filename": {
+          "type": "string",
+          "description": "Optional filename hint (e.g., main.cpp, Program.cs). Not required for most languages."
+        }
+      },
+      "required": ["language", "code"]
+    }
+  }
+]
