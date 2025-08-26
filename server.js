@@ -10,10 +10,32 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
-
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.json());
+
+// --- Safe fetch helper ---
+async function fetchJson(url, options = {}) {
+  const res = await fetch(url, options);
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`HTTP ${res.status} from ${url}: ${text.slice(0, 200)}`);
+  }
+
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    const text = await res.text();
+    throw new Error(`Expected JSON from ${url}, got: ${text.slice(0, 200)}`);
+  }
+
+  try {
+    return await res.json();
+  } catch {
+    const text = await res.text();
+    throw new Error(`Invalid JSON from ${url}: ${text.slice(0, 200)}`);
+  }
+}
 
 // --- Define tools GPT-5-mini can call ---
 const tools = [
@@ -43,13 +65,14 @@ const tools = [
 
 // Dummy weather implementation (replace with real API)
 async function getWeatherAPI(location) {
+  // Example of using safe fetch if you later call a real API:
+  // return await fetchJson(`https://api.weather.com?q=${encodeURIComponent(location)}`);
   return { location, temp: "21°C", condition: "Cloudy" };
 }
 
 // Safe math evaluation
 function safeCalculate(expression) {
   try {
-    // ⚠️ For real apps, use a math library like mathjs — don't use eval in production
     const result = Function(`"use strict"; return (${expression})`)();
     return { expression, result };
   } catch {
@@ -98,13 +121,9 @@ wss.on("connection", (ws) => {
             result = safeCalculate(args.expression);
           }
 
-          // Add tool result to history
           addMessage(sessionId, "tool", JSON.stringify(result));
-
-          // Send result to client
           ws.send(JSON.stringify({ type: "tool_result", data: result }));
 
-          // Re-call GPT with tool result so it can continue naturally
           const followUp = await openai.responses.create({
             model: "gpt-5-mini",
             input: getHistory(sessionId),
@@ -116,6 +135,7 @@ wss.on("connection", (ws) => {
           const finalText = followUp.output[0].content
             .map((c) => c.text)
             .join("");
+
           addMessage(sessionId, "assistant", finalText);
           ws.send(JSON.stringify({ type: "message", data: finalText }));
         }
@@ -132,7 +152,7 @@ wss.on("connection", (ws) => {
   });
 });
 
-// --- SSE endpoint (same as before) ---
+// --- SSE endpoint ---
 app.post("/chat/:sessionId", async (req, res) => {
   const { sessionId } = req.params;
   const { content } = req.body;
@@ -175,3 +195,4 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () =>
   console.log(`🚀 GPT-5-mini server running at http://localhost:${PORT}`)
 );
+
