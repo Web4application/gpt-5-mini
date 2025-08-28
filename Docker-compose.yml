@@ -3,6 +3,7 @@ version: "3.9"
 services:
   postgres:
     image: postgres:15
+    container_name: n8n_postgres
     environment:
       POSTGRES_USER: n8n_user
       POSTGRES_PASSWORD: supersecurepw
@@ -13,6 +14,7 @@ services:
 
   redis:
     image: redis:7.4
+    container_name: gpt_redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -21,9 +23,10 @@ services:
     build:
       context: ./my-gpt-chat
       dockerfile: Dockerfile
+    container_name: gpt_app
     ports:
-      - "8080:8080"
-      - "6060:6060"
+      - "8080:8080"   # GPT chat API
+      - "6060:6060"   # pprof
     env_file:
       - ./my-gpt-chat/.env
     depends_on:
@@ -32,6 +35,7 @@ services:
 
   n8n:
     image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
     ports:
       - "5678:5678"
     environment:
