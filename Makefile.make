@@ -8,7 +8,6 @@ services:=acsWebhooks balanceControl balancePlatform binLookup checkout configur
 
 # Generate models (for each service)
 models: $(services)
-
 balanceControl: spec=BalanceControlService-v1
 balancePlatform: spec=BalancePlatformService-v2
 binLookup: spec=BinLookupService-v54
