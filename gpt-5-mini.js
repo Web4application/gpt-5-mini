@@ -1,4 +1,4 @@
-// src/chatgpt5.js
+// src/gpt5-mini.js
 import express from "express";
 import OpenAI from "openai";
 
