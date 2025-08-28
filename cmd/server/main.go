@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
-	openai "github.com/openai/openai-go"
+	"golang.org/x/sync/errgroup"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 
@@ -23,30 +23,35 @@ type Message struct {
 	Content string `json:"content"`
 }
 
+type RequestBody struct {
+	Model    string    `json:"model"`
+	Messages []Message `json:"messages"`
+}
+
 var (
-	ctx = context.Background()
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR"), // "redis:6379" in Docker
-		Password: "",
+	ctx       = context.Background()
+	redisAddr = "localhost:6379" // or your cloud endpoint
+	rdb       = redis.NewClient(&redis.Options{
+		Addr:     redisAddr,
+		Password: "", // set if needed
 		DB:       0,
 	})
 )
 
 func main() {
-	http.HandleFunc("/generate", generateHandler)
-	http.HandleFunc("/kubu-hai", kubuHandler)
-
-	// Start pprof in background
+	// Start pprof
 	go func() {
-		log.Println("pprof on :6060")
-		log.Println(http.ListenAndServe(":6060", nil))
+		log.Println("pprof server on :8080")
+		log.Println(http.ListenAndServe(":8080", nil))
 	}()
 
-	log.Println("Server running on :8080")
+	http.HandleFunc("/chat", chatHandler)
+
+	log.Println("Chat server running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func generateHandler(w http.ResponseWriter, r *http.Request) {
+func chatHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Use POST", http.StatusMethodNotAllowed)
 		return
@@ -65,52 +70,66 @@ func generateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Style prompt
+	// Title‑case the prompt
 	caser := cases.Title(language.English)
-	userMessage := Message{"user", caser.String(input.Prompt)}
+	userMessage := Message{Role: "user", Content: caser.String(input.Prompt)}
 
+	// Append user message to Redis list
 	if err := appendMessage(input.SessionID, userMessage); err != nil {
-		http.Error(w, "Failed to store user message", http.StatusInternalServerError)
+		http.Error(w, "Failed to store message", http.StatusInternalServerError)
 		return
 	}
 
-	history, err := loadHistory(input.SessionID)
+	// Fetch full conversation from Redis
+	contextMessages, err := loadHistory(input.SessionID)
 	if err != nil {
 		http.Error(w, "Failed to load history", http.StatusInternalServerError)
 		return
 	}
 
-	apiKey := os.Getenv("OPENAI_API_KEY")
-	if apiKey == "" {
-		http.Error(w, "Missing OPENAI_API_KEY", http.StatusInternalServerError)
-		return
+	// Prepare GPT request
+	reqBody := RequestBody{
+		Model:    "gpt-5",
+		Messages: contextMessages,
+	}
+	payload, _ := json.Marshal(reqBody)
+
+	var g errgroup.Group
+	var aiResp struct {
+		Choices []struct {
+			Message Message `json:"message"`
+		} `json:"choices"`
 	}
 
-	client := openai.NewClient(apiKey)
-	resp, err := client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
-		Model:    "gpt-5",
-		Messages: convertMessages(history),
+	g.Go(func() error {
+		client := &http.Client{Timeout: 15 * time.Second}
+		req, _ := http.NewRequest("POST",
+			"https://api.openai.com/v1/chat/completions",
+			bytes.NewBuffer(payload))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+os.Getenv("OPENAI_API_KEY"))
+
+		res, err := client.Do(req)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
+		return json.NewDecoder(res.Body).Decode(&aiResp)
 	})
-	if err != nil {
+
+	if err := g.Wait(); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	reply := Message{
-		Role:    resp.Choices[0].Message.Role,
-		Content: resp.Choices[0].Message.Content,
-	}
-
-	if err := appendMessage(input.SessionID, reply); err != nil {
+	// Append AI reply
+	if err := appendMessage(input.SessionID, aiResp.Choices[0].Message); err != nil {
 		http.Error(w, "Failed to store reply", http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(reply)
-}
-
-func kubuHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello from kubu‑hai integration")
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(aiResp)
 }
 
 func appendMessage(sessionID string, msg Message) error {
@@ -118,6 +137,7 @@ func appendMessage(sessionID string, msg Message) error {
 	if err := rdb.RPush(ctx, sessionID, data).Err(); err != nil {
 		return err
 	}
+	// Optional: set expiry so old chats fade out
 	return rdb.Expire(ctx, sessionID, 24*time.Hour).Err()
 }
 
@@ -129,20 +149,9 @@ func loadHistory(sessionID string) ([]Message, error) {
 	msgs := []Message{}
 	for _, item := range raw {
 		var m Message
-		if json.Unmarshal([]byte(item), &m) == nil {
+		if err := json.Unmarshal([]byte(item), &m); err == nil {
 			msgs = append(msgs, m)
 		}
 	}
 	return msgs, nil
-}
-
-func convertMessages(msgs []Message) []openai.ChatCompletionMessage {
-	oaiMsgs := []openai.ChatCompletionMessage{}
-	for _, m := range msgs {
-		oaiMsgs = append(oaiMsgs, openai.ChatCompletionMessage{
-			Role:    m.Role,
-			Content: m.Content,
-		})
-	}
-	return oaiMsgs
 }
