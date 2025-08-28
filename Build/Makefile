@@ -84,3 +84,16 @@ clean:
 	git clean -f -d src/typings src/services || true
 
 .PHONY: check-deps fetch-specs services clean type-check
+
+## 9 — Test GPT‑5 Mini route
+test-ai-route:
+	@echo "🔍 Testing GPT‑5 Mini API route locally..."
+	# This calls your local server with a sample prompt to ensure it responds
+	curl -s -X POST http://localhost:3000/api/gpt5-mini \
+	  -H "Content-Type: application/json" \
+	  -d '{"prompt": "Hello from pipeline!"}' \
+	  | tee build/ai-test-response.json
+
+## 10 — Full pipeline run
+pipeline: services type-check test-ai-route
+	@echo "✅ SDK and AI route generation pipeline completed"
