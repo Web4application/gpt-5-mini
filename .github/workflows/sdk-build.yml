@@ -1,0 +1,51 @@
+name: SDK Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-sdk:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1 — Get your repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2 — Install OS-level deps
+      - name: Install required packages
+        run: sudo apt-get update && sudo apt-get install -y jq perl wget
+
+      # 3 — Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # 4 — Install project deps
+      - name: Install NPM dependencies
+        run: npm ci
+
+      # 5 — Generate SDK from specs
+      - name: Run Makefile build
+        run: make services
+
+      # 6 — TypeScript type-check
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # 7 — Run tests
+      - name: Test
+        run: npm test
+
+      # 8 — Build your project
+      - name: Build
+        run: npm run build
+
+      # 9 — Deploy (optional — customize this step)
+      - name: Deploy
+        run: ./scripts/deploy.sh
