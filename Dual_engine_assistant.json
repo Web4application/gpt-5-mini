@@ -1,0 +1,76 @@
+{
+  "name": "Dual Engine AI Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dual-assistant",
+        "responseMode": "onReceived"
+      },
+      "id": "1",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "dual-assistant"
+    },
+    {
+      "parameters": {
+        "url": "http://gpt-app:8080/generate",
+        "method": "POST",
+        "bodyParametersJson": "{\n  \"session_id\": \"n8n-session-1\",\n  \"prompt\": \"{{$json[\"prompt\"]}}\"\n}"
+      },
+      "id": "2",
+      "name": "Call GPT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [550, 200]
+    },
+    {
+      "parameters": {
+        "url": "http://ml-service:8000/infer",
+        "method": "POST",
+        "bodyParametersJson": "{\n  \"data\": {{$json[\"data\"]}}\n}"
+      },
+      "id": "3",
+      "name": "Call ML Service",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [550, 400]
+    },
+    {
+      "parameters": {
+        "functionCode": "return [{ json: { gpt_reply: $items(\"Call GPT\")[0].json, model_result: $items(\"Call ML Service\")[0].json } }];"
+      },
+      "id": "4",
+      "name": "Combine Results",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          { "node": "Call GPT", "type": "main", "index": 0 },
+          { "node": "Call ML Service", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Call GPT": {
+      "main": [
+        [
+          { "node": "Combine Results", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Call ML Service": {
+      "main": [
+        [
+          { "node": "Combine Results", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  }
+}
