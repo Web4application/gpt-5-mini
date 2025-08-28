@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GPT-5-mini Interactive Dashboard</title>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 24px; color: #111; background: #f7f8fb; }
+    header { display:flex; align-items:center; gap:12px; }
+    h1 { margin:0; font-size:20px; }
+    .summary { display:flex; gap:18px; margin-top:16px; flex-wrap:wrap; }
+    .card { background:#fff; padding:14px 16px; border-radius:10px; box-shadow:0 6px 18px rgba(20,20,40,0.06); min-width:160px; }
+    .charts { display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px; }
+    .full { grid-column: 1 / -1; }
+    ul { margin: 6px 0 0 16px; }
+    footer { margin-top:24px; font-size:12px; color:#666; }
+    .muted { color:#666; font-size:13px; }
+    @media (max-width:900px) { .charts { grid-template-columns: 1fr; } }
+    .top-prompts { max-height:200px; overflow:auto; padding-right:8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 GPT-5-mini — Interactive Usage Dashboard</h1>
+  </header>
+
+  <div id="notice" class="muted">Loading <code>stories/history.json</code>…</div>
+
+  <div id="content" style="display:none;">
+    <div class="summary">
+      <div class="card">
+        <div class="muted">Total runs</div>
+        <div id="totalRuns" style="font-weight:700; font-size:18px">—</div>
+      </div>
+      <div class="card">
+        <div class="muted">Total input tokens</div>
+        <div id="totalInput" style="font-weight:700; font-size:18px">—</div>
+      </div>
+      <div class="card">
+        <div class="muted">Total output tokens</div>
+        <div id="totalOutput" style="font-weight:700; font-size:18px">—</div>
+      </div>
+      <div class="card">
+        <div class="muted">Estimated total cost (USD)</div>
+        <div id="totalCost" style="font-weight:700; font-size:18px">—</div>
+      </div>
+      <div class="card">
+        <div class="muted">Average output length (tokens)</div>
+        <div id="avgOutput" style="font-weight:700; font-size:18px">—</div>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="card full">
+        <canvas id="costChart" height="120"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="muted">Output length per run</div>
+        <canvas id="outputChart" height="160"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="muted">Runs (click to copy filename)</div>
+        <ul id="runsList"></ul>
+      </div>
+
+      <div class="card">
+        <div class="muted">🔝 Top prompts</div>
+        <div class="top-prompts">
+          <ol id="topPrompts"></ol>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="muted">Tip: if charts look empty, make sure <code>stories/history.json</code> exists and you're serving files over HTTP (see instructions below).</div>
+    </footer>
+  </div>
+
+<script>
+(async function(){
+  const HISTORY_PATH = 'stories/history.json'; // relative to project root served by HTTP server
+
+  async function fetchHistory() {
+    try {
+      const res = await fetch(HISTORY_PATH + '?_=' + Date.now());
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (err) {
+      throw new Error('Failed to load history.json — ' + err.message);
+    }
+  }
+
+  function formatUSD(v) { return '$' + (Math.round(v * 1e6) / 1e6).toFixed(6); }
+
+  try {
+    const history = await fetchHistory();
+    if (!Array.isArray(history) || history.length === 0) {
+      document.getElementById('notice').innerText = 'No entries found in stories/history.json yet.';
+      return;
+    }
+
+    document.getElementById('notice').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+
+    // Derived stats
+    const totalRuns = history.length;
+    const totalInput = history.reduce((s,e)=> s + ((e.tokens && e.tokens.input_tokens) || 0), 0);
+    const totalOutput = history.reduce((s,e)=> s + ((e.tokens && e.tokens.output_tokens) || 0), 0);
+    const totalCost = history.reduce((s,e)=> s + (Number(e.cost_usd) || 0), 0);
+    const avgOutput = totalOutput / totalRuns;
+
+    document.getElementById('totalRuns').innerText = totalRuns;
+    document.getElementById('totalInput').innerText = totalInput;
+    document.getElementById('totalOutput').innerText = totalOutput;
+    document.getElementById('totalCost').innerText = formatUSD(totalCost);
+    document.getElementById('avgOutput').innerText = Math.round(avgOutput * 100) / 100;
+
+    // Prepare datasets (sorted by timestamp)
+    const sorted = history.slice().sort((a,b) => a.timestamp.localeCompare(b.timestamp));
+    const labels = sorted.map(e => e.timestamp);
+    const costs = sorted.map(e => Number(e.cost_usd) || 0);
+    const outputs = sorted.map(e => (e.tokens && e.tokens.output_tokens) || 0);
+
+    // Render cost chart
+    const costCtx = document.getElementById('costChart').getContext('2d');
+    new Chart(costCtx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Estimated Cost (USD)',
+          data: costs,
+          fill: true,
+          tension: 0.25,
+          pointRadius: 4,
+        }]
+      },
+      options: {
+        interaction: { mode: 'index', intersect: false },
+        responsive: true,
+        plugins: { tooltip: { callbacks: { label: ctx => formatUSD(ctx.raw) } } },
+        scales: { x: { ticks: { maxRotation: 45, autoSkip: true } }, y: { beginAtZero: true } }
+      }
+    });
+
+    // Output length chart (bar)
+    const outCtx = document.getElementById('outputChart').getContext('2d');
+    new Chart(outCtx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{ label: 'Output tokens', data: outputs }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { x: { ticks: { maxRotation: 45, autoSkip: true } }, y: { beginAtZero: true } }
+      }
+    });
+
+    // Runs list (click copies output filename)
+    const runsList = document.getElementById('runsList');
+    sorted.forEach(e => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.style = 'border:none;background:transparent;padding:0;color:#0366d6;cursor:pointer;text-decoration:underline;font-size:13px';
+      btn.textContent = e.output_file || '(no filename)';
+      btn.title = 'Click to copy filename';
+      btn.onclick = () => {
+        navigator.clipboard?.writeText(btn.textContent).then(()=> {
+          btn.textContent = 'Copied ✓ ' + (e.output_file || '');
+          setTimeout(()=> btn.textContent = e.output_file || '(no filename)', 1200);
+        }).catch(()=> alert('Unable to copy to clipboard'));
+      };
+      li.appendChild(btn);
+      runsList.appendChild(li);
+    });
+
+    // Top prompts
+    const promptCount = {};
+    history.forEach(e => { promptCount[e.prompt] = (promptCount[e.prompt]||0) + 1; });
+    const top = Object.entries(promptCount).sort((a,b)=> b[1]-a[1]).slice(0,10);
+    const topPrompts = document.getElementById('topPrompts');
+    top.forEach(([prompt, count]) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<code style="font-size:13px">${prompt}</code> — <small style="color:#666">${count}×</small>`;
+      topPrompts.appendChild(li);
+    });
+
+  } catch (err) {
+    document.getElementById('notice').innerText = err.message;
+  }
+})();
+</script>
+</body>
+</html>
