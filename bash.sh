@@ -117,3 +117,11 @@ pip install -r requirements.txt
 
 npm install express body-parser uuid
 
+curl -X POST http://localhost:8080/generate \
+  -H "Content-Type: application/json" \
+  -d '{"session_id":"abc123", "prompt":"Hello Ogun State"}'
+
+go mod init github.com/seriki/my-gpt-chat
+go mod tidy
+
+docker compose up --build
