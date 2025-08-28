@@ -198,5 +198,130 @@
   }
 })();
 </script>
+  <script>
+/* --- helper: renderDashboard(history) ---
+   Reuse the existing render logic you already have.
+   This function should re-render stats, charts, runs list & top prompts
+   using the provided `history` array.
+   Below I include a compact example that calls your existing logic.
+*/
+
+function formatUSD(v) { return '$' + (Math.round(v * 1e6) / 1e6).toFixed(6); }
+
+// Keep previously-written render code but move it into a function named renderDashboard
+// For brevity, assume you have a function renderDashboard(history) that:
+//  - computes totals
+//  - updates DOM elements (#totalRuns, #totalInput, #totalOutput, #totalCost, #avgOutput)
+//  - builds/updates Chart.js instances (costChart, outputChart) or re-creates them
+//  - populates runs list and top prompts
+//
+// If you didn't modularize, copy the rendering parts from your prior file and wrap into renderDashboard(history).
+
+// --- Minimal example to integrate with WebSocket (you should replace with your full renderDashboard implementation)
+let costChart = null;
+let outputChart = null;
+
+function renderDashboard(history){
+  // show UI
+  document.getElementById('notice').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  const totalRuns = history.length;
+  const totalInput = history.reduce((s,e)=> s + ((e.tokens && e.tokens.input_tokens) || 0), 0);
+  const totalOutput = history.reduce((s,e)=> s + ((e.tokens && e.tokens.output_tokens) || 0), 0);
+  const totalCost = history.reduce((s,e)=> s + (Number(e.cost_usd) || 0), 0);
+  const avgOutput = totalRuns ? totalOutput / totalRuns : 0;
+
+  document.getElementById('totalRuns').innerText = totalRuns;
+  document.getElementById('totalInput').innerText = totalInput;
+  document.getElementById('totalOutput').innerText = totalOutput;
+  document.getElementById('totalCost').innerText = formatUSD(totalCost);
+  document.getElementById('avgOutput').innerText = Math.round(avgOutput * 100) / 100;
+
+  // sort by timestamp
+  const sorted = history.slice().sort((a,b) => a.timestamp.localeCompare(b.timestamp));
+  const labels = sorted.map(e => e.timestamp);
+  const costs = sorted.map(e => Number(e.cost_usd) || 0);
+  const outputs = sorted.map(e => (e.tokens && e.tokens.output_tokens) || 0);
+
+  // Destroy old charts if they exist, then recreate
+  if (costChart) costChart.destroy();
+  if (outputChart) outputChart.destroy();
+
+  const costCtx = document.getElementById('costChart').getContext('2d');
+  costChart = new Chart(costCtx, {
+    type: 'line',
+    data: { labels, datasets:[{ label:'Estimated Cost (USD)', data:costs, fill:true, tension:0.25, pointRadius:4 }]},
+    options:{ interaction:{ mode:'index', intersect:false }, responsive:true, plugins:{ tooltip:{ callbacks:{ label: ctx => formatUSD(ctx.raw)}}}, scales:{ x:{ ticks:{ maxRotation:45, autoSkip:true } }, y:{ beginAtZero:true } } }
+  });
+
+  const outCtx = document.getElementById('outputChart').getContext('2d');
+  outputChart = new Chart(outCtx, {
+    type: 'bar',
+    data: { labels, datasets:[{ label:'Output tokens', data:outputs }]},
+    options:{ responsive:true, plugins:{ legend:{ display:false } }, scales:{ x:{ ticks:{ maxRotation:45, autoSkip:true } }, y:{ beginAtZero:true } } }
+  });
+
+  // Runs list
+  const runsList = document.getElementById('runsList');
+  runsList.innerHTML = '';
+  sorted.forEach(e => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.style = 'border:none;background:transparent;padding:0;color:#0366d6;cursor:pointer;text-decoration:underline;font-size:13px';
+    btn.textContent = e.output_file || '(no filename)';
+    btn.title = 'Click to copy filename';
+    btn.onclick = () => {
+      navigator.clipboard?.writeText(btn.textContent).then(()=> {
+        btn.textContent = 'Copied ✓ ' + (e.output_file || '');
+        setTimeout(()=> btn.textContent = e.output_file || '(no filename)', 1200);
+      }).catch(()=> alert('Unable to copy to clipboard'));
+    };
+    li.appendChild(btn);
+    runsList.appendChild(li);
+  });
+
+  // Top prompts
+  const promptCount = {};
+  history.forEach(e => { promptCount[e.prompt] = (promptCount[e.prompt]||0) + 1; });
+  const top = Object.entries(promptCount).sort((a,b)=> b[1]-a[1]).slice(0,10);
+  const topPrompts = document.getElementById('topPrompts');
+  topPrompts.innerHTML = '';
+  top.forEach(([prompt, count]) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<code style="font-size:13px">${prompt}</code> — <small style="color:#666">${count}×</small>`;
+    topPrompts.appendChild(li);
+  });
+}
+
+// --- WebSocket connection to receive live updates ---
+(function(){
+  const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+  const wsUrl = `${protocol}://${location.host}/ws`;
+  const ws = new WebSocket(wsUrl);
+
+  ws.addEventListener('open', () => {
+    console.log('WebSocket connected to', wsUrl);
+  });
+
+  ws.addEventListener('message', (ev) => {
+    try {
+      const history = JSON.parse(ev.data);
+      renderDashboard(history);
+    } catch (err) {
+      console.error('Invalid history payload', err);
+    }
+  });
+
+  ws.addEventListener('close', () => {
+    console.warn('WebSocket closed. The dashboard will no longer auto-update. Refresh to retry.');
+    document.getElementById('notice').innerText = 'Disconnected from server — live updates paused.';
+  });
+
+  ws.addEventListener('error', (e) => {
+    console.error('WebSocket error', e);
+  });
+})();
+</script>
 </body>
 </html>
