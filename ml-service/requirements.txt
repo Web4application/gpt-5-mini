@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+torch
+numpy
+imgaug
+nlpaug
+tsaug
+cpufeature
+petals
