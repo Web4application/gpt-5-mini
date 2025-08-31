@@ -1,45 +1,26 @@
+
 import fs from "fs";
-import path from "path";
 import OpenAI from "openai";
-import dotenv from "dotenv";
+const client = new OpenAI();
 
-dotenv.config();
-
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-async function uploadPDF(filePath: string) {
-  const fileStream = fs.createReadStream(filePath);
-  const file = await client.files.create({
-    file: fileStream,
+// Upload a PDF we will reference in the prompt variables
+const file = await client.files.create({
+    file: fs.createReadStream("draconomicon.pdf"),
     purpose: "user_data",
-  });
-  return file.id;
-}
+});
 
-async function generateResponse(topic: string, fileId: string) {
-  const response = await client.responses.create({
+const response = await client.responses.create({
     model: "gpt-5",
     prompt: {
-      id: "pmpt_abc123",
-      variables: {
-        topic,
-        reference_pdf: {
-          type: "input_file",
-          file_id: fileId,
+        id: "pmpt_abc123",
+        variables: {
+            topic: "Dragons",
+            reference_pdf: {
+                type: "input_file",
+                file_id: file.id,
+            },
         },
-      },
     },
-  });
-  return response.output_text;
-}
+});
 
-(async () => {
-  try {
-    const pdfPath = path.join(__dirname, "../uploads/draconomicon.pdf");
-    const fileId = await uploadPDF(pdfPath);
-    const output = await generateResponse("Dragons", fileId);
-    console.log("📝 Response:\n", output);
-  } catch (err) {
-    console.error("❌ Error:", err);
-  }
-})();
+console.log(response.output_text);
