@@ -22,7 +22,7 @@ export async function fetchWithTimeout(
 }
 
 /**
- * Handle incoming tool calls from the stream.
+ * Merge incoming tool calls into runTools array.
  */
 export function handleToolCalls(
   runTools: any[],
