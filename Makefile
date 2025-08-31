@@ -112,3 +112,12 @@ clean:
 	git clean -f -d src/typings src/services/management
 
 .PHONY: templates models $(services)
+
+all: build/spec $(openapi-generator-jar) models services
+
+npx prettier --write ./src/services/$@/*.ts
+
+clean:
+    rm -rf build src/typings/* src/services/*
+
+@echo "Generating service: $@"
