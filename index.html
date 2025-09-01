@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>GPT-5 Mini by Web4</title>
   <link rel="icon" href="favicon.png" />
-  <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#2575fc" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg: #ffffff;
+      --bg: #f9fafb;
       --text: #222;
       --brand: #2575fc;
-      --user-bg: var(--brand);
-      --ai-bg: #e0e0e0;
-      --surface: #f4f4f4;
+      --surface: #fff;
       --radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     body {
       background: var(--bg);
@@ -24,40 +23,53 @@
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      transition: background 0.3s, color 0.3s;
+      line-height: 1.5;
     }
     header {
-      background: var(--surface);
+      background: var(--brand);
+      color: #fff;
       padding: 16px 24px;
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      box-shadow: var(--shadow);
     }
     .brand h1 {
       margin: 0;
       font-size: 1.5rem;
     }
+    .brand p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
     nav a {
       margin-left: 16px;
       text-decoration: none;
-      color: var(--brand);
+      color: #fff;
       font-weight: 600;
+      transition: opacity 0.2s;
     }
+    nav a:hover { opacity: 0.8; }
     main {
       padding: 24px;
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 24px;
     }
     .panel {
       background: var(--surface);
       border-radius: var(--radius);
       padding: 16px;
+      box-shadow: var(--shadow);
     }
+    .panel h2 { margin-top: 0; }
     #chat-log {
       max-height: 300px;
       overflow-y: auto;
       margin-bottom: 12px;
+      padding-right: 6px;
     }
     .message {
       max-width: 80%;
@@ -69,12 +81,12 @@
     }
     .message.user {
       margin-left: auto;
-      background: var(--user-bg);
+      background: var(--brand);
       color: white;
     }
     .message.ai {
       margin-right: auto;
-      background: var(--ai-bg);
+      background: #e5e7eb;
       color: var(--text);
     }
     .chat-form {
@@ -83,59 +95,46 @@
     }
     textarea#user-input {
       flex: 1;
-      border: none;
+      border: 1px solid #ccc;
       resize: none;
       padding: 8px;
       border-radius: var(--radius);
+      font-family: inherit;
     }
     button {
       background: var(--brand);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 16px;
       border-radius: var(--radius);
       cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
     }
-    input[type="text"],
-    input[type="file"],
-    textarea {
+    button:hover { background: #185cd1; }
+    input[type="text"], input[type="file"], textarea {
       width: 100%;
       margin-bottom: 10px;
       padding: 10px;
       border-radius: var(--radius);
       border: 1px solid #ccc;
+      font-family: inherit;
     }
     #joke-output {
       margin-bottom: 10px;
       font-style: italic;
+      min-height: 24px;
     }
-    canvas#assetChart {
-      max-width: 100%;
-      height: 300px;
-    }
+    canvas#assetChart { max-width: 100%; height: 300px; }
     footer {
       text-align: center;
       padding: 20px;
-      background: #eee;
+      background: #f1f1f1;
       font-size: 0.9rem;
+      margin-top: 20px;
     }
-    .dark-mode {
-      --bg: #121212;
-      --text: #f0f0f0;
-      --surface: #1e1e1e;
-      --ai-bg: #333;
-    }
-    @media (max-width: 768px) {
-      main {
-        padding: 16px;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      nav a {
-        margin: 8px 0;
-      }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -165,9 +164,8 @@
 
     <section id="prompt-studio" class="panel">
       <h2>🧠 Prompt Studio</h2>
-      <textarea id="template" placeholder="Enter your prompt template..."></textarea>
+      <textarea id="template" placeholder="Enter your prompt template (use {{topic}})..."></textarea>
       <input type="text" id="topic" placeholder="Topic" />
-      <input type="file" id="pdf" />
       <button onclick="sendPrompt()">Run Prompt</button>
       <pre id="output"></pre>
     </section>
@@ -188,8 +186,107 @@
     <p>© 2025 Web4 • GPT-5 Mini</p>
   </footer>
 
-  <script type="module" src="/src/main.js"></script>
-  <script src="prompt-studio.js"></script>
-  <script src="chart.js"></script>
+  <script>
+    const API_KEY = "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
+"; // ⚠️ Replace with your OpenAI API key
+
+    // Chat
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("user-input");
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      addMessage("user", userText);
+      input.value = "";
+
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini", // fallback if gpt-5-mini not public
+            messages: [{ role: "user", content: userText }],
+          }),
+        });
+
+        const data = await res.json();
+        const reply = data?.choices?.[0]?.message?.content || "(no reply)";
+        addMessage("ai", reply);
+      } catch (err) {
+        addMessage("ai", "Error: " + err.message);
+      }
+    }
+
+    function addMessage(sender, text) {
+      const chatLog = document.getElementById("chat-log");
+      const div = document.createElement("div");
+      div.className = "message " + sender;
+      div.textContent = text;
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // Prompt Studio
+    async function sendPrompt() {
+      const template = document.getElementById("template").value;
+      const topic = document.getElementById("topic").value;
+      const output = document.getElementById("output");
+
+      if (!template || !topic) {
+        output.textContent = "Please enter both template and topic.";
+        return;
+      }
+
+      output.textContent = "Running…";
+
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            messages: [{ role: "user", content: template.replace("{{topic}}", topic) }],
+          }),
+        });
+
+        const data = await res.json();
+        output.textContent = data?.choices?.[0]?.message?.content || "(no reply)";
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+      }
+    }
+
+    // JokeBox
+    const jokes = [
+      "Why did the AI go broke? Because it had too many hidden layers.",
+      "I told my computer I needed a break… now it won’t stop sending me KitKat ads.",
+      "GPT-5 walks into a bar. The bartender says: 'Is this context long enough?'"
+    ];
+    function getJoke() {
+      const output = document.getElementById("joke-output");
+      output.textContent = jokes[Math.floor(Math.random() * jokes.length)];
+    }
+
+    // Dashboard Chart
+    const ctx = document.getElementById("assetChart").getContext("2d");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["BTC", "ETH", "SOL", "ADA"],
+        datasets: [{
+          label: "Assets",
+          data: [40, 25, 15, 10],
+          backgroundColor: ["#f2a900", "#627eea", "#66f", "#0d6efd"]
+        }]
+      }
+    });
+  </script>
 </body>
 </html>
