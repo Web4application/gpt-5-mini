@@ -134,3 +134,4 @@ npm install express dotenv openai cors
 
 OPENAI_API_KEY=qusDmXVuflS2UgVbtNoxT3BlbkFJdB1IU0OFhSmKkTfBQpAo
 PORT=5000
+export RUNNER_VERSION=$(curl -X 'GET' https://data.forgejo.org/api/v1/repos/forgejo/runner/releases/latest | jq .name -r | cut -c 2-)
