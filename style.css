@@ -1,0 +1,150 @@
+:root {
+  --bg: #ffffff;
+  --text: #222;
+  --brand: #2575fc;
+  --user-bg: var(--brand);
+  --ai-bg: #e0e0e0;
+  --surface: #f4f4f4;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+header {
+  background: var(--surface);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+nav a {
+  margin-left: 16px;
+  text-decoration: none;
+  color: var(--brand);
+  font-weight: 600;
+}
+
+main {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+#chat-log {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  line-height: 1.4;
+  word-break: break-word;
+  margin: 6px 0;
+}
+
+.message.user {
+  margin-left: auto;
+  background: var(--user-bg);
+  color: white;
+}
+
+.message.ai {
+  margin-right: auto;
+  background: var(--ai-bg);
+  color: var(--text);
+}
+
+.chat-form {
+  display: flex;
+  gap: 8px;
+}
+
+textarea#user-input {
+  flex: 1;
+  border: none;
+  resize: none;
+  padding: 8px;
+  border-radius: var(--radius);
+}
+
+button {
+  background: var(--brand);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+input[type="text"],
+input[type="file"],
+textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  border: 1px solid #ccc;
+}
+
+#joke-output {
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+canvas#assetChart {
+  max-width: 100%;
+  height: 300px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #eee;
+  font-size: 0.9rem;
+}
+
+/* Dark Mode */
+.dark-mode {
+  --bg: #121212;
+  --text: #f0f0f0;
+  --surface: #1e1e1e;
+  --ai-bg: #333;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 16px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a {
+    margin: 8px 0;
+  }
+}
