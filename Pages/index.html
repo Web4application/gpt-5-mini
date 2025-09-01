@@ -42,7 +42,7 @@
 
 <footer>
   <p>We respect your privacy. No data is stored without your consent.</p>
-  <a href="https://github.com/Web4application/roupg" target="_blank">View Source on GitHub</a>
+  <a href="https://web4application.github.io/web.chatgpt-5mini." target="_blank">View Source on GitHub</a>
 </footer>
 
 <script>
@@ -145,42 +145,6 @@ voiceBtn.addEventListener("click",()=>{
 
 sendBtn.addEventListener("click",sendMessage);
 input.addEventListener("keypress",e=>{ if(e.key==="Enter") sendMessage(); });
-  const sendMessage = async () => {
-  const text = input.value.trim();
-  if (!text) return;
-
-  addMessage('You: ' + text, 'user');
-  input.value = '';
-  input.focus();
-
-  const typingMsg = addMessage('AI is typing', 'ai');
-  let dots = 0;
-
-  const typingInterval = setInterval(() => {
-    dots = (dots + 1) % 4;
-    typingMsg.textContent = 'AI is typing' + '.'.repeat(dots);
-    chat.scrollTop = chat.scrollHeight;
-  }, 500);
-
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text }),
-    });
-
-    if (!res.ok) throw new Error('Network response not OK');
-    const data = await res.json();
-
-    clearInterval(typingInterval);
-    typingMsg.textContent = '';
-    typeText(typingMsg, 'AI: ' + data.reply, 30);
-  } catch (err) {
-    clearInterval(typingInterval);
-    typingMsg.textContent = '⚠️ Error connecting to backend';
-    console.error(err);
-  }
-};
 </script>
 </body>
 </html>
