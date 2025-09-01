@@ -125,3 +125,6 @@ go mod init github.com/seriki/my-gpt-chat
 go mod tidy
 
 docker compose up --build
+
+npm install @supabase/supabase-js
+
