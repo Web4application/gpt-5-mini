@@ -1,370 +1,306 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPT-5 Mini • Web4</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive. Free to use and easy to try." />
+  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot, writing help, brainstorm tool" />
+  <meta property="og:title" content="GPT-5 mini" />
+  <meta property="og:description" content="A conversational AI system that listens, learns, and challenges" />
+  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
+  <meta property="og:url" content="https://GPT-5-mini.com/" />
+  <link rel="canonical" href="https://GPT-5-mini.com/" />
+  <link rel="icon" href="favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <title>ChatGPT5 mini</title>
+
   <style>
-    :root {
-      --bg: #f9fafb;
-      --surface: #ffffff;
-      --text: #111827;
-      --subtext: #6b7280;
-      --brand: #2563eb;
-      --radius: 16px;
-      --shadow: 0 4px 12px rgba(0,0,0,0.06);
+    :root{
+      --primary:#2575fc;
+      --accent:#6a11cb;
+      --bg:#fff;
+      --muted:#f4f4f4;
+      --text:#222;
+      --card:#f4f4f4;
+      --radius:12px;
     }
-    body.dark {
-      --bg: #111827;
-      --surface: #1f2937;
-      --text: #f9fafb;
-      --subtext: #9ca3af;
-      --brand: #3b82f6;
-      --shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    aside {
-      width: 220px;
-      background: var(--surface);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow);
-    }
-    .brand { font-size: 1.3rem; font-weight: 700; margin-bottom: 30px; }
-    nav a {
-      display: block;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      color: var(--text);
-      text-decoration: none;
-      margin-bottom: 6px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    nav a:hover, nav a.active {
-      background: var(--brand);
-      color: #fff;
-    }
-    .toggle-dark {
-      margin-top: auto;
-      padding: 8px;
-      border-radius: var(--radius);
-      background: var(--brand);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    main {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .panel {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      flex: 1;
-      display: none;
-      flex-direction: column;
-    }
-    .panel.active { display: flex; }
-
-    /* --- Chat Styling --- */
-    #chat-log {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      margin-bottom: 12px;
-    }
-    .chat-row {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
-      gap: 10px;
-    }
-    .chat-row.user { justify-content: flex-end; }
-    .chat-row.ai { justify-content: flex-start; }
-    .avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--brand);
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .bubble {
-      max-width: 70%;
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      line-height: 1.5;
-      box-shadow: var(--shadow);
-      white-space: pre-wrap;
-    }
-    .chat-row.user .bubble {
-      background: var(--brand);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-    .chat-row.ai .bubble {
-      background: #e5e7eb;
-      color: var(--text);
-      border-bottom-left-radius: 4px;
-    }
-    body.dark .chat-row.ai .bubble {
-      background: #374151;
+      font-family: 'Inter',sans-serif;
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition:background .25s,color .25s;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
     }
 
-    .chat-form { display: flex; gap: 8px; }
-    textarea#user-input {
-      flex: 1;
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      padding: 10px;
-      font-family: inherit;
+    header.hero {
+      text-align:center;
+      padding:56px 20px;
+      background:linear-gradient(90deg,var(--accent),var(--primary));
+      color:#fff;
     }
-    button {
-      background: var(--brand);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
+    header.hero img { height:64px; display:block; margin:0 auto 16px; }
+    .cta-button {
+      display:inline-block;
+      margin-top:12px;
+      background:#fff;
+      color:var(--primary);
+      padding:10px 20px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:700;
     }
-    button:hover { background: #1d4ed8; }
 
-    /* Prompt Studio & others */
-    textarea, input {
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      padding: 10px;
-      margin-bottom: 10px;
-      font-family: inherit;
+    main { flex:1; width:100%; max-width:1100px; margin:0 auto; padding:24px; }
+
+    .controls { display:flex; justify-content:center; gap:12px; margin:12px 0 24px; }
+    .controls button { padding:8px 12px; border-radius:8px; border:0; cursor:pointer; background:var(--primary); color:white; font-weight:600; }
+    .controls .ghost { background:#fff; color:var(--primary); border:1px solid rgba(0,0,0,.06); }
+
+    #chat-wrapper { max-width:640px; margin:0 auto; }
+    #chat-container {
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      height:420px;
+      overflow:hidden;
     }
-    pre {
-      background: rgba(0,0,0,0.05);
-      padding: 12px;
-      border-radius: var(--radius);
-      max-height: 200px;
-      overflow-y: auto;
-      white-space: pre-wrap;
+    #messages {
+      flex:1;
+      overflow:auto;
+      padding:8px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
     }
-    #joke-output { font-style: italic; margin-bottom: 12px; }
-    canvas { max-width: 100%; height: 300px; }
+    .msg {
+      max-width:80%;
+      padding:10px 14px;
+      border-radius:12px;
+      line-height:1.4;
+      word-break:break-word;
+    }
+    .msg.user { align-self:flex-end; background:var(--primary); color:#fff; }
+    .msg.ai { align-self:flex-start; background:#e9e9e9; color:var(--text); }
+    .input-row { display:flex; gap:8px; margin-top:12px; }
+    .input-row input[type="text"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #ddd;
+      outline:none;
+      font-size:1rem;
+    }
+    .input-row button { padding:10px 16px; border-radius:8px; border:0; background:var(--primary); color:#fff; cursor:pointer; }
+
+    .testimonials {
+      padding:28px 16px;
+      background:#fafafa;
+      margin-top:28px;
+      border-radius:8px;
+      text-align:center;
+    }
+    footer {
+      text-align:center;
+      padding:16px;
+      background:#eee;
+      margin-top:28px;
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      --bg:#0f1113;
+      --text:#e6e6e6;
+      --card:#161719;
+    }
+    .dark-mode header.hero { color:#fff; }
+    .dark-mode .msg.ai { background:#222; color:#eaeaea; }
+
+    @media (max-width:720px){
+      header.hero{padding:28px 16px}
+      #chat-container{height:360px}
+    }
   </style>
 </head>
 <body>
-  <aside>
-    <div class="brand">🤖 GPT-5 Mini</div>
-    <nav>
-      <a href="#" class="active" onclick="showPanel('chat')">Chat</a>
-      <a href="#" onclick="showPanel('prompt')">Prompt Studio</a>
-      <a href="#" onclick="showPanel('jokes')">JokeBox</a>
-      <a href="#" onclick="showPanel('dashboard')">Dashboard</a>
-    </nav>
-    <button class="toggle-dark" onclick="toggleDark()">Toggle Theme</button>
-  </aside>
+  <header class="hero" role="banner">
+    <img src="logo.png" alt="ChatGPT5 mini logo" />
+    <h1>Welcome to ChatGPT5 mini</h1>
+    <p>Your AI companion for writing, learning, and productivity.</p>
+    <a class="cta-button" href="#chat">Try It Now</a>
+  </header>
 
   <main>
-    <section id="chat" class="panel active">
-      <h2>💬 Chat</h2>
-      <div id="chat-log"></div>
-      <form class="chat-form" onsubmit="handleSubmit(event)">
-        <textarea id="user-input" rows="2" placeholder="Type your message..."></textarea>
-        <button type="submit">Send</button>
-      </form>
+    <div class="controls" aria-hidden="false">
+      <button id="toggle-dark" type="button" aria-pressed="false">Toggle Dark Mode</button>
+      <button id="clear-chat" class="ghost" type="button">Clear Chat</button>
+    </div>
+
+    <section id="chat-wrapper" aria-labelledby="chat-heading">
+      <h2 id="chat-heading" style="text-align:center">See ChatGPT5 mini in Action</h2>
+
+      <div id="chat-container" aria-live="polite" aria-atomic="false">
+        <div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+        <form id="chat-form" class="input-row" aria-label="Chat form">
+          <label for="message" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Message</label>
+          <input id="message" name="message" type="text" autocomplete="off" placeholder="Type your message and press Enter" required />
+          <button id="send" type="submit">Send</button>
+        </form>
+      </div>
     </section>
 
-    <section id="prompt" class="panel">
-      <h2>🧠 Prompt Studio</h2>
-      <textarea id="template" placeholder="Enter prompt with {{topic}}..."></textarea>
-      <input type="text" id="topic" placeholder="Topic" />
-      <button onclick="sendPrompt()">Run Prompt</button>
-      <pre id="output"></pre>
-    </section>
-
-    <section id="jokes" class="panel">
-      <h2>🎭 JokeBox</h2>
-      <div id="joke-output">Click below for a laugh!</div>
-      <button onclick="getJoke()">Tell me a joke</button>
-    </section>
-
-    <section id="dashboard" class="panel">
-      <h2>📊 Asset Dashboard</h2>
-      <canvas id="assetChart"></canvas>
+    <section class="testimonials" aria-hidden="false">
+      <h3>Why People Love ChatGPT5 mini</h3>
+      <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+      <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
     </section>
   </main>
 
+  <footer>
+    <p>We respect your privacy. No data is stored without your consent.</p>
+    <p><a href="https://github.com/Web4application/roupg" target="_blank" rel="noopener">View Source on GitHub</a></p>
+  </footer>
+
   <script>
-    const API_KEY = "sk-YOUR_API_KEY"; // ⚠️ replace
+    // Graceful client behavior:
+    // 1) Try server-sent events streaming at /api/stream?message=...
+    // 2) Fall back to a JSON POST to /api/chat if streaming is not available.
 
-    function showPanel(id) {
-      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      event.target.classList.add("active");
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('message');
+    const toggleDark = document.getElementById('toggle-dark');
+    const clearBtn = document.getElementById('clear-chat');
+
+    function appendMessage(text, cls) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + cls;
+      // always use textContent to avoid XSS
+      div.textContent = text;
+      messagesEl.appendChild(div);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
-    function toggleDark() { document.body.classList.toggle("dark"); }
 
-    // --- Chat with avatars + streaming ---
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById("user-input");
-      const userText = input.value.trim();
-      if (!userText) return;
-      addMessage("user", userText);
-      input.value = "";
+    function clearMessages(){
+      messagesEl.innerHTML = '';
+      input.focus();
+    }
 
-      const aiBubble = addMessage("ai", ""); // placeholder
+    toggleDark.addEventListener('click', () => {
+      const pressed = document.body.classList.toggle('dark-mode');
+      toggleDark.setAttribute('aria-pressed', String(pressed));
+    });
 
+    clearBtn.addEventListener('click', clearMessages);
+
+    async function postChatMessage(text){
+      // fallback non-streaming request
       try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: userText }],
-            stream: true
-          }),
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
         });
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        return data.reply || data.message || '';
+      } catch (err) {
+        console.error('POST /api/chat failed', err);
+        throw err;
+      }
+    }
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let buffer = "";
+    function streamChatMessage(text){
+      // Returns a promise that resolves with the final text, and streams partial data into the UI.
+      return new Promise((resolve, reject) => {
+        // Use same-origin EventSource endpoint if available.
+        // Note: EventSource doesn't support POST or request bodies; we encode message into querystring.
+        const url = '/api/stream?message=' + encodeURIComponent(text);
+        let finalText = '';
+        let es;
+        try {
+          es = new EventSource(url);
+        } catch (e) {
+          return reject(e);
+        }
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
+        es.onmessage = (evt) => {
+          if (!evt.data) return;
+          if (evt.data === '[END]') {
+            es.close();
+            resolve(finalText);
+            return;
+          }
+          // Append chunk
+          finalText += evt.data;
+          // Update the last AI message or create one
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = finalText;
+          } else {
+            appendMessage(finalText, 'ai');
+          }
+        };
 
-          const parts = buffer.split("\n\n");
-          buffer = parts.pop();
+        es.onerror = (err) => {
+          es.close();
+          reject(err);
+        };
+      });
+    }
 
-          for (const part of parts) {
-            if (part.startsWith("data: ")) {
-              const data = part.replace("data: ", "").trim();
-              if (data === "[DONE]") return;
-              try {
-                const json = JSON.parse(data);
-                const token = json.choices?.[0]?.delta?.content;
-                if (token) {
-                  aiBubble.textContent += token;
-                  scrollChat();
-                }
-              } catch {}
-            }
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      appendMessage('You: ' + text, 'user');
+      input.value = '';
+      input.disabled = true;
+      // optimistic AI placeholder
+      appendMessage('...', 'ai');
+
+      // Try streaming first; if it fails, try POST fallback.
+      try {
+        await streamChatMessage(text);
+      } catch (streamErr) {
+        console.warn('Streaming failed, falling back to POST:', streamErr);
+        try {
+          const reply = await postChatMessage(text);
+          // replace last AI message (which may be '...') with reply
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = reply;
+          } else {
+            appendMessage(reply, 'ai');
+          }
+        } catch (postErr) {
+          // show error message
+          const last = messagesEl.lastElementChild;
+          if (last && last.classList.contains('ai')) {
+            last.textContent = '⚠️ Error connecting to backend';
+          } else {
+            appendMessage('⚠️ Error connecting to backend', 'ai');
           }
         }
-      } catch (err) {
-        aiBubble.textContent = "Error: " + err.message;
-      }
-    }
-
-    function addMessage(sender, text) {
-      const chatLog = document.getElementById("chat-log");
-      const row = document.createElement("div");
-      row.className = "chat-row " + sender;
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = sender === "user" ? "U" : "AI";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.textContent = text;
-
-      if (sender === "user") {
-        row.appendChild(bubble);
-        row.appendChild(avatar);
-      } else {
-        row.appendChild(avatar);
-        row.appendChild(bubble);
-      }
-
-      chatLog.appendChild(row);
-      scrollChat();
-      return bubble;
-    }
-    function scrollChat() {
-      const chatLog = document.getElementById("chat-log");
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    // Prompt Studio
-    async function sendPrompt() {
-      const template = document.getElementById("template").value;
-      const topic = document.getElementById("topic").value;
-      const output = document.getElementById("output");
-      if (!template || !topic) {
-        output.textContent = "Please enter both template and topic.";
-        return;
-      }
-      output.textContent = "Running…";
-      try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: template.replace("{{topic}}", topic) }],
-          }),
-        });
-        const data = await res.json();
-        output.textContent = data?.choices?.[0]?.message?.content || "(no reply)";
-      } catch (err) {
-        output.textContent = "Error: " + err.message;
-      }
-    }
-
-    // JokeBox
-    const jokes = [
-      "Why did the AI go broke? Too many hidden layers.",
-      "I told my PC I needed a break. Now it won’t stop sending KitKats.",
-      "GPT-5 walks into a bar. Bartender: 'Is this context long enough?'"
-    ];
-    function getJoke() {
-      document.getElementById("joke-output").textContent =
-        jokes[Math.floor(Math.random() * jokes.length)];
-    }
-
-    // Dashboard
-    new Chart(document.getElementById("assetChart"), {
-      type: "line",
-      data: {
-        labels: ["BTC", "ETH", "SOL", "ADA"],
-        datasets: [{
-          label: "Assets",
-          data: [40, 25, 15, 10],
-          borderColor: "#2563eb",
-          backgroundColor: "rgba(37,99,235,0.2)",
-          fill: true,
-          tension: 0.3
-        }]
+      } finally {
+        input.disabled = false;
+        input.focus();
       }
     });
+
+    // keyboard accessibility: focus input on load
+    window.addEventListener('load', () => input.focus());
   </script>
 </body>
 </html>
