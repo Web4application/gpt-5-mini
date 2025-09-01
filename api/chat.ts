@@ -5,7 +5,10 @@ import dotenv from "dotenv";
 dotenv.config();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default function handler(req, res) {
+  res.status(200).json({ message: "Hello world" });
+}
+ {
   const message = req.query.message as string;
 
   if (!message || message.trim() === "") {
