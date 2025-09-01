@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GPT-5 Mini by Web4</title>
+  <link rel="icon" href="favicon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2575fc" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #222;
+      --brand: #2575fc;
+      --user-bg: var(--brand);
+      --ai-bg: #e0e0e0;
+      --surface: #f4f4f4;
+      --radius: 12px;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: var(--surface);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    nav a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: var(--brand);
+      font-weight: 600;
+    }
+    main {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    #chat-log {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+    .message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      line-height: 1.4;
+      word-break: break-word;
+      margin: 6px 0;
+    }
+    .message.user {
+      margin-left: auto;
+      background: var(--user-bg);
+      color: white;
+    }
+    .message.ai {
+      margin-right: auto;
+      background: var(--ai-bg);
+      color: var(--text);
+    }
+    .chat-form {
+      display: flex;
+      gap: 8px;
+    }
+    textarea#user-input {
+      flex: 1;
+      border: none;
+      resize: none;
+      padding: 8px;
+      border-radius: var(--radius);
+    }
+    button {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid #ccc;
+    }
+    #joke-output {
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    canvas#assetChart {
+      max-width: 100%;
+      height: 300px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #eee;
+      font-size: 0.9rem;
+    }
+    .dark-mode {
+      --bg: #121212;
+      --text: #f0f0f0;
+      --surface: #1e1e1e;
+      --ai-bg: #333;
+    }
+    @media (max-width: 768px) {
+      main {
+        padding: 16px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav a {
+        margin: 8px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>🤖 GPT-5 Mini</h1>
+      <p>Built by Web4</p>
+    </div>
+    <nav>
+      <a href="#chat">Chat</a>
+      <a href="#prompt-studio">Prompt Studio</a>
+      <a href="#jokebox">JokeBox</a>
+      <a href="#dashboard">Dashboard</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="chat" class="panel">
+      <h2>💬 Chat</h2>
+      <div id="chat-log"></div>
+      <form class="chat-form" onsubmit="handleSubmit(event)">
+        <textarea id="user-input" rows="2" placeholder="Ask me anything…"></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+
+    <section id="prompt-studio" class="panel">
+      <h2>🧠 Prompt Studio</h2>
+      <textarea id="template" placeholder="Enter your prompt template..."></textarea>
+      <input type="text" id="topic" placeholder="Topic" />
+      <input type="file" id="pdf" />
+      <button onclick="sendPrompt()">Run Prompt</button>
+      <pre id="output"></pre>
+    </section>
+
+    <section id="jokebox" class="panel">
+      <h2>🎭 JokeBox</h2>
+      <div id="joke-output">Click below for a laugh!</div>
+      <button onclick="getJoke()">Tell me a joke</button>
+    </section>
+
+    <section id="dashboard" class="panel">
+      <h2>📊 Asset Dashboard</h2>
+      <canvas id="assetChart"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Web4 • GPT-5 Mini</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script src="prompt-studio.js"></script>
+  <script src="chart.js"></script>
+</body>
+</html>
