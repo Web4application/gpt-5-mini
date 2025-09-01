@@ -127,4 +127,10 @@ go mod tidy
 docker compose up --build
 
 npm install @supabase/supabase-js
+mkdir gpt5-backend
+cd gpt5-backend
+npm init -y
+npm install express dotenv openai cors
 
+OPENAI_API_KEY=qusDmXVuflS2UgVbtNoxT3BlbkFJdB1IU0OFhSmKkTfBQpAo
+PORT=5000
