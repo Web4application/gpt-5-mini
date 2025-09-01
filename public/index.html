@@ -1,46 +1,70 @@
-const input = document.getElementById("input");
-const send = document.getElementById("send");
-const chat = document.getElementById("chat");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GPT-5 Mini by Web4</title>
+  <link rel="icon" href="favicon.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2575fc" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>🤖 GPT-5 Mini</h1>
+      <p>Built by Web4</p>
+    </div>
+    <nav>
+      <a href="#chat">Chat</a>
+      <a href="#prompt-studio">Prompt Studio</a>
+      <a href="#jokebox">JokeBox</a>
+      <a href="#dashboard">Dashboard</a>
+    </nav>
+  </header>
 
-function appendMessage(text, sender = "user") {
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}`;
-  msg.textContent = text;
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}
+  <main>
+    <!-- Chat Section -->
+    <section id="chat" class="panel">
+      <h2>💬 Chat</h2>
+      <div id="chat-log"></div>
+      <form class="chat-form" onsubmit="handleSubmit(event)">
+        <textarea id="user-input" rows="2" placeholder="Ask me anything…"></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
 
-function sendMessage() {
-  const message = input.value.trim();
-  if (!message) return;
+    <!-- Prompt Studio -->
+    <section id="prompt-studio" class="panel">
+      <h2>🧠 Prompt Studio</h2>
+      <textarea id="template" placeholder="Enter your prompt template..."></textarea>
+      <input type="text" id="topic" placeholder="Topic" />
+      <input type="file" id="pdf" />
+      <button onclick="sendPrompt()">Run Prompt</button>
+      <pre id="output"></pre>
+    </section>
 
-  appendMessage(message, "user");
-  input.value = "";
+    <!-- JokeBox -->
+    <section id="jokebox" class="panel">
+      <h2>🎭 JokeBox</h2>
+      <div id="joke-output">Click below for a laugh!</div>
+      <button onclick="getJoke()">Tell me a joke</button>
+    </section>
 
-  const eventSource = new EventSource(`/api/chat?message=${encodeURIComponent(message)}`);
+    <!-- Dashboard -->
+    <section id="dashboard" class="panel">
+      <h2>📊 Asset Dashboard</h2>
+      <canvas id="assetChart"></canvas>
+    </section>
+  </main>
 
-  let botMessage = "";
-  const botDiv = document.createElement("div");
-  botDiv.className = "message bot";
-  chat.appendChild(botDiv);
+  <footer>
+    <p>© 2025 Web4 • GPT-5 Mini</p>
+  </footer>
 
-  eventSource.onmessage = (event) => {
-    if (event.data === "[END]") {
-      eventSource.close();
-    } else {
-      botMessage += event.data;
-      botDiv.textContent = botMessage;
-      chat.scrollTop = chat.scrollHeight;
-    }
-  };
-
-  eventSource.onerror = () => {
-    botDiv.textContent = "⚠️ Error receiving response.";
-    eventSource.close();
-  };
-}
-
-send.addEventListener("click", sendMessage);
-input.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+  <script src="app.js"></script>
+  <script src="prompt-studio.js"></script>
+  <script src="chart.js"></script>
+</body>
+</html>
