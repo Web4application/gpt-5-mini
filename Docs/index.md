@@ -1,366 +1,203 @@
----
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GPT-5 Mini • Web4</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive. Free to use and easy to try." />
+  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot, writing help, brainstorm tool" />
+  <meta property="og:title" content="GPT-5 mini" />
+  <meta property="og:description" content="A conversational AI system that listens, learns, and challenges" />
+  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
+  <meta property="og:url" content="https://GPT-5-mini.com/" />
+  <link rel="canonical" href="https://GPT-5-mini.com/" />
+  <link rel="icon" href="favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <title>ChatGPT5 mini</title>
+
   <style>
-    :root {
-      --bg: #f9fafb;
-      --surface: #ffffff;
-      --text: #111827;
-      --subtext: #6b7280;
-      --brand: #2563eb;
-      --radius: 16px;
-      --shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-    body.dark {
-      --bg: #111827;
-      --surface: #1f2937;
-      --text: #f9fafb;
-      --subtext: #9ca3af;
-      --brand: #3b82f6;
-      --shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      display: flex;
-      height: 100vh;
-      background: var(--bg);
-      color: var(--text);
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #222;
       transition: background 0.3s, color 0.3s;
     }
-    aside {
-      width: 220px;
-      background: var(--surface);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      box-shadow: var(--shadow);
-    }
-    .brand { font-size: 1.3rem; font-weight: 700; margin-bottom: 30px; }
-    nav a {
-      display: block;
-      padding: 10px 12px;
-      border-radius: var(--radius);
-      color: var(--text);
-      text-decoration: none;
-      margin-bottom: 6px;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    nav a:hover, nav a.active {
-      background: var(--brand);
-      color: #fff;
-    }
-    .toggle-dark {
-      margin-top: auto;
-      padding: 8px;
-      border-radius: var(--radius);
-      background: var(--brand);
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    main {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .panel {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      flex: 1;
-      display: none;
-      flex-direction: column;
-    }
-    .panel.active { display: flex; }
-    /* --- Chat Styling --- */
-    #chat-log {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      margin-bottom: 12px;
-    }
-    .chat-row {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
-      gap: 10px;
-    }
-    .chat-row.user { justify-content: flex-end; }
-    .chat-row.ai { justify-content: flex-start; }
-    .avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--brand);
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-    .bubble {
-      max-width: 70%;
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      line-height: 1.5;
-      box-shadow: var(--shadow);
-      white-space: pre-wrap;
-    }
-    .chat-row.user .bubble {
-      background: var(--brand);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-    .chat-row.ai .bubble {
-      background: #e5e7eb;
-      color: var(--text);
-      border-bottom-left-radius: 4px;
-    }
-    body.dark .chat-row.ai .bubble {
-      background: #374151;
-    }
-    .chat-form { display: flex; gap: 8px; }
-    textarea#user-input {
-      flex: 1;
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      padding: 10px;
-      font-family: inherit;
-    }
-    button {
-      background: var(--brand);
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
       color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
     }
-    button:hover { background: #1d4ed8; }
-    /* Prompt Studio & others */
-    textarea, input {
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: var(--radius);
-      padding: 10px;
-      margin-bottom: 10px;
-      font-family: inherit;
+    .hero img {
+      height: 64px;
+      margin-bottom: 20px;
     }
-    pre {
-      background: rgba(0,0,0,0.05);
-      padding: 12px;
-      border-radius: var(--radius);
-      max-height: 200px;
+    .cta-button {
+      background: white;
+      color: #2575fc;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Chat Section */
+    #chat-preview {
+      padding: 40px 20px;
+      text-align: center;
+    }
+    #chat-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #f4f4f4;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+    }
+    #chat {
+      flex: 1;
       overflow-y: auto;
-      white-space: pre-wrap;
+      margin-bottom: 10px;
+      text-align: left;
     }
-    #joke-output { font-style: italic; margin-bottom: 12px; }
-    canvas { max-width: 100%; height: 300px; }
+    .msg {
+      margin: 8px 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      line-height: 1.4;
+      max-width: 80%;
+    }
+    .user { background: #2575fc; color: #fff; margin-left: auto; }
+    .ai { background: #e0e0e0; color: #222; margin-right: auto; }
+    #input-bar {
+      display: flex;
+    }
+    #input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px 0 0 8px;
+    }
+    #send {
+      background: #2575fc;
+      border: none;
+      color: white;
+      padding: 0 20px;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 40px 20px;
+      background: #fafafa;
+      text-align: center;
+    }
+    .testimonials blockquote {
+      font-style: italic;
+      margin: 10px 0;
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+    .dark-mode #chat-container { background: #1e1e1e; }
+    .dark-mode .ai { background: #333; color: #f0f0f0; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #eee;
+    }
+
+    @media (max-width: 768px) {
+      .hero, #chat-container, .testimonials {
+        padding: 20px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <aside>
-    <div class="brand">🤖 GPT-5 Mini</div>
-    <nav>
-      <a href="#" class="active" onclick="showPanel('chat')">Chat</a>
-      <a href="#" onclick="showPanel('prompt')">Prompt Studio</a>
-      <a href="#" onclick="showPanel('jokes')">JokeBox</a>
-      <a href="#" onclick="showPanel('dashboard')">Dashboard</a>
-    </nav>
-    <button class="toggle-dark" onclick="toggleDark()">Toggle Theme</button>
-  </aside>
+  <section class="hero">
+    <img src="logo.png" alt="ChatGPT5 mini logo" />
+    <h1>Welcome to ChatGPT5 mini</h1>
+    <p>Your AI companion for writing, learning, and productivity.</p>
+    <a href="#chat-preview" class="cta-button">Try It Now</a>
+  </section>
 
-  <main>
-    <section id="chat" class="panel active">
-      <h2>💬 Chat</h2>
-      <div id="chat-log"></div>
-      <form class="chat-form" onsubmit="handleSubmit(event)">
-        <textarea id="user-input" rows="2" placeholder="Type your message..."></textarea>
-        <button type="submit">Send</button>
-      </form>
-    </section>
-    <section id="prompt" class="panel">
-      <h2>🧠 Prompt Studio</h2>
-      <textarea id="template" placeholder="Enter prompt with {{topic}}..."></textarea>
-      <input type="text" id="topic" placeholder="Topic" />
-      <button onclick="sendPrompt()">Run Prompt</button>
-      <pre id="output"></pre>
-    </section>
-    <section id="jokes" class="panel">
-      <h2>🎭 JokeBox</h2>
-      <div id="joke-output">Click below for a laugh!</div>
-      <button onclick="getJoke()">Tell me a joke</button>
-    </section>
-    <section id="dashboard" class="panel">
-      <h2>📊 Asset Dashboard</h2>
-      <canvas id="assetChart"></canvas>
-    </section>
-  </main>
+  <button onclick="document.body.classList.toggle('dark-mode')">Toggle Dark Mode</button>
 
+  <!-- Chat Section -->
+  <section id="chat-preview">
+    <h2>See ChatGPT5 mini in Action</h2>
+    <div id="chat-container">
+      <div id="chat"></div>
+      <div id="input-bar">
+        <input id="input" type="text" placeholder="Say something…" />
+        <button id="send">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>Why People Love ChatGPT5 mini</h2>
+    <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+    <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
+  </section>
+
+  <footer>
+    <p>We respect your privacy. No data is stored without your consent.</p>
+    <a href="https://github.com/Web4application/roupg" target="_blank">View Source on GitHub</a>
+  </footer>
+
+  <!-- Chat Logic -->
   <script>
-    const API_KEY = "sk-YOUR_API_KEY"; // ⚠️ replace
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
 
-    function showPanel(id) {
-      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-      document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      event.target.classList.add("active");
-    }
-    function toggleDark() { document.body.classList.toggle("dark"); }
-
-    // --- Chat with avatars + streaming ---
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById("user-input");
-      const userText = input.value.trim();
-      if (!userText) return;
-      addMessage("user", userText);
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage("You: " + text, "user");
       input.value = "";
 
-      const aiBubble = addMessage("ai", ""); // placeholder
-
       try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        const res = await fetch("http://localhost:3000/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: userText }],
-            stream: true
-          }),
-        });
-
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let buffer = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-
-          const parts = buffer.split("\n\n");
-          buffer = parts.pop();
-
-          for (const part of parts) {
-            if (part.startsWith("data: ")) {
-              const data = part.replace("data: ", "").trim();
-              if (data === "[DONE]") return;
-              try {
-                const json = JSON.parse(data);
-                const token = json.choices?.[0]?.delta?.content;
-                if (token) {
-                  aiBubble.textContent += token;
-                  scrollChat();
-                }
-              } catch {}
-            }
-          }
-        }
-      } catch (err) {
-        aiBubble.textContent = "Error: " + err.message;
-      }
-    }
-
-    function addMessage(sender, text) {
-      const chatLog = document.getElementById("chat-log");
-      const row = document.createElement("div");
-      row.className = "chat-row " + sender;
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = sender === "user" ? "U" : "AI";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.textContent = text;
-
-      if (sender === "user") {
-        row.appendChild(bubble);
-        row.appendChild(avatar);
-      } else {
-        row.appendChild(avatar);
-        row.appendChild(bubble);
-      }
-
-      chatLog.appendChild(row);
-      scrollChat();
-      return bubble;
-    }
-    function scrollChat() {
-      const chatLog = document.getElementById("chat-log");
-      chatLog.scrollTop = chatLog.scrollHeight;
-    }
-
-    // Prompt Studio
-    async function sendPrompt() {
-      const template = document.getElementById("template").value;
-      const topic = document.getElementById("topic").value;
-      const output = document.getElementById("output");
-      if (!template || !topic) {
-        output.textContent = "Please enter both template and topic.";
-        return;
-      }
-      output.textContent = "Running…";
-      try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: template.replace("{{topic}}", topic) }],
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
         });
         const data = await res.json();
-        output.textContent = data?.choices?.[0]?.message?.content || "(no reply)";
+        addMessage("AI: " + data.reply, "ai");
       } catch (err) {
-        output.textContent = "Error: " + err.message;
+        addMessage("⚠️ Error connecting to backend", "ai");
       }
     }
 
-    // JokeBox
-    const jokes = [
-      "Why did the AI go broke? Too many hidden layers.",
-      "I told my PC I needed a break. Now it won’t stop sending KitKats.",
-      "GPT-5 walks into a bar. Bartender: 'Is this context long enough?'"
-    ];
-    function getJoke() {
-      document.getElementById("joke-output").textContent =
-        jokes[Math.floor(Math.random() * jokes.length)];
+    function addMessage(text, cls) {
+      const msg = document.createElement("div");
+      msg.className = `msg ${cls}`;
+      msg.textContent = text;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    // Dashboard
-    new Chart(document.getElementById("assetChart"), {
-      type: "line",
-      data: {
-        labels: ["BTC", "ETH", "SOL", "ADA"],
-        datasets: [{
-          label: "Assets",
-          data: [40, 25, 15, 10],
-          borderColor: "#2563eb",
-          backgroundColor: "rgba(37,99,235,0.2)",
-          fill: true,
-          tension: 0.3
-        }]
-      }
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendMessage();
     });
   </script>
 </body>
 </html>
----
