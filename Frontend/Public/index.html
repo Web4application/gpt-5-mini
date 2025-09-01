@@ -2,194 +2,264 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>GPT-5 Mini by Web4</title>
-  <link rel="icon" href="favicon.png" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#2575fc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ChatGPT5 mini helps you get answers, brainstorm, and be more productive. Free to use and easy to try." />
+  <meta property="og:title" content="ChatGPT5 mini" />
+  <meta property="og:description" content="Your AI companion for writing, learning, and productivity." />
+  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
+  <meta property="og:url" content="https://yourdomain.com/" />
+  <link rel="icon" href="favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <title>ChatGPT5 mini</title>
+
   <style>
     :root {
+      --brand: #2575fc;
+      --brand-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
       --bg: #ffffff;
       --text: #222;
-      --brand: #2575fc;
-      --user-bg: var(--brand);
-      --ai-bg: #e0e0e0;
       --surface: #f4f4f4;
       --radius: 12px;
     }
     body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
       transition: background 0.3s, color 0.3s;
     }
-    header {
-      background: var(--surface);
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--brand-gradient);
+      color: white;
     }
-    .brand h1 {
-      margin: 0;
-      font-size: 1.5rem;
+    .hero img {
+      height: 64px;
+      margin-bottom: 16px;
     }
-    nav a {
-      margin-left: 16px;
-      text-decoration: none;
+    .hero h1 {
+      font-size: 2.5rem;
+      margin: 0 0 12px;
+    }
+    .hero p {
+      margin: 0 0 24px;
+      font-size: 1.2rem;
+    }
+    .cta-button {
+      background: white;
       color: var(--brand);
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
       font-weight: 600;
+      transition: background 0.2s;
     }
-    main {
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
+    .cta-button:hover {
+      background: #f0f0f0;
     }
-    .panel {
+
+    /* Chat Section */
+    #chat-section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    #chat-container {
+      max-width: 700px;
+      margin: 0 auto;
       background: var(--surface);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      height: 500px;
     }
-    #chat-log {
-      max-height: 300px;
+    #chat {
+      flex: 1;
       overflow-y: auto;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      text-align: left;
     }
-    .message {
+    .msg {
+      display: flex;
+      align-items: flex-start;
+      margin: 10px 0;
       max-width: 80%;
-      padding: 10px 14px;
+    }
+    .msg.user { margin-left: auto; flex-direction: row-reverse; }
+    .msg.ai { margin-right: auto; }
+    .msg .bubble {
+      padding: 12px 16px;
       border-radius: var(--radius);
       line-height: 1.4;
-      word-break: break-word;
-      margin: 6px 0;
-    }
-    .message.user {
-      margin-left: auto;
-      background: var(--user-bg);
-      color: white;
-    }
-    .message.ai {
-      margin-right: auto;
-      background: var(--ai-bg);
+      background: #e0e0e0;
       color: var(--text);
+      word-break: break-word;
     }
-    .chat-form {
-      display: flex;
-      gap: 8px;
-    }
-    textarea#user-input {
-      flex: 1;
-      border: none;
-      resize: none;
-      padding: 8px;
-      border-radius: var(--radius);
-    }
-    button {
+    .msg.user .bubble {
       background: var(--brand);
       color: white;
+    }
+    .msg .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: 0 8px;
+      object-fit: cover;
+    }
+    #input-bar {
+      display: flex;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    #input {
+      flex: 1;
+      padding: 12px;
       border: none;
-      padding: 8px 16px;
-      border-radius: var(--radius);
+      outline: none;
+    }
+    #send {
+      background: var(--brand);
+      border: none;
+      color: white;
+      padding: 0 24px;
       cursor: pointer;
+      font-weight: 600;
     }
-    input[type="text"],
-    input[type="file"],
-    textarea {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      border-radius: var(--radius);
-      border: 1px solid #ccc;
-    }
-    #joke-output {
-      margin-bottom: 10px;
-      font-style: italic;
-    }
-    canvas#assetChart {
-      max-width: 100%;
-      height: 300px;
-    }
-    footer {
+
+    /* Testimonials */
+    .testimonials {
+      padding: 60px 20px;
+      background: #fafafa;
       text-align: center;
-      padding: 20px;
-      background: #eee;
-      font-size: 0.9rem;
     }
+    .testimonials h2 {
+      margin-bottom: 20px;
+    }
+    .testimonials blockquote {
+      font-style: italic;
+      margin: 12px auto;
+      max-width: 600px;
+    }
+
+    /* Dark Mode */
     .dark-mode {
       --bg: #121212;
       --text: #f0f0f0;
       --surface: #1e1e1e;
-      --ai-bg: #333;
     }
+    .dark-mode .bubble { background: #333; color: #f0f0f0; }
+    .dark-toggle {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: var(--surface);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #eee;
+    }
+
     @media (max-width: 768px) {
-      main {
-        padding: 16px;
-      }
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      nav a {
-        margin: 8px 0;
-      }
+      .hero h1 { font-size: 2rem; }
+      #chat-container { height: 400px; }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="brand">
-      <h1>🤖 GPT-5 Mini</h1>
-      <p>Built by Web4</p>
+  <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌙</button>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="logo.png" alt="ChatGPT5 mini logo" />
+    <h1>ChatGPT5 mini</h1>
+    <p>Your AI companion for writing, learning, and productivity.</p>
+    <a href="#chat-section" class="cta-button">Try It Now</a>
+  </section>
+
+  <!-- Chat Section -->
+  <section id="chat-section">
+    <h2>See ChatGPT5 mini in Action</h2>
+    <div id="chat-container">
+      <div id="chat"></div>
+      <div id="input-bar">
+        <input id="input" type="text" placeholder="Type a message…" />
+        <button id="send">Send</button>
+      </div>
     </div>
-    <nav>
-      <a href="#chat">Chat</a>
-      <a href="#prompt-studio">Prompt Studio</a>
-      <a href="#jokebox">JokeBox</a>
-      <a href="#dashboard">Dashboard</a>
-    </nav>
-  </header>
+  </section>
 
-  <main>
-    <section id="chat" class="panel">
-      <h2>💬 Chat</h2>
-      <div id="chat-log"></div>
-      <form class="chat-form" onsubmit="handleSubmit(event)">
-        <textarea id="user-input" rows="2" placeholder="Ask me anything…"></textarea>
-        <button type="submit">Send</button>
-      </form>
-    </section>
-
-    <section id="prompt-studio" class="panel">
-      <h2>🧠 Prompt Studio</h2>
-      <textarea id="template" placeholder="Enter your prompt template..."></textarea>
-      <input type="text" id="topic" placeholder="Topic" />
-      <input type="file" id="pdf" />
-      <button onclick="sendPrompt()">Run Prompt</button>
-      <pre id="output"></pre>
-    </section>
-
-    <section id="jokebox" class="panel">
-      <h2>🎭 JokeBox</h2>
-      <div id="joke-output">Click below for a laugh!</div>
-      <button onclick="getJoke()">Tell me a joke</button>
-    </section>
-
-    <section id="dashboard" class="panel">
-      <h2>📊 Asset Dashboard</h2>
-      <canvas id="assetChart"></canvas>
-    </section>
-  </main>
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>What People Say</h2>
+    <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+    <blockquote>"Great for brainstorming before meetings." – Tunde</blockquote>
+  </section>
 
   <footer>
-    <p>© 2025 Web4 • GPT-5 Mini</p>
+    <p>© 2025 Web4 • ChatGPT5 mini</p>
+    <a href="https://github.com/Web4application/GPT5-mini" target="_blank">View Source on GitHub</a>
   </footer>
 
- <script type="module" src="/src/main.js"></script>
-  <script src="prompt-studio.js"></script>
-  <script src="chart.js"></script>
+  <!-- Chat Logic -->
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const sendBtn = document.getElementById("send");
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      input.value = "";
+
+      try {
+        const res = await fetch("http://localhost:3000/chat", { // replace with your backend URL
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        addMessage(data.reply || "(no reply)", "ai");
+      } catch (err) {
+        addMessage("⚠️ Error connecting to backend", "ai");
+      }
+    }
+
+    function addMessage(text, role) {
+      const msg = document.createElement("div");
+      msg.className = "msg " + role;
+
+      const avatar = document.createElement("img");
+      avatar.className = "avatar";
+      avatar.src = role === "user" ? "user.png" : "ai.png";
+      avatar.alt = role;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      msg.appendChild(avatar);
+      msg.appendChild(bubble);
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") sendMessage();
+    });
+    input.focus();
+  </script>
 </body>
 </html>
