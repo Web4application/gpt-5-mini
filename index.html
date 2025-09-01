@@ -217,24 +217,41 @@
     const input = document.getElementById("input");
     const sendBtn = document.getElementById("send");
 
-    async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage(text, "user");
-      input.value = "";
+   async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
 
-      try {
-        const res = await fetch("http://localhost:3000/chat", { // replace with your backend URL
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-        const data = await res.json();
-        addMessage(data.reply || "(no reply)", "ai");
-      } catch (err) {
-        addMessage("⚠️ Error connecting to backend", "ai");
-      }
-    }
+  addMessage(text, "user");
+  input.value = "";
+
+  const aiMsg = addMessage("", "ai"); // create placeholder for AI reply
+
+  const res = await fetch("http://localhost:3000/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text })
+  });
+
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    const chunk = decoder.decode(value, { stream: true });
+    aiMsg.textContent += chunk.replace(/data: /g, "");
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+function addMessage(text, cls) {
+  const msg = document.createElement("div");
+  msg.className = `msg ${cls}`;
+  msg.textContent = text;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+  return msg; // return so we can update it
+}
 
     function addMessage(text, role) {
       const msg = document.createElement("div");
