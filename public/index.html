@@ -7,7 +7,7 @@
   <meta property="og:title" content="ChatGPT5 mini" />
   <meta property="og:description" content="Your AI companion for writing, learning, and productivity." />
   <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
-  <meta property="og:url" content="https://yourdomain.com/" />
+  <meta property="og:url" content="https://gpt-5-mini-kbfq-nnppaf48l-web4apps.vercel.app/" />
   <link rel="icon" href="favicon.png" sizes="32x32" />
   <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -226,7 +226,7 @@
 
   const aiMsg = addMessage("", "ai"); // create placeholder for AI reply
 
-  const res = await fetch("http://localhost:3000/chat", {
+  const res = await fetch("https://gpt-5-mini-kbfq-nnppaf48l-web4apps.vercel.app/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message: text })
