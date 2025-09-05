@@ -11,8 +11,17 @@ app.use(bodyParser.json());
 
 // Streaming endpoint
 app.post("/chat", async (req, res) => {
-  const { message } = req.body;
-  if (!message) return res.status(400).json({ error: "Missing message" });
+ const baseURL = "https://gpt5-backend.onrender.com";
+
+fetch(`${baseURL}/api/chat`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: text })
+})
+.then(res => res.json())
+.then(data => {
+  document.getElementById("chat-output").textContent += data.reply;
+});
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
