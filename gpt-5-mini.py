@@ -4,6 +4,9 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense
 import joblib
+from flask_cors import CORS
+CORS(app)
+
 
 # Database setup
 def setup_database():
