@@ -1,6 +1,8 @@
 # Install BFG if not installed
 brew install bfg
 
+export OPENAI_API_KEY=sk-yAlzaSyCHjfdo3w160Dd5yTVJD409pWmigOJEg
+export OPENAI_API_KEY=sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10
 # Remove all instances of the old key from history
 bfg --replace-text <(printf '%s\n' 'ZK1XXchhqBKOltJ87RMqghmUVI_M4qL-bZxuXA05f1A==[REDACTED]')
 
