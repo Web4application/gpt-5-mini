@@ -263,8 +263,8 @@ document.getElementById('mic-button').onclick = () => recognition.start();
           }
           
   function startChatStream(text) {
-  const baseURL = "https://gpt5-backend.onrender.com"; // Replace with your actual backend URL
-
+ 
+    const baseURL = "https://gpt5-backend.onrender.com"; // Replace with your actual backend URL
   const source = new EventSource(`${baseURL}/api/chat?message=${encodeURIComponent(text)}`);
 
   source.onmessage = (event) => {
@@ -302,7 +302,31 @@ document.getElementById('typing-indicator').style.display = 'none';
     source.close();
   };
 }
-          
+          const ws = new WebSocket("wss://gpt-5-mini.onrender.com");
+const sessionId = "user-" + Date.now(); // Unique session per user
+
+ws.onopen = () => {
+  console.log("✅ Connected to GPT-5-mini WebSocket");
+};
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  if (data.type === "message") {
+    appendMessage(data.data, "ai");
+  } else if (data.type === "tool_result") {
+    appendMessage("🛠 Tool result: " + JSON.stringify(data.data), "ai");
+  } else if (data.type === "system") {
+    appendMessage("🔧 " + data.data, "ai");
+  } else if (data.type === "error") {
+    appendMessage("⚠️ Error: " + data.data, "ai");
+  }
+};
+
+function sendMessage(text) {
+  appendMessage(text, "user");
+  ws.send(JSON.stringify({ sessionId, content: text }));
+}
+
           // Append chunk
           finalText += evt.data;
           // Update the last AI message or create one
