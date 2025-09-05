@@ -20,6 +20,29 @@ app.get("/api/chat", async (req, res) => {
     if (!message || message.trim() === "") {
       return res.status(400).json({ error: "Message is required" });
     }
+    app.post("/api/chat", async (req, res) => {
+  const { message } = req.body;
+  if (!message || message.trim() === "") {
+    return res.status(400).json({ error: "Message is required" });
+  }
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-5-mini",
+      messages: [
+        { role: "system", content: "You are a helpful, concise AI assistant." },
+        { role: "user", content: message }
+      ],
+      max_tokens: 400
+    });
+
+    const reply = response.choices[0].message.content;
+    res.status(200).json({ reply });
+  } catch (err) {
+    console.error("❌ POST error:", err);
+    res.status(500).json({ error: "Something went wrong with POST request." });
+  }
+});
 
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
