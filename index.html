@@ -125,6 +125,16 @@
     }
     .dark-mode header.hero { color:#fff; }
     .dark-mode .msg.ai { background:#222; color:#eaeaea; }
+    .dots::after {
+  content: ' .';
+  animation: dots 1s steps(3, end) infinite;
+}
+@keyframes dots {
+  0% { content: ' .'; }
+  33% { content: ' ..'; }
+  66% { content: ' ...'; }
+}
+
 
     @media (max-width:720px){
       header.hero{padding:28px 16px}
@@ -151,11 +161,15 @@
 
       <div id="chat-container" aria-live="polite" aria-atomic="false">
         <div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <div id="typing-indicator" style="display:none; font-style: italic; margin: 10px;">AI is thinking<span class="dots">...</span></div>
+
 
         <form id="chat-form" class="input-row" aria-label="Chat form">
           <label for="message" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Message</label>
           <input id="message" name="message" type="text" autocomplete="off" placeholder="Type your message and press Enter" required />
           <button id="send" type="submit">Send</button>
+          <button id="mic-button">🎤 Speak</button>
+
         </form>
       </div>
     </section>
@@ -182,6 +196,11 @@
     const input = document.getElementById('message');
     const toggleDark = document.getElementById('toggle-dark');
     const clearBtn = document.getElementById('clear-chat');
+    const recognition = new webkitSpeechRecognition();
+recognition.onresult = (event) => {
+  input.value = event.results[0][0].transcript;
+};
+document.getElementById('mic-button').onclick = () => recognition.start();
 
     function appendMessage(text, cls) {
       const div = document.createElement('div');
@@ -242,6 +261,48 @@
             resolve(finalText);
             return;
           }
+          
+  function startChatStream(text) {
+  const baseURL = "https://gpt5-backend.onrender.com"; // Replace with your actual backend URL
+
+  const source = new EventSource(`${baseURL}/api/chat?message=${encodeURIComponent(text)}`);
+
+  source.onmessage = (event) => {
+    if (event.data === "[END]") {
+      source.close();
+      console.log("✅ Stream ended");
+    } else {
+      document.getElementById('typing-indicator').style.display = 'block';
+try {
+  await streamChatMessage(text);
+} catch (streamErr) {
+  // fallback logic
+}
+document.getElementById('typing-indicator').style.display = 'none';
+    }
+  };
+
+  source.onerror = () => {
+    console.warn("⚠️ SSE failed, falling back to POST");
+
+    fetch(`${baseURL}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("chat-output").textContent += data.reply;
+    })
+    .catch(err => {
+      console.error("❌ POST fallback failed:", err);
+      document.getElementById("chat-output").textContent += "\n⚠️ Unable to connect to backend.";
+    });
+
+    source.close();
+  };
+}
+          
           // Append chunk
           finalText += evt.data;
           // Update the last AI message or create one
@@ -286,21 +347,40 @@
           }
         } catch (postErr) {
           // show error message
-          const last = messagesEl.lastElementChild;
-          if (last && last.classList.contains('ai')) {
-            last.textContent = '⚠️ Error connecting to backend';
-          } else {
+         const last = messagesEl.lastElementChild;
+if (last && last.classList.contains('ai')) {
+  last.innerHTML = '⚠️ Error connecting to backend. <button onclick="retryLast()">Retry</button>';
+} else {
+  appendMessage('⚠️ Error connecting to backend <button onclick="retryLast()">Retry</button>', 'ai');
+}
+ else {
             appendMessage('⚠️ Error connecting to backend', 'ai');
           }
         }
-      } finally {
+      } 
+      
+      finally {
         input.disabled = false;
         input.focus();
       }
     });
-
+    function retryLast() {
+  const lastInput =sessionStorage.setItem('lastUserInput', text);
+  if (lastInput) {
+    input.value = lastInput;
+    form.dispatchEvent(new Event('submit'));
+  }
+};
+ 
     // keyboard accessibility: focus input on load
-    window.addEventListener('load', () => input.focus());
+   window.addEventListener('beforeunload', () => {
+  localStorage.setItem('chatHistory', messagesEl.innerHTML);
+});
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('chatHistory');
+  if (saved) messagesEl.innerHTML = saved;
+});
+
   </script>
 </body>
 </html>
