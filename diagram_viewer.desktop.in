@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Diagram Viewer
+Comment=View and explore diagrams
+Exec=@BINARY_NAME@
+Icon=@BINARY_NAME@
+Terminal=false
+Type=Application
+Categories=Graphics;Utility;
+StartupNotify=true
