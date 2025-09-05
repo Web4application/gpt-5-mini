@@ -1,0 +1,19 @@
+if(NOT DEFINED CMAKE_INSTALL_PREFIX)
+  set(CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@")
+endif()
+
+# Remove binary
+file(REMOVE "${CMAKE_INSTALL_PREFIX}/bin/@BINARY_NAME@")
+
+# Remove desktop entry
+file(REMOVE "${CMAKE_INSTALL_PREFIX}/share/applications/@BINARY_NAME@.desktop")
+
+# Remove icons (multiple sizes if they exist)
+file(GLOB ICON_FILES
+  "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/*/apps/@BINARY_NAME@.png"
+)
+file(REMOVE ${ICON_FILES})
+
+# Refresh caches after uninstall
+execute_process(COMMAND update-desktop-database "${CMAKE_INSTALL_PREFIX}/share/applications")
+execute_process(COMMAND gtk-update-icon-cache -q -t "${CMAKE_INSTALL_PREFIX}/share/icons/hicolor")
