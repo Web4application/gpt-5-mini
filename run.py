@@ -5,6 +5,11 @@ import datetime
 import json
 import webbrowser
 from openai import OpenAI
+from flask_cors import CORS
+CORS(app)
+from fastapi import FastAPI
+app = FastAPI()
+# Define routes here
 
 # Paths
 STORIES_DIR = "stories"
