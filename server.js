@@ -1,198 +1,204 @@
 import express from "express";
-import OpenAI from "openai";
-import dotenv from "dotenv";
-import http from "http";
-import { WebSocketServer } from "ws";
-import { getHistory, addMessage, resetHistory } from "./chatStore.js";
+import cors from "cors";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
+import fetch from "node-fetch";
+import { config as loadEnv } from "dotenv";
 
-dotenv.config();
+loadEnv();
 
 const app = express();
-const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const PORT = process.env.PORT || 8080;
+const HOST = process.env.HOST || "0.0.0.0";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+const OPENAI_MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 
-app.use(express.json());
+app.use(morgan("dev"));
+app.use(express.json({ limit: "1mb" }));
+app.use(cors({ origin: true }));
 
-// --- Safe fetch helper ---
-async function fetchJson(url, options = {}) {
-  const res = await fetch(url, options);
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`HTTP ${res.status} from ${url}: ${text.slice(0, 200)}`);
-  }
-
-  const contentType = res.headers.get("content-type") || "";
-  if (!contentType.includes("application/json")) {
-    const text = await res.text();
-    throw new Error(`Expected JSON from ${url}, got: ${text.slice(0, 200)}`);
-  }
-
-  try {
-    return await res.json();
-  } catch {
-    const text = await res.text();
-    throw new Error(`Invalid JSON from ${url}: ${text.slice(0, 200)}`);
-  }
-}
-
-// --- Define tools GPT-5-mini can call ---
-const tools = [
-  {
-    name: "getWeather",
-    description: "Fetch current weather for a city",
-    input_schema: {
-      type: "object",
-      properties: {
-        location: { type: "string", description: "City name" }
-      },
-      required: ["location"]
-    }
-  },
-  {
-    name: "calculate",
-    description: "Evaluate a mathematical expression safely",
-    input_schema: {
-      type: "object",
-      properties: {
-        expression: { type: "string", description: "Math expression in plain text" }
-      },
-      required: ["expression"]
-    }
-  }
-];
-
-// Dummy weather implementation (replace with real API)
-async function getWeatherAPI(location) {
-  // Example of using safe fetch if you later call a real API:
-  // return await fetchJson(`https://api.weather.com?q=${encodeURIComponent(location)}`);
-  return { location, temp: "21°C", condition: "Cloudy" };
-}
-
-// Safe math evaluation
-function safeCalculate(expression) {
-  try {
-    const result = Function(`"use strict"; return (${expression})`)();
-    return { expression, result };
-  } catch {
-    return { error: "Invalid expression" };
-  }
-}
-
-// --- WebSocket handling ---
-wss.on("connection", (ws) => {
-  console.log("WebSocket client connected ✅");
-
-  ws.on("message", async (msg) => {
-    const { sessionId, content, reset } = JSON.parse(msg);
-
-    if (reset) {
-      resetHistory(sessionId);
-      ws.send(JSON.stringify({ type: "system", data: "History reset." }));
-      return;
-    }
-
-    addMessage(sessionId, "user", content);
-
-    try {
-      const stream = await openai.responses.stream({
-        model: "gpt-5-mini",
-        input: getHistory(sessionId),
-        reasoning: { effort: "medium" },
-        text: { format: { type: "text" }, verbosity: "medium" },
-        tools,
-        store: true
-      });
-
-      for await (const event of stream) {
-        if (event.type === "response.output_text.delta") {
-          ws.send(JSON.stringify({ type: "message", data: event.delta }));
-        }
-
-        if (event.type === "response.tool_call") {
-          const { name, arguments: args } = event;
-          console.log(`🛠 Tool call: ${name}`, args);
-
-          let result;
-          if (name === "getWeather") {
-            result = await getWeatherAPI(args.location);
-          } else if (name === "calculate") {
-            result = safeCalculate(args.expression);
-          }
-
-          addMessage(sessionId, "tool", JSON.stringify(result));
-          ws.send(JSON.stringify({ type: "tool_result", data: result }));
-
-          const followUp = await openai.responses.create({
-            model: "gpt-5-mini",
-            input: getHistory(sessionId),
-            reasoning: { effort: "medium" },
-            text: { format: { type: "text" }, verbosity: "medium" },
-            store: true
-          });
-
-          const finalText = followUp.output[0].content
-            .map((c) => c.text)
-            .join("");
-
-          addMessage(sessionId, "assistant", finalText);
-          ws.send(JSON.stringify({ type: "message", data: finalText }));
-        }
-
-        if (event.type === "response.completed") {
-          console.log("✅ GPT finished response");
-          break;
-        }
-      }
-    } catch (err) {
-      console.error("Error:", err);
-      ws.send(JSON.stringify({ type: "error", data: err.message }));
-    }
-  });
+// Simple rate limit
+const limiter = rateLimit({
+  windowMs: 30 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false
 });
+app.use(limiter);
 
-// --- SSE endpoint ---
-app.post("/chat/:sessionId", async (req, res) => {
-  const { sessionId } = req.params;
-  const { content } = req.body;
+// Serve static frontend
+app.use(express.static("public"));
 
-  addMessage(sessionId, "user", content);
+// ---------- Helpers ----------
+function sanitizeMessage(s) {
+  if (typeof s !== "string") return "";
+  // Basic trimming + hard length cap
+  const trimmed = s.trim();
+  return trimmed.slice(0, 4000);
+}
 
-  res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Cache-Control", "no-cache");
+// Fake local streamer if no API key
+async function* localFakeStream(prompt) {
+  const reply = `Local demo (no API key set). Echoing: ${prompt}`;
+  // stream a token-ish output
+  const parts = reply.split(" ");
+  for (const p of parts) {
+    yield p + " ";
+    await new Promise(r => setTimeout(r, 80));
+  }
+  // End marker for SSE
+  yield "[END]";
+}
+
+// OpenAI streaming via Chat Completions (kept on because it’s stable and widely used)
+async function* openAIStream(prompt) {
+  const url = "https://api.openai.com/v1/chat/completions";
+  const body = {
+    model: OPENAI_MODEL,
+    stream: true,
+    messages: [
+      { role: "system", content: "You are a helpful assistant." },
+      { role: "user", content: prompt }
+    ]
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok || !res.body) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`OpenAI error ${res.status}: ${text || "No body"}`);
+  }
+
+  // SSE stream from OpenAI (data: {...})
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder("utf-8");
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    let idx;
+    while ((idx = buffer.indexOf("\n\n")) !== -1) {
+      const chunk = buffer.slice(0, idx).trim();
+      buffer = buffer.slice(idx + 2);
+
+      // Each line may look like "data: {...}" or "data: [DONE]"
+      if (!chunk.startsWith("data:")) continue;
+      const data = chunk.slice(5).trim();
+
+      if (data === "[DONE]") {
+        yield "[END]";
+        return;
+      }
+
+      try {
+        const json = JSON.parse(data);
+        const delta = json.choices?.[0]?.delta?.content;
+        if (delta) {
+          yield delta;
+        }
+      } catch {
+        // ignore parse issues
+      }
+    }
+  }
+  // In case upstream didn’t send [DONE]
+  yield "[END]";
+}
+
+function streamFromProvider(message) {
+  return OPENAI_API_KEY ? openAIStream(message) : localFakeStream(message);
+}
+
+// ---------- Routes ----------
+
+// SSE streaming: /api/stream?message=...
+app.get("/api/stream", async (req, res) => {
+  const message = sanitizeMessage(req.query.message);
+  if (!message) {
+    return res.status(400).json({ error: "message query param required" });
+  }
+
+  // Set SSE headers
+  res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
+  res.flushHeaders?.();
+
+  let closed = false;
+  req.on("close", () => { closed = true; });
 
   try {
-    const stream = await openai.responses.stream({
-      model: "gpt-5-mini",
-      input: getHistory(sessionId),
-      reasoning: { effort: "medium" },
-      text: { format: { type: "text" }, verbosity: "medium" },
-      tools,
-      store: true
-    });
-
-    for await (const event of stream) {
-      if (event.type === "response.output_text.delta") {
-        res.write(`data: ${JSON.stringify(event.delta)}\n\n`);
-      }
-      if (event.type === "response.completed") {
-        res.write("event: end\ndata: [DONE]\n\n");
-        res.end();
-        break;
-      }
+    for await (const chunk of streamFromProvider(message)) {
+      if (closed) break;
+      res.write(`data: ${chunk}\n\n`);
     }
   } catch (err) {
-    console.error("Error:", err);
-    res.write(`event: error\ndata: ${JSON.stringify(err.message)}\n\n`);
-    res.end();
+    if (!closed) {
+      res.write(`data: [ERROR] ${String(err.message || err)}\n\n`);
+    }
+  } finally {
+    if (!closed) res.end();
   }
 });
 
-// --- Start server ---
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () =>
-  console.log(`🚀 GPT-5-mini server running at http://localhost:${PORT}`)
-);
+// Non-streaming POST
+app.post("/api/chat", async (req, res) => {
+  const message = sanitizeMessage(req.body?.message);
+  if (!message) {
+    return res.status(400).json({ error: "message field required" });
+  }
 
+  if (!OPENAI_API_KEY) {
+    // local fake reply
+    return res.json({ reply: `Local demo (no API key). You said: ${message}` });
+  }
+
+  try {
+    // Call OpenAI non-streaming
+    const url = "https://api.openai.com/v1/chat/completions";
+    const body = {
+      model: OPENAI_MODEL,
+      stream: false,
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: message }
+      ]
+    };
+
+    const r = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) {
+      const t = await r.text().catch(() => "");
+      return res.status(502).json({ error: `OpenAI error ${r.status}: ${t}` });
+    }
+    const json = await r.json();
+    const reply = json.choices?.[0]?.message?.content || "";
+    return res.json({ reply });
+  } catch (e) {
+    return res.status(500).json({ error: String(e.message || e) });
+  }
+});
+
+// Health
+app.get("/healthz", (req, res) => res.json({ ok: true }));
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server listening on http://${HOST}:${PORT}`);
+  console.log(OPENAI_API_KEY ? "OpenAI mode: ENABLED" : "OpenAI mode: DISABLED (local demo)");
+});
