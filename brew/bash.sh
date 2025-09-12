@@ -114,3 +114,5 @@ zip -r ai_prediction_shiny.zip ai_prediction_shiny
 
 echo "Shiny AI scaffold created and zipped as ai_prediction_shiny.zip!"
 ```
+git clone https://github.com/Web4application/GPT-5-mini.git
+cd GPT-5-mini
