@@ -68,4 +68,4 @@ for uid in $(echo "$deployments_to_delete" | jq -r '.[]'); do
   fi
 done
 
-uvicorn server:app --reload --port 8000
+uvicorn server:app --reload --port 5000
