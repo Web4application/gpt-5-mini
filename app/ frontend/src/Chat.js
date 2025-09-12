@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export default function Chat() {
   const [prompt, setPrompt] = useState("");
@@ -14,29 +14,40 @@ export default function Chat() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendPrompt = async () => {
+  const sendPrompt = () => {
     if (!prompt.trim()) return;
+
     const userMsg = { role: "user", content: prompt };
     setMessages((prev) => [...prev, userMsg]);
     setPrompt("");
     setLoading(true);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
+    let aiMsg = { role: "assistant", content: "" };
+    setMessages((prev) => [...prev, aiMsg]);
+
+    const eventSource = new EventSourcePolyfill("http://localhost:5000/api/ask-stream", {
+      headers: { "Content-Type": "application/json" },
+      payload: JSON.stringify({ prompt })
+    });
+
+    eventSource.onmessage = (e) => {
+      if (e.data === "[DONE]") {
+        setLoading(false);
+        eventSource.close();
+        return;
+      }
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1].content += JSON.parse(e.data);
+        return updated;
       });
-      const data = await res.json();
-      const aiMsg = { role: "assistant", content: data.response };
-      setMessages((prev) => [...prev, aiMsg]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "⚠️ Error: " + err.message }
-      ]);
-    }
-    setLoading(false);
+    };
+
+    eventSource.onerror = (err) => {
+      console.error("Stream error:", err);
+      eventSource.close();
+      setLoading(false);
+    };
   };
 
   return (
@@ -45,9 +56,7 @@ export default function Chat() {
         {messages.map((msg, idx) => (
           <div
             key={idx}
-            className={`flex ${
-              msg.role === "user" ? "justify-end" : "justify-start"
-            }`}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`px-4 py-2 rounded-lg max-w-xs ${
