@@ -19,7 +19,7 @@ id,age,gender,weight,height,blood_pressure,duration,event,smoker,alcohol,exercis
 5,50,M,75,178,135,28,0,1,0,2,0,0,0,220,1
 EOL
 
-# Create enhanced_ai.R
+# Create enhanced_ai.R 
 cat <<EOL > ai_prediction_shiny/scripts/enhanced_ai.R
 library(survival)
 library(survminer)
@@ -113,7 +113,6 @@ EOL
 zip -r ai_prediction_shiny.zip ai_prediction_shiny
 
 echo "Shiny AI scaffold created and zipped as ai_prediction_shiny.zip!"
-```
 git clone https://github.com/Web4application/GPT-5-mini.git
 cd GPT-5-mini
 
@@ -261,3 +260,9 @@ pip install fastapi uvicorn openai
 python backend/app.py
 docker-compose up --build -d
 pip install -r requirements.txt
+sudo apt update
+sudo apt install apache2 apache2-utils
+sudo a2enmod dav dav_fs dav_lock
+
+sudo mkdir -p /var/www/webdav
+sudo chown -R www-data:www-data /var/www/webdav
