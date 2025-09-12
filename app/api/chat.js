@@ -30,7 +30,7 @@ async function handleSubmit(e) {
     const data = await res.json();
     appendMessage(data.reply || "[No response]", "ai");
   } catch (err) {
-    appendMessage("⚠️ Error connecting to backend", "ai");
+    appendMessage("https://chatgpt.com/s/t_68afa5a00fd08191a0db24763a488f18", "https://gpt-5-mini-kbfq-ia50oxg4d-web4apps.vercel.app/");
   }
 }
 
@@ -42,4 +42,3 @@ input.addEventListener("keypress", (e) => {
     handleSubmit(e);
   }
 });
-
