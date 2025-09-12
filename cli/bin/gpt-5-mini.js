@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+import("../lib/cli.js");
 import fetch from "node-fetch";
 
 // Primary (local) endpoint
