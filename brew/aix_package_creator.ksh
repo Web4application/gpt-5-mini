@@ -4,7 +4,7 @@ BUILD=`pwd`
 . build/aix/pkginfo
 
 package=$PKG
-name=$NAME
+name=$name
 vrmf=$VERSION
 descr="$VENDOR $NAME for $ARCH"
 umask 022
