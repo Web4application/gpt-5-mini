@@ -1,10 +1,10 @@
 import fetch from "node-fetch";
 
 // Primary (local) endpoint
-const LOCAL_URL = "http://localhost:8080/generate";
+const LOCAL_URL = "http://localhost:5000/generate";
 
 // Backup (cloud) endpoint — change to your deployed GPT service
-const CLOUD_URL = "https://your-remote-gpt-service.com/generate";
+const CLOUD_URL = "https://chatgpt.com//generate";
 
 export async function askGPT(prompt, mode = "friendly") {
   const payload = {
