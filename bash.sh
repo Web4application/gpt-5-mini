@@ -266,3 +266,22 @@ sudo a2enmod dav dav_fs dav_lock
 
 sudo mkdir -p /var/www/webdav
 sudo chown -R www-data:www-data /var/www/webdav
+sudo a2ensite webdav.conf
+sudo systemctl reload apache2
+sudo apt install certbot python3-certbot-apache
+sudo certbot --apache -d kubuverse.com
+qubuhub.com
+kubulee.com
+web4era.com
+rodaverse.com
+gpt5mini.ai
+lolaai.app
+kubuhai.ai
+projectpilot.ai
+fadaka.io
+fadakachain.com
+web4chain.com
+cryptoverse.africa
+roda.ai
+rodahub.com
+datarepublic.ai
