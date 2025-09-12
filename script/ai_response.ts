@@ -1,10 +1,10 @@
-let model = GenerativeModel(name: "RODA", apiKey: "AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10")
+let model = GenerativeModel(name: "gpt-5-mini", apiKey: "AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10")
 let cookieImage = UIImage(...)
 let prompt = "build models,train models,compile data,run data,convert websites to app,and perform deeplearning?";
 let response = try await model.generateContent(prompt, cookieImage)
 let response = try await model.generateContent(prompt)
 async function interactWithChatGPT(response) {
-    const apiKey = '$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';
+    const apiKey = '$sk-AIzaSyAvrxOyAVzPVcnzxuD0mjKVDyS2bNWfC10';
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
     const response = await fetch(apiUrl, {
