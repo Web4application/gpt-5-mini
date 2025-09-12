@@ -1,0 +1,17 @@
+topic = "Ancient Red Dragons"  # Change this to whatever you want
+
+prompt_text = f"""
+You are a master loremaster and dragon scholar.
+Use the attached document 'draconomicon.pdf' as your primary source of truth.
+Always ground your answers in the lore, facts, and details from that document.
+If the document does not contain the answer, clearly state that and avoid inventing unsupported details.
+
+TASK:
+Provide a detailed, immersive explanation about: {topic}
+
+REQUIREMENTS:
+- Include relevant dragon types, abilities, and historical context from the PDF.
+- Use vivid, in‑world language as if narrating to an apprentice wizard.
+- Where possible, connect the lore to tactical or storytelling applications.
+- End with 2–3 creative hooks for how this could be used in a campaign or story.
+"""
