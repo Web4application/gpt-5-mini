@@ -1,0 +1,24 @@
+{
+  "name": "gpt5-mini-cli",
+  "version": "1.1.0",
+  "description": "A CLI for GPT-5-mini with chat + coderunner modes",
+  "main": "lib/cli.js",
+  "bin": {
+    "gpt5-mini": "./bin/gpt5-mini.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node bin/gpt5-mini.js"
+  },
+  "keywords": ["gpt-5", "cli", "ai", "chatbot", "coderunner"],
+  "author": "Web4application",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "cli-highlight": "^2.1.11",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "readline": "^1.3.0"
+  }
+}
