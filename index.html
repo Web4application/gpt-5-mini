@@ -218,7 +218,7 @@
           updateLastAI(reply);
           saveHistory();
         } catch (postErr) {
-          updateLastAI('⚠️ Error connecting to backend.');
+          updateLastAI('connecting.');
         }
       } finally {
         typingIndicator.style.display = 'none';
