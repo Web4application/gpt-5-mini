@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import readline from "readline";
-import { askGPT } from "./gpt5mini.js";
+import { askGPT } from "./GPT-5-mini.js";
 import fetch from "node-fetch";
 import chalk from "chalk";
 
