@@ -1,0 +1,50 @@
+name: Deploy Web4application Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Optional: Install Node.js if you want future JS/CSS builds
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3. Optional: Build step for JS/CSS assets
+      - name: Build Assets
+        run: |
+          if [ -f package.json ]; then
+            npm install
+            npm run build
+          else
+            echo "No build step defined, skipping..."
+          fi
+
+      # 4. Configure GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      # 5. Upload site files as artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./  # Root folder contains index.html and assets
+
+      # 6. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+
+      # 7. Configure custom domain (CNAME)
+      - name: Setup Custom Domain
+        run: |
+          echo "askgpt5mini.app" > CNAME
