@@ -3,3 +3,5 @@ numpy
 scikit-learn
 tensorflow
 joblib
+smtplib
+email
