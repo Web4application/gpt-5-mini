@@ -1,0 +1,359 @@
+250901 21:46:24.659 [INFO][606..init(with:)] Log started, build: 1.11.1.f273708
+250901 21:46:24.665 [INFO][606.AppDelegate.application] App version: 1.11.1 (2508072143)
+250901 21:46:24.665 [INFO][606.AppDelegate.application] Locale: en_GB@rg=uszzzz
+250901 21:46:24.675 [INFO][606.Configuration+Structs.defaultSettings] Generate DNSSettings: Warp Enabled: true | DNSProtocol: dow
+250901 21:46:24.694 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:24.694 [INFO][606.WarpApi+DevicePosture.getPostureRules] Started
+250901 21:46:24.695 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:24.696 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 21:46:24.698 [INFO][606.TranslationShim.translateSettings] 
+250901 21:46:24.698 [INFO][606.TeamsConfigLoader.loadConfiguration] Loading the Teams configuration has started. Source: mdm
+250901 21:46:24.699 [INFO][606.TeamsConfigLoader.rawConfig] MDM configuration not found for team: web4app.
+250901 21:46:24.699 [INFO][606.TeamsConfigLoader.rawConfig] No MDM configurations found.
+250901 21:46:24.700 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_mdm_policy: nil
+250901 21:46:24.701 [INFO][606.TeamsConfigLoader.rawConfig] MDM configuration not found for team: web4app.
+250901 21:46:24.701 [INFO][606.TeamsConfigLoader.rawConfig] No MDM configurations found.
+250901 21:46:24.701 [INFO][606.TeamsConfigLoader.loadConfiguration] The Teams config is missing. No configuration will be loaded.
+250901 21:46:24.705 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:24.705 [INFO][606.WarpApi+DevicePosture.getPostureRules] Started
+250901 21:46:24.706 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:24.706 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 21:46:24.727 [INFO][606.NotificationsManager.remoteNotificationsEnabled] Registering for remote notifications.
+250901 21:46:24.753 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:46:24.761 [INFO][606.AppDelegate.applicationDidBecomeActive] 
+250901 21:46:24.765 [INFO][606.AppDelegate.application] Did register for remote notifications and acquired a new device token.
+250901 21:46:24.768 [INFO][606.NotificationsManager.apnsToken] Setting up FCM with new APNS token.
+250901 21:46:24.769 [INFO][606.TunnelManager.loadDefaultManager] Loaded default manager
+250901 21:46:24.771 [INFO][606.NotificationsManager.messaging] FCM registration token: cu8DhvXhpEYpkQosQceS0s:APA91bHX5QpCakscCo1fq0G_DNSx7eR6UkNalvcXdmdYmC9RmyRW2A3XlopnZ_oZweHJxBEUv4aeet6OsZaJZcG1VS_HrPYqLTvEknXvn7qyMKPHb1vDaks
+250901 21:46:24.772 [INFO][606.NotificationsManager.fcmToken] Updated fcmToken from nil to Optional("cu8DhvXhpEYpkQosQceS0s:APA91bHX5QpCakscCo1fq0G_DNSx7eR6UkNalvcXdmdYmC9RmyRW2A3XlopnZ_oZweHJxBEUv4aeet6OsZaJZcG1VS_HrPYqLTvEknXvn7qyMKPHb1vDaks")
+250901 21:46:24.773 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:24.773 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 21:46:24.774 [INFO][606.WarpApi+Registration.patch] Started
+250901 21:46:24.775 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:46:24.775 [INFO][606.NotificationsManager.retrieveNewFCMToken] New FCM registration token: cu8DhvXhpEYpkQosQceS0s:APA91bHX5QpCakscCo1fq0G_DNSx7eR6UkNalvcXdmdYmC9RmyRW2A3XlopnZ_oZweHJxBEUv4aeet6OsZaJZcG1VS_HrPYqLTvEknXvn7qyMKPHb1vDaks
+250901 21:46:24.776 [INFO][606.TunnelManager.updateProxySettings] Proxy settings have not changed
+250901 21:46:25.834 [INFO][606.WarpApi+DevicePosture.getPostureRules] Ended
+250901 21:46:25.837 [INFO][606.WarpApi+DevicePosture.getPostureRules] Received Posture Rules from API. Body: {"success":true,"result":{}}
+250901 21:46:25.842 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_device_posture: Optional([])
+250901 21:46:26.096 [INFO][606.WarpApi+DevicePosture.getPostureRules] Ended
+250901 21:46:26.100 [INFO][606.WarpApi+DevicePosture.getPostureRules] Received Posture Rules from API. Body: {"success":true,"result":{}}
+250901 21:46:26.103 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_device_posture: Optional([])
+250901 21:46:26.999 [INFO][606.WarpApi+Registration.patch] Ended
+250901 21:46:29.733 [INFO][606.AppCoordinator.startInterface] Initialization timed out.
+250901 21:46:29.739 [INFO][606.UserDefaults.wrappedValue] Saved app_local_dark_theme: true
+250901 21:46:29.770 [INFO][606.UserDefaults.wrappedValue] Saved app_local_presented_onboarding: true
+250901 21:46:29.771 [INFO][606.AppCoordinator.didFinishOnboarding] Finished the onboarding and show the profile installation if needed.
+250901 21:46:29.773 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: disconnected
+250901 21:46:29.773 [INFO][606.TunnelManager.loadDefaultManager] Loaded default manager
+250901 21:46:29.775 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:46:29.776 [INFO][606.TunnelManager.updateProxySettings] Proxy settings have not changed
+250901 21:46:29.782 [INFO][606.AppCoordinator.presentMainView] Start and show the main screen
+250901 21:46:29.837 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:46:29.838 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetailsIfNeeded] Attempt to send device details to the server has started.
+250901 21:46:29.840 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_teams_correlation_id} is found.
+250901 21:46:29.844 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:29.845 [INFO][606.WarpApi+Registration.patch] Started
+250901 21:46:29.860 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:46:29.863 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:46:29.866 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:46:29.870 [INFO][606.ScreenName.logScreen] main
+250901 21:46:29.871 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:46:29.874 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:46:30.379 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:30.383 [INFO][606.WarpApi+Config.getWarpConfig] Started
+250901 21:46:30.386 [INFO][606.WarpApi+Config.getWarpConfig] New Config Request without alternate network
+250901 21:46:30.387 [INFO][606.WarpApi+Config.getWarpCommonConfig] Started
+250901 21:46:30.389 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 21:46:30.937 [INFO][606.WarpApi+Config.getWarpCommonConfig] Ended
+250901 21:46:31.113 [INFO][606.WarpApi+Registration.patch] Ended
+250901 21:46:31.116 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetails] Teams device details have been sent to the server.
+250901 21:46:31.270 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:46:31.448 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_raw_teams_config: Optional(_cloudflareoneagent.PolicyData(team: Optional("web4app"), displayName: nil, enable: nil, dnsMode: nil, dnsLogs: nil, familiesBlockType: nil, gatewayUniqueID: Optional("3c2d8a9226729b067992b8515d7c2a75"), nxFallbackIsEnabled: nil, disableOnCellular: nil, disableOnWiFi: nil, trustedWiFiNetworks: nil, serviceMode: nil, serviceModeV2: Optional(_cloudflareoneagent.ServiceModeApi(mode: Optional("warp"), port: nil)), supportURL: Optional(""), hidden: nil, onboarding: nil, exclude: Optional([_cloudflareoneagent.PolicyDataSplitItem(address: Optional("10.0.0.0/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("100.64.0.0/10"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("169.254.0.0/16"), host: nil, description: Optional("DHCP Unspecified")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("172.16.0.0/12"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.168.0.0/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("224.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("240.0.0.0/4"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("255.255.255.255/32"), host: nil, description: Optional("DHCP Broadcast")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fe80::/10"), host: nil, description: Optional("IPv6 Link Local")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fd00::/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff01::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff02::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff03::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff04::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff05::/16"), host: nil, description: nil)]), include: nil, fallbackDomains: Optional([_cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home.arpa", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "intranet", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "internal", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "private", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localdomain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "domain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "lan", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "host", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "corp", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "local", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localhost", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "invalid", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "test", description: nil, dnsServer: nil)]), autoConnect: Optional(0), switchLocked: Optional(false), alwaysOn: nil, accessClientId: nil, accessClientSecret: nil, accessClientCertificate: nil, allowModeSwitch: Optional(false), managedMode: false, allowLeave: Optional(true), endpointDoH: nil, endpointAPI: nil, endpointWarp: nil, uniqueId: nil, warpTunnelProtocol: Optional(Wireguard), postQuantumSupport: Optional(_cloudflareoneagent.PostQuantumSupport.disabled), dohOutsideTunnel: nil, enablePostQuantum: nil))
+250901 21:46:31.449 [INFO][606.TeamsConfigLoader.loadConfiguration] Loading the Teams configuration has started. Source: api
+250901 21:46:31.455 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_api_policy: Optional(_cloudflareoneagent.PolicyData(team: Optional("web4app"), displayName: nil, enable: nil, dnsMode: nil, dnsLogs: nil, familiesBlockType: nil, gatewayUniqueID: Optional("3c2d8a9226729b067992b8515d7c2a75"), nxFallbackIsEnabled: nil, disableOnCellular: nil, disableOnWiFi: nil, trustedWiFiNetworks: nil, serviceMode: nil, serviceModeV2: Optional(_cloudflareoneagent.ServiceModeApi(mode: Optional("warp"), port: nil)), supportURL: Optional(""), hidden: nil, onboarding: nil, exclude: Optional([_cloudflareoneagent.PolicyDataSplitItem(address: Optional("10.0.0.0/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("100.64.0.0/10"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("169.254.0.0/16"), host: nil, description: Optional("DHCP Unspecified")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("172.16.0.0/12"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.168.0.0/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("224.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("240.0.0.0/4"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("255.255.255.255/32"), host: nil, description: Optional("DHCP Broadcast")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fe80::/10"), host: nil, description: Optional("IPv6 Link Local")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fd00::/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff01::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff02::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff03::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff04::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff05::/16"), host: nil, description: nil)]), include: nil, fallbackDomains: Optional([_cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home.arpa", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "intranet", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "internal", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "private", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localdomain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "domain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "lan", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "host", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "corp", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "local", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localhost", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "invalid", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "test", description: nil, dnsServer: nil)]), autoConnect: Optional(0), switchLocked: Optional(false), alwaysOn: nil, accessClientId: nil, accessClientSecret: nil, accessClientCertificate: nil, allowModeSwitch: Optional(false), managedMode: false, allowLeave: Optional(true), endpointDoH: nil, endpointAPI: nil, endpointWarp: nil, uniqueId: nil, warpTunnelProtocol: Optional(Wireguard), postQuantumSupport: Optional(_cloudflareoneagent.PostQuantumSupport.disabled), dohOutsideTunnel: nil, enablePostQuantum: nil))
+250901 21:46:31.457 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_account_team_name_for_reauthentication: nil
+250901 21:46:31.459 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_switch_locked: Optional(false)
+250901 21:46:31.461 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_auto_connect: Optional(0)
+250901 21:46:31.462 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_switch_locked: Optional(false)
+250901 21:46:31.465 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_dns_log_is_enabled: ConfigManageableItem<Bool>(value: true, locked: true, visible: true)
+250901 21:46:31.469 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_nx_fallback_is_enabled: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.473 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_disable_on_cellular: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.473 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:46:31.475 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_disable_on_wifi: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.475 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:46:31.477 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_trusted_wifi_networks: ConfigManageableItem<Array<String>>(value: [], locked: true, visible: true)
+250901 21:46:31.477 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:46:31.480 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_enable_tunnel_on_start: ConfigManageableItem<Bool>(value: false, locked: false, visible: true)
+250901 21:46:31.488 [INFO][606.UserDefaults.wrappedValue] Saved app_local_account_team_name: ConfigManageableItem<Optional<String>>(value: Optional("web4app"), locked: true, visible: true)
+250901 21:46:31.489 [INFO][606.TeamsConfigLoader.loadConfiguration] Loading the Teams config has finished.
+250901 21:46:31.492 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_warp_api_invalid_state_error: nil
+250901 21:46:31.500 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_warp_configuration: Optional(_cloudflareoneagent.WarpConfiguration(timeStamp: 2025-09-01 21:46:31 +0000, interface: _cloudflareoneagent.Endpoint(v4: "172.16.0.2", v6: "2606:4700:cf1:1000::1", ports: nil), peers: [WARP service public key: bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=, endpoint: Endpoint(v4: "162.159.193.1:0", v6: "[2606:4700:100::a29f:c101]:0", ports: Optional([2408, 500, 1701, 4500]))], deniedIPv4: [_cloudflareoneagent.DeniedIPv4(address: "10.0.0.0", netmask: "255.0.0.0"), _cloudflareoneagent.DeniedIPv4(address: "100.64.0.0", netmask: "255.192.0.0"), _cloudflareoneagent.DeniedIPv4(address: "169.254.0.0", netmask: "255.255.0.0"), _cloudflareoneagent.DeniedIPv4(address: "172.16.0.0", netmask: "255.240.0.0"), _cloudflareoneagent.DeniedIPv4(address: "192.0.0.0", netmask: "255.255.255.0"), _cloudflareoneagent.DeniedIPv4(address: "192.168.0.0", netmask: "255.255.0.0"), _cloudflareoneagent.DeniedIPv4(address: "224.0.0.0", netmask: "255.255.255.0"), _cloudflareoneagent.DeniedIPv4(address: "240.0.0.0", netmask: "240.0.0.0"), _cloudflareoneagent.DeniedIPv4(address: "239.255.255.250", netmask: "255.255.255.255"), _cloudflareoneagent.DeniedIPv4(address: "255.255.255.255", netmask: "255.255.255.255"), _cloudflareoneagent.DeniedIPv4(address: "17.249.0.0", netmask: "255.255.0.0"), _cloudflareoneagent.DeniedIPv4(address: "17.252.0.0", netmask: "255.255.0.0"), _cloudflareoneagent.DeniedIPv4(address: "17.57.144.0", netmask: "255.255.252.0"), _cloudflareoneagent.DeniedIPv4(address: "17.188.128.0", netmask: "255.255.192.0"), _cloudflareoneagent.DeniedIPv4(address: "17.188.20.0", netmask: "255.255.254.0")], deniedIPv6: [_cloudflareoneagent.DeniedIPv6(address: "fe80::", prefix: 10), _cloudflareoneagent.DeniedIPv6(address: "fd00::", prefix: 8), _cloudflareoneagent.DeniedIPv6(address: "ff01::", prefix: 16), _cloudflareoneagent.DeniedIPv6(address: "ff02::", prefix: 16), _cloudflareoneagent.DeniedIPv6(address: "ff03::", prefix: 16), _cloudflareoneagent.DeniedIPv6(address: "ff04::", prefix: 16), _cloudflareoneagent.DeniedIPv6(address: "ff05::", prefix: 16), _cloudflareoneagent.DeniedIPv6(address: "fc00::", prefix: 7), _cloudflareoneagent.DeniedIPv6(address: "2620:149:a44::", prefix: 48), _cloudflareoneagent.DeniedIPv6(address: "2403:300:a42::", prefix: 48), _cloudflareoneagent.DeniedIPv6(address: "2403:300:a51::", prefix: 48), _cloudflareoneagent.DeniedIPv6(address: "2a01:b740:a42::", prefix: 48)], httpProxy: "172.16.0.1:2480", metrics: Optional(_cloudflareoneagent.MetricsConfiguration(traceroutes: [], pings: [])), alternateNetworks: nil))
+250901 21:46:31.503 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_user_account: Optional(_cloudflareoneagent.WarpAccount(id: "3c2d8a9226729b067992b8515d7c2a75", license: nil, accountType: _cloudflareoneagent.WarpAccountType.team, role: nil, created: nil, updated: nil, plusExpiresAt: nil, premiumData: nil, quota: nil, referralCount: nil, managed: Optional(_cloudflareoneagent.WarpAccount.Managed.notApiManaged)))
+250901 21:46:31.506 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_raw_teams_config: Optional(_cloudflareoneagent.PolicyData(team: Optional("web4app"), displayName: nil, enable: nil, dnsMode: nil, dnsLogs: nil, familiesBlockType: nil, gatewayUniqueID: Optional("3c2d8a9226729b067992b8515d7c2a75"), nxFallbackIsEnabled: nil, disableOnCellular: nil, disableOnWiFi: nil, trustedWiFiNetworks: nil, serviceMode: nil, serviceModeV2: Optional(_cloudflareoneagent.ServiceModeApi(mode: Optional("warp"), port: nil)), supportURL: Optional(""), hidden: nil, onboarding: nil, exclude: Optional([_cloudflareoneagent.PolicyDataSplitItem(address: Optional("10.0.0.0/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("100.64.0.0/10"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("169.254.0.0/16"), host: nil, description: Optional("DHCP Unspecified")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("172.16.0.0/12"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.168.0.0/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("224.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("240.0.0.0/4"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("255.255.255.255/32"), host: nil, description: Optional("DHCP Broadcast")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fe80::/10"), host: nil, description: Optional("IPv6 Link Local")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fd00::/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff01::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff02::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff03::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff04::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff05::/16"), host: nil, description: nil)]), include: nil, fallbackDomains: Optional([_cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home.arpa", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "intranet", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "internal", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "private", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localdomain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "domain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "lan", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "host", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "corp", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "local", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localhost", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "invalid", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "test", description: nil, dnsServer: nil)]), autoConnect: Optional(0), switchLocked: Optional(false), alwaysOn: nil, accessClientId: nil, accessClientSecret: nil, accessClientCertificate: nil, allowModeSwitch: Optional(false), managedMode: false, allowLeave: Optional(true), endpointDoH: nil, endpointAPI: nil, endpointWarp: nil, uniqueId: nil, warpTunnelProtocol: Optional(Wireguard), postQuantumSupport: Optional(_cloudflareoneagent.PostQuantumSupport.disabled), dohOutsideTunnel: nil, enablePostQuantum: nil))
+250901 21:46:31.507 [INFO][606.TeamsConfigLoader.loadConfiguration] Loading the Teams configuration has started. Source: api
+250901 21:46:31.512 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_api_policy: Optional(_cloudflareoneagent.PolicyData(team: Optional("web4app"), displayName: nil, enable: nil, dnsMode: nil, dnsLogs: nil, familiesBlockType: nil, gatewayUniqueID: Optional("3c2d8a9226729b067992b8515d7c2a75"), nxFallbackIsEnabled: nil, disableOnCellular: nil, disableOnWiFi: nil, trustedWiFiNetworks: nil, serviceMode: nil, serviceModeV2: Optional(_cloudflareoneagent.ServiceModeApi(mode: Optional("warp"), port: nil)), supportURL: Optional(""), hidden: nil, onboarding: nil, exclude: Optional([_cloudflareoneagent.PolicyDataSplitItem(address: Optional("10.0.0.0/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("100.64.0.0/10"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("169.254.0.0/16"), host: nil, description: Optional("DHCP Unspecified")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("172.16.0.0/12"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("192.168.0.0/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("224.0.0.0/24"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("240.0.0.0/4"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("255.255.255.255/32"), host: nil, description: Optional("DHCP Broadcast")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fe80::/10"), host: nil, description: Optional("IPv6 Link Local")), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("fd00::/8"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff01::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff02::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff03::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff04::/16"), host: nil, description: nil), _cloudflareoneagent.PolicyDataSplitItem(address: Optional("ff05::/16"), host: nil, description: nil)]), include: nil, fallbackDomains: Optional([_cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home.arpa", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "intranet", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "internal", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "private", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localdomain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "domain", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "lan", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "home", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "host", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "corp", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "local", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "localhost", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "invalid", description: nil, dnsServer: nil), _cloudflareoneagent.PolicyDataFallbackDomain(suffix: "test", description: nil, dnsServer: nil)]), autoConnect: Optional(0), switchLocked: Optional(false), alwaysOn: nil, accessClientId: nil, accessClientSecret: nil, accessClientCertificate: nil, allowModeSwitch: Optional(false), managedMode: false, allowLeave: Optional(true), endpointDoH: nil, endpointAPI: nil, endpointWarp: nil, uniqueId: nil, warpTunnelProtocol: Optional(Wireguard), postQuantumSupport: Optional(_cloudflareoneagent.PostQuantumSupport.disabled), dohOutsideTunnel: nil, enablePostQuantum: nil))
+250901 21:46:31.514 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_account_team_name_for_reauthentication: nil
+250901 21:46:31.515 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_switch_locked: Optional(false)
+250901 21:46:31.517 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_auto_connect: Optional(0)
+250901 21:46:31.518 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_teams_switch_locked: Optional(false)
+250901 21:46:31.520 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_dns_log_is_enabled: ConfigManageableItem<Bool>(value: true, locked: true, visible: true)
+250901 21:46:31.521 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_shared_nx_fallback_is_enabled: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.522 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_disable_on_cellular: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.523 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_disable_on_wifi: ConfigManageableItem<Bool>(value: false, locked: true, visible: true)
+250901 21:46:31.525 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_trusted_wifi_networks: ConfigManageableItem<Array<String>>(value: [], locked: true, visible: true)
+250901 21:46:31.526 [INFO][606.UserDefaults.wrappedValue] Saved web4app_app_local_enable_tunnel_on_start: ConfigManageableItem<Bool>(value: false, locked: false, visible: true)
+250901 21:46:31.528 [INFO][606.UserDefaults.wrappedValue] Saved app_local_account_team_name: ConfigManageableItem<Optional<String>>(value: Optional("web4app"), locked: true, visible: true)
+250901 21:46:31.529 [INFO][606.TeamsConfigLoader.loadConfiguration] Loading the Teams config has finished.
+250901 21:46:31.540 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:46:31.541 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:46:31.541 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 21:46:31.543 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:46:55.065 [INFO][606.AppDelegate.applicationWillResignActive] 
+250901 21:46:55.068 [INFO][606.AppDelegate.applicationDidEnterBackground] 
+250901 21:47:04.424 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 32.88166797161102 seconds.
+250901 21:47:04.427 [INFO][606.AppDelegate.applicationWillEnterForeground] 
+250901 21:47:04.430 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:04.432 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetailsIfNeeded] Attempt to send device details to the server has started.
+250901 21:47:04.436 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_teams_correlation_id} is found.
+250901 21:47:04.438 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetailsIfNeeded] Teams device details are up to date.
+250901 21:47:04.443 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:04.446 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:04.448 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:04.449 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 21:47:04.452 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:04.453 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:04.457 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:04.461 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:04.463 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:05.234 [INFO][606.AppDelegate.applicationDidBecomeActive] 
+250901 21:47:05.836 [INFO][606.TunnelManager.loadDefaultManager] Loaded default manager
+250901 21:47:05.839 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:47:05.840 [INFO][606.TunnelManager.updateProxySettings] Proxy settings have not changed
+250901 21:47:05.896 [INFO][606.TunnelManager.enable] Enabled
+250901 21:47:05.897 [INFO][606.TunnelManager.loadDefaultManager] Loaded default manager
+250901 21:47:05.898 [INFO][606.TunnelManager.enable] Starting VPN tunnel after enable action
+250901 21:47:05.903 [INFO][606.TunnelManager.enable] Enabled
+250901 21:47:05.904 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:05.905 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 21:47:05.912 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:05.921 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: disconnected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:05.927 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:05.938 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connecting
+250901 21:47:05.939 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connecting
+250901 21:47:05.939 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connecting
+250901 21:47:05.939 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connecting
+250901 21:47:05.941 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:05.943 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:47:05.943 [INFO][606.TunnelManager.updateProxySettings] Proxy settings have not changed
+250901 21:47:05.944 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:05.944 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connecting, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:05.944 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connecting, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:05.946 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:05.948 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:05.949 [INFO][606.TunnelManager.loadDefaultManager] Loaded default manager
+250901 21:47:05.950 [INFO][606.ServiceManager.vpnStatusDidChange] Loading dummy URL to force OS to restart the network extension process.
+250901 21:47:05.953 [INFO][606.TunnelManager.updateOnDemandRules] On demand rules updated: [
+    action = connect
+    interfaceTypeMatch = WiFi, 
+    action = connect
+    interfaceTypeMatch = cellular]
+250901 21:47:05.953 [INFO][606.TunnelManager.updateProxySettings] Proxy settings have not changed
+250901 21:47:06.886 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connecting, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:06.896 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:07.565 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connected
+250901 21:47:07.566 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connected
+250901 21:47:07.567 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connected
+250901 21:47:07.568 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connected
+250901 21:47:07.569 [INFO][606.ServiceManager.vpnStatusDidChange] ServiceManager - Tunnel status: connected
+250901 21:47:07.571 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:07.573 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"getTunnelStatus"}
+250901 21:47:07.579 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 21:47:07.580 [INFO][606.ConnectivityVerifier.checkNetworkConnectivity] Connectivity verifier: Connection verification has started.
+250901 21:47:07.581 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:07.582 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:07.583 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: unknown, service mode: WARP
+250901 21:47:07.585 [INFO][606.ConnectivityVerifier.performConnectivityCheckAttempt] Connectivity verifier: Taking attempt no 1
+250901 21:47:07.585 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:07.589 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:07.594 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:09.043 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 1.465570092201233 seconds.
+250901 21:47:09.044 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 21:47:09.046 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:09.052 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 3.147163987159729 seconds.
+250901 21:47:09.113 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 4.666025996208191 seconds.
+250901 21:47:11.984 [INFO][606.ScreenName.logScreen] settings
+250901 21:47:12.544 [INFO][606.ConnectivityVerifier.checkConnectivityInsideTunnel] Connectivity verifier: Response for cdn-cgi/trace request inside the tunnel: fl=984f71
+h=connectivity.cloudflareclient.com
+ip=2a09:bac5:4dd3:2696::3d8:47
+ts=1756763232.408
+visit_scheme=https
+uag=Cloudflare%20One/2508072143.1 CFNetwork/3860.100.1 Darwin/25.0.0
+colo=LHR
+sliver=none
+http=http/2
+loc=NG
+tls=TLSv1.3
+sni=plaintext
+warp=plus
+gateway=off
+rbi=off
+kex=X25519MLKEM768
+).
+250901 21:47:12.547 [INFO][606.AnalyticsEventLog.logEvent] connectivity_success
+250901 21:47:12.550 [INFO][606.ConnectivityVerifier.complete] Connectivity verifier: Verification inside the tunnel has succeeded.
+250901 21:47:12.552 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 21:47:12.559 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:12.571 [INFO][606.ConnectivityVerifier.finish] Connectivity verifier: Connection verification has finished
+250901 21:47:12.572 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 21:47:12.573 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 21:47:12.581 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:12.650 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 21:47:12.651 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 21:47:13.152 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 0.5765290260314941 seconds.
+250901 21:47:13.155 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 21:47:13.162 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 21:47:13.227 [INFO][606.ScreenName.logScreen] more_settings
+250901 21:47:15.209 [INFO][606.ScreenName.logScreen] device_posture
+250901 21:47:16.737 [INFO][606.AppDelegate.applicationWillResignActive] 
+250901 21:47:17.875 [INFO][606.AppDelegate.applicationDidEnterBackground] 
+250901 22:34:42.755 [INFO][606.AppDelegate.applicationWillEnterForeground] 
+250901 22:34:42.771 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 22:34:42.771 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetailsIfNeeded] Attempt to send device details to the server has started.
+250901 22:34:42.774 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_teams_correlation_id} is found.
+250901 22:34:42.777 [INFO][606.DeviceTeamsClientDetailsSender.sendDeviceDetailsIfNeeded] Teams device details are up to date.
+250901 22:34:42.781 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 22:34:42.781 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"getTunnelStatus"}
+250901 22:34:42.782 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:34:42.785 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 22:34:42.788 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 22:34:42.793 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 22:34:42.805 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 22:34:42.806 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 22:34:42.807 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 22:34:42.995 [INFO][606.AppDelegate.applicationDidBecomeActive] 
+250901 22:34:43.426 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 0.6183499097824097 seconds.
+250901 22:34:43.428 [INFO][606.MainViewModel.updateStatusAndInfo] Internet connection: true, tunnel connection status: connected, pause: none, trusted network: none, tunnel status: No captive portal, dns status: doh, service mode: WARP
+250901 22:34:43.437 [INFO][606.UserDefaults.wrappedValue] Saved app_local_admin_code_date: nil
+250901 22:34:44.614 [INFO][606.ScreenName.logScreen] settings
+250901 22:34:44.942 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:34:44.946 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 22:34:45.532 [INFO][606.ScreenName.logScreen] more_settings
+250901 22:34:46.535 [INFO][606.ScreenName.logScreen] settings
+250901 22:34:48.069 [INFO][606.ScreenName.logScreen] account
+250901 22:34:51.516 [INFO][606.ScreenName.logScreen] settings
+250901 22:34:51.628 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:34:51.631 [INFO][606.SupportVisibleProtocol.feedbackType] Feedback Button: Not valid (teams(type: _cloudflareoneagent.TeamsType.account))
+250901 22:34:52.212 [INFO][606.ScreenName.logScreen] more_settings
+250901 22:34:53.220 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:34:53.223 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:34:53.742 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:34:55.958 [INFO][606.ScreenName.logScreen] fallback_domains
+250901 22:36:24.778 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:32.804 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:32.807 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:33.347 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:36:34.862 [INFO][606.ScreenName.logScreen] split_tunnel_excluded
+250901 22:36:43.605 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:43.607 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:44.148 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:36:44.642 [INFO][606.WarpApi+OverlapIp.getVirtualNetworks] Started
+250901 22:36:44.657 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:44.659 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 22:36:45.214 [INFO][606.ScreenName.logScreen] overlapping_ip
+250901 22:36:46.057 [INFO][606.WarpApi+OverlapIp.getVirtualNetworks] Ended
+250901 22:36:47.333 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:47.335 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:47.857 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:36:49.155 [INFO][606.WarpApi+OverlapIp.getVirtualNetworks] Started
+250901 22:36:49.170 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:49.172 [INFO][606.WarpApi.apiEndpoint] Current base API URL: https://zero-trust-client.cloudflareclient.com/v0i2508072143
+250901 22:36:49.728 [INFO][606.ScreenName.logScreen] overlapping_ip
+250901 22:36:49.897 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:49.901 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:50.012 [INFO][606.WarpApi+OverlapIp.getVirtualNetworks] Ended
+250901 22:36:50.423 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:36:52.353 [INFO][606.ScreenName.logScreen] split_tunnel_excluded
+250901 22:36:53.668 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:53.669 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:36:54.204 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:36:55.126 [INFO][606.ScreenName.logScreen] dnsSettings
+250901 22:37:01.527 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:01.530 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:02.052 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:37:03.380 [INFO][606.ScreenName.logScreen] fallback_domains
+250901 22:37:05.611 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:05.613 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:06.153 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:37:09.063 [INFO][606.ScreenName.logScreen] fallback_domains
+250901 22:37:09.877 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:09.879 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:10.416 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:37:11.132 [INFO][606.ScreenName.logScreen] dnsSettings
+250901 22:37:11.497 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:11.499 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:12.024 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:37:13.237 [INFO][606.ScreenName.logScreen] more_settings
+250901 22:37:16.717 [INFO][606.ScreenName.logScreen] device_posture
+250901 22:37:24.851 [INFO][606.ScreenName.logScreen] more_settings
+250901 22:37:25.596 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:25.598 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:26.121 [INFO][606.ScreenName.logScreen] connection_options
+250901 22:37:26.932 [INFO][606.ScreenName.logScreen] more_settings
+250901 22:37:27.666 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 22:37:27.667 [INFO][606.DiagnosticsViewModel.fetchWarpStats] Fetching updated tunnel stats
+250901 22:37:27.668 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"getWarpStats"}
+250901 22:37:27.710 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:27.715 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:27.729 [INFO][606.DiagnosticsViewModel.fetchWarpStats] tunnel stats sent: 33266045 recieved: 255611832 handshake: Optional(2025-09-01 22:37:17 +0000)  rtt: 298 loss: 0.0
+250901 22:37:27.736 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:27.738 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:28.242 [INFO][606.ScreenName.logScreen] diagnostics
+250901 22:37:28.514 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 0.8448760509490967 seconds.
+250901 22:37:32.962 [INFO][606.ScreenName.logScreen] debug_configuration
+250901 22:37:34.602 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] Starting DNS TXT record query...
+250901 22:37:34.604 [INFO][606.DiagnosticsViewModel.fetchWarpStats] Fetching updated tunnel stats
+250901 22:37:34.607 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"getWarpStats"}
+250901 22:37:34.654 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:34.658 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:34.671 [INFO][606.DiagnosticsViewModel.fetchWarpStats] tunnel stats sent: 33283972 recieved: 255642150 handshake: Optional(2025-09-01 22:37:17 +0000)  rtt: 298 loss: 0.0
+250901 22:37:34.678 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:34.681 [INFO][606.Keychain.getKeychainData] Keychain item {web4app_app_shared_secret_configuration} is found.
+250901 22:37:35.185 [INFO][606.ScreenName.logScreen] diagnostics
+250901 22:37:35.213 [INFO][606.ServiceDNSStatusOperation.queryTXTRecord] DNS TXT record query completed in 0.6121610403060913 seconds.
+250901 22:37:40.281 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"flushExtensionLogs"}
+250901 22:37:40.934 [INFO][606.ScreenName.logScreen] console_logs
+250901 22:37:44.317 [INFO][606.TunnelManager.sendMessage] Sending message {"type":"flushExtensionLogs"}
+250901 22:37:46.076 [INFO][606.ScreenName.logScreen] console_log_details
+250901 22:39:24.484 [INFO][606.ScreenName.logScreen] console_logs
+250901 22:39:26.162 [INFO][606.ScreenName.logScreen] console_log_details
+250901 22:39:30.656 [INFO][606.ScreenName.logScreen] console_logs
+250901 22:39:31.654 [INFO][606.ScreenName.logScreen] console_log_details
+250901 22:39:33.840 [INFO][606.ScreenName.logScreen] console_logs
