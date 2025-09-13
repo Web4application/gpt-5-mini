@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     try {
       const response = await client.chat.completions.create({
-        model: "gpt-4o-mini", // or "gpt-5-mini" if available
+        model: "gpt-5-mini", // or "gpt-5a-mini" if available
         messages: [
           { role: "system", content: "You are a helpful, concise AI assistant." },
           { role: "user", content: message }
