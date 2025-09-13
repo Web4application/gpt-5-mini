@@ -1,0 +1,7 @@
+$ cog run python
+Building Docker image from cog.yaml...
+[...]
+Running 'python' in Docker with the current directory mounted as a volume...
+Python 3.12.6 (main, Sep  9 2024, 18:06:16) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
