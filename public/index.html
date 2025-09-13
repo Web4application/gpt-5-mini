@@ -4,15 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive." />
-  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot" />
   <title>GPT-5 mini</title>
-  <link rel="icon" href="/favicon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+  <link rel="icon" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
-  <header class="hero" role="banner">
+  <header class="hero">
     <img src="/logo.png" alt="GPT-5 mini logo" />
     <h1>Welcome to GPT-5 mini</h1>
     <p>Your AI companion for writing, learning, and productivity.</p>
@@ -20,26 +19,25 @@
   </header>
 
   <main id="chat">
-    <div class="controls" aria-hidden="false">
-      <button id="toggle-dark" type="button" aria-pressed="false">Toggle Dark Mode</button>
-      <button id="clear-chat" class="ghost" type="button">Clear Chat</button>
-      <button id="mic-button" class="ghost" type="button">🎤 Speak</button>
+    <div class="controls">
+      <button id="toggle-dark">Toggle Dark Mode</button>
+      <button id="clear-chat" class="ghost">Clear Chat</button>
+      <button id="mic-button" class="ghost">🎤 Speak</button>
     </div>
 
-    <section id="chat-wrapper" aria-labelledby="chat-heading">
-      <h2 id="chat-heading" style="text-align:center">See GPT-5 mini in Action</h2>
-      <div id="chat-container" aria-live="polite" aria-atomic="false">
-        <div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
-        <div id="typing-indicator" style="display:none; font-style: italic; margin: 10px;">AI is thinking<span class="dots"></span></div>
-        <form id="chat-form" class="input-row" aria-label="Chat form">
-          <label for="message" class="sr-only">Message</label>
-          <input id="message" name="message" type="text" autocomplete="off" placeholder="Type your message and press Enter" required />
+    <section id="chat-wrapper">
+      <h2 style="text-align:center">See GPT-5 mini in Action</h2>
+      <div id="chat-container">
+        <div id="messages"></div>
+        <div id="typing-indicator" style="display:none;">AI is thinking<span class="dots"></span></div>
+        <form id="chat-form" class="input-row">
+          <input id="message" name="message" type="text" placeholder="Type your message" required />
           <button id="send" type="submit">Send</button>
         </form>
       </div>
     </section>
 
-    <section class="testimonials" aria-hidden="false">
+    <section class="testimonials">
       <h3>Why People Love GPT-5 mini</h3>
       <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
       <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
