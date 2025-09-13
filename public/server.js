@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 
@@ -22,7 +22,7 @@ app.post("/chat", async (req, res) => {
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini", // or gpt-4o
+        model: "gpt-5-mini", // or gpt-5
         messages: [{ role: "user", content: message }],
         stream: true
       })
@@ -68,7 +68,7 @@ app.post("/chat", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Streaming server running on http://localhost:${PORT}`);
+  console.log(`✅ Streaming server running on redis://default:SNezMa2Q7GuhZP4bbAWN7oiUFjhPb2Xl@redis-16963.c82.us-east-1-2.ec2.redns.redis-cloud.com:16963`);
 });
     res.json({ reply });
 
