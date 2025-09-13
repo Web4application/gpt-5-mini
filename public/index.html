@@ -1,381 +1,56 @@
-<!DOCTYPE html>
-<html lang="en-US">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="ChatGPT5 mini helps you get answers, brainstorm, and be more productive. Free to use and easy to try." />
-  <meta property="og:title" content="ChatGPT5 mini" />
-  <meta property="og:description" content="Your AI companion for writing, learning, and productivity." />
-  <meta property="og:image" content="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" />
-  <meta property="og:url" content="https://gpt-5-mini-kbfq-nnppaf48l-web4apps.vercel.app/" />
-  <link rel="icon" href="favicon.png" sizes="32x32" />
-  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <title>ChatGPT5 mini</title>
-
-  <style>
-    :root {
-      --brand: #2575fc;
-      --brand-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
-      --bg: #ffffff;
-      --text: #222;
-      --surface: #f4f4f4;
-      --radius: 12px;
-    }
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-
-    /* Hero */
-    .hero {
-      text-align: center;
-      padding: 80px 20px;
-      background: var(--brand-gradient);
-      color: white;
-    }
-    .hero img {
-      height: 64px;
-      margin-bottom: 16px;
-    }
-    .hero h1 {
-      font-size: 2.5rem;
-      margin: 0 0 12px;
-    }
-    .hero p {
-      margin: 0 0 24px;
-      font-size: 1.2rem;
-    }
-    .cta-button {
-      background: white;
-      color: var(--brand);
-      padding: 14px 28px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    .cta-button:hover {
-      background: #f0f0f0;
-    }
-
-    /* Chat Section */
-    #chat-section {
-      padding: 60px 20px;
-      text-align: center;
-    }
-    #chat-container {
-      max-width: 700px;
-      margin: 0 auto;
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      height: 500px;
-    }
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-    .msg {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
-      max-width: 80%;
-    }
-    .msg.user { margin-left: auto; flex-direction: row-reverse; }
-    .msg.ai { margin-right: auto; }
-    .msg .bubble {
-      padding: 12px 16px;
-      border-radius: var(--radius);
-      line-height: 1.4;
-      background: #e0e0e0;
-      color: var(--text);
-      word-break: break-word;
-    }
-    .msg.user .bubble {
-      background: var(--brand);
-      color: white;
-    }
-    .msg .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      margin: 0 8px;
-      object-fit: cover;
-    }
-    #input-bar {
-      display: flex;
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    #input {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      outline: none;
-    }
-    #send {
-      background: var(--brand);
-      border: none;
-      color: white;
-      padding: 0 24px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    /* Testimonials */
-    .testimonials {
-      padding: 60px 20px;
-      background: #fafafa;
-      text-align: center;
-    }
-    .testimonials h2 {
-      margin-bottom: 20px;
-    }
-    .testimonials blockquote {
-      font-style: italic;
-      margin: 12px auto;
-      max-width: 600px;
-    }
-
-    /* Dark Mode */
-    .dark-mode {
-      --bg: #121212;
-      --text: #f0f0f0;
-      --surface: #1e1e1e;
-    }
-    .dark-mode .bubble { background: #333; color: #f0f0f0; }
-    .dark-toggle {
-      position: fixed;
-      top: 12px;
-      right: 12px;
-      background: var(--surface);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px;
-      background: #eee;
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      #chat-container { height: 400px; }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="ChatGPT5 mini helps you get answers, find inspiration and be more productive." />
+  <meta name="keywords" content="ChatGPT5 mini, AI assistant, productivity chatbot" />
+  <title>GPT-5 mini</title>
+  <link rel="icon" href="/favicon.png" sizes="32x32" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
-
 <body>
-  <button class="dark-toggle" onclick="document.body.classList.toggle('dark-mode')">🌙</button>
-
-  <!-- Hero -->
-  <section class="hero">
-    <img src="logo.png" alt="ChatGPT5 mini logo" />
-    <h1>ChatGPT5 mini</h1>
+  <header class="hero" role="banner">
+    <img src="/logo.png" alt="GPT-5 mini logo" />
+    <h1>Welcome to GPT-5 mini</h1>
     <p>Your AI companion for writing, learning, and productivity.</p>
-    <a href="#chat-section" class="cta-button">Try It Now</a>
-  </section>
+    <a class="cta-button" href="#chat">Try It Now</a>
+  </header>
 
-  <!-- Chat Section -->
-  <section id="chat-section">
-    <h2>See ChatGPT5 mini in Action</h2>
-    <div id="chat-container">
-      <div id="chat"></div>
-      <div id="input-bar">
-        <input id="input" type="text" placeholder="Type a message…" />
-        <button id="send">Send</button>
-      </div>
+  <main id="chat">
+    <div class="controls" aria-hidden="false">
+      <button id="toggle-dark" type="button" aria-pressed="false">Toggle Dark Mode</button>
+      <button id="clear-chat" class="ghost" type="button">Clear Chat</button>
+      <button id="mic-button" class="ghost" type="button">🎤 Speak</button>
     </div>
-  </section>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <h2>What People Say</h2>
-    <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
-    <blockquote>"Great for brainstorming before meetings." – Tunde</blockquote>
-  </section>
+    <section id="chat-wrapper" aria-labelledby="chat-heading">
+      <h2 id="chat-heading" style="text-align:center">See GPT-5 mini in Action</h2>
+      <div id="chat-container" aria-live="polite" aria-atomic="false">
+        <div id="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <div id="typing-indicator" style="display:none; font-style: italic; margin: 10px;">AI is thinking<span class="dots"></span></div>
+        <form id="chat-form" class="input-row" aria-label="Chat form">
+          <label for="message" class="sr-only">Message</label>
+          <input id="message" name="message" type="text" autocomplete="off" placeholder="Type your message and press Enter" required />
+          <button id="send" type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="testimonials" aria-hidden="false">
+      <h3>Why People Love GPT-5 mini</h3>
+      <blockquote>"Helped me write my resume in minutes!" – Ada</blockquote>
+      <blockquote>"Great for quick brainstorming before meetings." – Tunde</blockquote>
+    </section>
+  </main>
 
   <footer>
-    <p>© 2025 Web4 • ChatGPT5 mini</p>
-    <a href="https://github.com/Web4application/GPT5-mini" target="_blank">View Source on GitHub</a>
+    <p>We respect your privacy. No data is stored without your consent.</p>
+    <p><a href="https://github.com/Web4application/roupg" target="_blank" rel="noopener">View Source on GitHub</a></p>
   </footer>
 
-  <!-- Chat Logic -->
-  <script>
-    <script>
-const messagesEl = document.getElementById('messages');
-const form = document.getElementById('chat-form');
-const input = document.getElementById('message');
-const toggleDark = document.getElementById('toggle-dark');
-const clearBtn = document.getElementById('clear-chat');
-const micButton = document.getElementById('mic-button');
-
-// --- Utilities ---
-function appendMessage(text, cls) {
-  const div = document.createElement('div');
-  div.className = 'msg ' + cls;
-  div.textContent = text;
-  messagesEl.appendChild(div);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function updateLastAIStreaming(finalText, showDots = true) {
-  let last = messagesEl.lastElementChild;
-  if (!last || !last.classList.contains('ai')) {
-    last = document.createElement('div');
-    last.className = 'msg ai';
-    messagesEl.appendChild(last);
-  }
-  last.innerHTML = `
-    <span class="text-content">${finalText}</span>
-    ${showDots ? `<span class="typing">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </span>` : ''}
-  `;
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
-
-function clearMessages() {
-  messagesEl.innerHTML = '';
-  input.focus();
-  localStorage.removeItem("chatHistory");
-}
-
-// --- Persist chat history ---
-function saveHistory() {
-  const items = Array.from(messagesEl.querySelectorAll(".msg")).map(node => ({
-    role: node.classList.contains("user") ? "user" : "ai",
-    text: node.textContent
-  }));
-  localStorage.setItem("chatHistory", JSON.stringify(items));
-}
-
-function loadHistory() {
-  const raw = localStorage.getItem("chatHistory");
-  if (!raw) return;
-  try {
-    const items = JSON.parse(raw);
-    messagesEl.innerHTML = "";
-    items.forEach(m => appendMessage(m.text, m.role));
-  } catch {}
-}
-
-loadHistory();
-
-// --- UI controls ---
-toggleDark.addEventListener('click', () => {
-  const pressed = document.body.classList.toggle('dark-mode');
-  toggleDark.setAttribute('aria-pressed', String(pressed));
-});
-
-clearBtn.addEventListener('click', clearMessages);
-
-// --- Speech recognition ---
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SR();
-  recognition.onresult = (event) => {
-    input.value = event.results[0][0].transcript;
-    form.requestSubmit();
-  };
-  micButton.onclick = () => recognition.start();
-} else {
-  micButton.disabled = true;
-  micButton.title = "Speech recognition not supported in this browser.";
-}
-
-// --- Networking ---
-async function postChatMessage(text){
-  const res = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: text })
-  });
-  if (!res.ok) throw new Error('Network response was not ok');
-  const data = await res.json();
-  return data.reply || data.message || '';
-}
-
-// --- Human-like SSE streaming ---
-function streamChatMessage(text){
-  return new Promise(async (resolve, reject) => {
-    const url = '/api/stream?message=' + encodeURIComponent(text);
-    let finalText = '';
-    let es;
-    try { es = new EventSource(url); } 
-    catch (e) { return reject(e); }
-
-    // THINKING DELAY
-    await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
-
-    es.onmessage = async (evt) => {
-      if (!evt.data) return;
-
-      if (evt.data === '[END]') {
-        es.close();
-        const last = messagesEl.lastElementChild;
-        last?.querySelector('.typing')?.remove();
-        resolve(finalText);
-        return;
-      }
-
-      // Append each character dynamically
-      for (let char of evt.data) {
-        finalText += char;
-        updateLastAIStreaming(finalText);
-
-        const delay = (char === ' ' || char === ',' || char === '.') ? 10 : 35;
-        await new Promise(r => setTimeout(r, delay));
-      }
-      saveHistory();
-    };
-
-    es.onerror = (err) => { es.close(); reject(err); };
-  });
-}
-
-// --- Form handler ---
-form.addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const text = input.value.trim();
-  if (!text) return;
-
-  appendMessage(text, 'user');
-  saveHistory();
-  input.value = '';
-  input.disabled = true;
-
-  try {
-    await streamChatMessage(text);
-  } catch {
-    try {
-      const reply = await postChatMessage(text);
-      appendMessage(reply, 'ai');
-      saveHistory();
-    } catch {
-      appendMessage('Connection failed. Please try again.', 'ai');
-    }
-  } finally {
-    input.disabled = false;
-    input.focus();
-  }
-});
-
-// Save history on unload
-window.addEventListener('beforeunload', saveHistory);
-</script>
+  <script src="/gpt5mini.js"></script>
 </body>
 </html>
