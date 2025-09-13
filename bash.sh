@@ -1,5 +1,8 @@
 #!/bin/bash
 
+sudo curl -o /usr/local/bin/cog -L https://github.com/replicate/cog/releases/latest/download/cog_`uname -s`_`uname -m`
+sudo chmod +x /usr/local/bin/cog
+
 # Remove old folder if exists
 rm -rf ai_prediction_shiny
 rm -f ai_prediction_shiny.zip
