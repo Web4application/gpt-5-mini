@@ -84,196 +84,169 @@
     <p>We respect your privacy. No data is stored without your consent.</p>
     <p><a href="https://github.com/Web4application/roupg" target="_blank" rel="noopener">View Source on GitHub</a></p>
   </footer>
+<script>
+const messagesEl = document.getElementById('messages');
+const form = document.getElementById('chat-form');
+const input = document.getElementById('message');
+const toggleDark = document.getElementById('toggle-dark');
+const clearBtn = document.getElementById('clear-chat');
+const micButton = document.getElementById('mic-button');
 
-  <script>
-    const messagesEl = document.getElementById('messages');
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('message');
-    const toggleDark = document.getElementById('toggle-dark');
-    const clearBtn = document.getElementById('clear-chat');
-    const typingIndicator = document.getElementById('typing-indicator');
-    const micButton = document.getElementById('mic-button');
-
-    // --- Utilities ---
-    function appendMessage(text, cls) {
-      const div = document.createElement('div');
-      div.className = 'msg ' + cls;
-      div.textContent = text;
-      messagesEl.appendChild(div);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-    function updateLastAI(text) {
-      const last = messagesEl.lastElementChild;
-      if (last && last.classList.contains('ai')) {
-        last.textContent = text;
-      } else {
-        appendMessage(text, 'ai');
-      }
-    }
-    function clearMessages(){
-      messagesEl.innerHTML = '';
-      input.focus();
-      localStorage.removeItem("chatHistory");
-    }
-
-    // Persist chat history
-    function saveHistory() {
-      const items = Array.from(messagesEl.querySelectorAll(".msg")).map(node => ({
-        role: node.classList.contains("user") ? "user" : "ai",
-        text: node.textContent
-      }));
-      localStorage.setItem("chatHistory", JSON.stringify(items));
-    }
-    function loadHistory() {
-      const raw = localStorage.getItem("chatHistory");
-      if (!raw) return;
-      try {
-        const items = JSON.parse(raw);
-        messagesEl.innerHTML = "";
-        items.forEach(m => appendMessage(m.text, m.role));
-      } catch {}
-    }
-    loadHistory();
-
-    // --- UI controls ---
-    toggleDark.addEventListener('click', () => {
-      const pressed = document.body.classList.toggle('dark-mode');
-      toggleDark.setAttribute('aria-pressed', String(pressed));
-    });
-    clearBtn.addEventListener('click', clearMessages);
-
-    // --- Speech recognition (best-effort) ---
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SR();
-      recognition.onresult = (event) => {
-        input.value = event.results[0][0].transcript;
-        form.requestSubmit();
-      };
-      micButton.onclick = () => recognition.start();
-    } else {
-      micButton.disabled = true;
-      micButton.title = "Speech recognition not supported in this browser.";
-    }
-
-    // --- Networking ---
-    async function postChatMessage(text){
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
-      return data.reply || data.message || '';
-    }
-
-    function streamChatMessage(text){
-      return new Promise((resolve, reject) => {
-        const url = '/api/stream?message=' + encodeURIComponent(text);
-        let finalText = '';
-        let es;
-        try {
-          es = new EventSource(url);
-        } catch (e) {
-          return reject(e);
-        }
-        es.onmessage = (evt) => {
-          if (!evt.data) return;
-          if (evt.data === '[END]') {
-            es.close();
-            resolve(finalText);
-            return;
-          }
-          finalText += evt.data;
-          updateLastAI(finalText);
-          saveHistory();
-        };
-        es.onerror = (err) => {
-          es.close();
-          reject(err);
-        };
-      });
-    }
-
-    // --- Form handler ---
-    form.addEventListener('submit', async (ev) => {
-      ev.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
-      appendMessage(text, 'user');
-      saveHistory();
-      input.value = '';
-      input.disabled = true;
-      typingIndicator.style.display = 'block';
-      updateLastAI('...');
-
-      try {
-        // Try SSE streaming first
-        await streamChatMessage(text);
-      } catch (streamErr) {
-        // Fallback: POST
-        try {
-          const reply = await postChatMessage(text);
-          updateLastAI(reply);
-          saveHistory();
-        } catch (postErr) {
-          updateLastAI('connecting.');
-        }
-      } finally {
-        typingIndicator.style.display = 'none';
-        input.disabled = false;
-        input.focus();
-      }
-    });
-
-    // Save history on page unload
-    window.addEventListener('beforeunload', saveHistory);
-
-    const input = document.getElementById("user-input");
-const chatLog = document.getElementById("chat-log");
-const form = document.querySelector(".chat-form");
-
-// Append message to chat log
-function appendMessage(text, sender = "user") {
-  const msg = document.createElement("div");
-  msg.className = `message ${sender}`;
-  msg.textContent = text;
-  chatLog.appendChild(msg);
-  chatLog.scrollTop = chatLog.scrollHeight;
+// --- Utilities ---
+function appendMessage(text, cls) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + cls;
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-// Handle form submission
-async function handleSubmit(e) {
-  e.preventDefault();
-  const message = input.value.trim();
-  if (!message) return;
+function updateLastAIStreaming(finalText, showDots = true) {
+  let last = messagesEl.lastElementChild;
+  if (!last || !last.classList.contains('ai')) {
+    last = document.createElement('div');
+    last.className = 'msg ai';
+    messagesEl.appendChild(last);
+  }
+  last.innerHTML = `
+    <span class="text-content">${finalText}</span>
+    ${showDots ? `<span class="typing">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </span>` : ''}
+  `;
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
 
-  appendMessage(message, "user");
-  input.value = "";
+function clearMessages() {
+  messagesEl.innerHTML = '';
+  input.focus();
+  localStorage.removeItem("chatHistory");
+}
+
+// --- Persist chat history ---
+function saveHistory() {
+  const items = Array.from(messagesEl.querySelectorAll(".msg")).map(node => ({
+    role: node.classList.contains("user") ? "user" : "ai",
+    text: node.textContent
+  }));
+  localStorage.setItem("chatHistory", JSON.stringify(items));
+}
+
+function loadHistory() {
+  const raw = localStorage.getItem("chatHistory");
+  if (!raw) return;
+  try {
+    const items = JSON.parse(raw);
+    messagesEl.innerHTML = "";
+    items.forEach(m => appendMessage(m.text, m.role));
+  } catch {}
+}
+
+loadHistory();
+
+// --- UI controls ---
+toggleDark.addEventListener('click', () => {
+  const pressed = document.body.classList.toggle('dark-mode');
+  toggleDark.setAttribute('aria-pressed', String(pressed));
+});
+
+clearBtn.addEventListener('click', clearMessages);
+
+// --- Speech recognition ---
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SR();
+  recognition.onresult = (event) => {
+    input.value = event.results[0][0].transcript;
+    form.requestSubmit();
+  };
+  micButton.onclick = () => recognition.start();
+} else {
+  micButton.disabled = true;
+  micButton.title = "Speech recognition not supported in this browser.";
+}
+
+// --- Networking ---
+async function postChatMessage(text){
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: text })
+  });
+  if (!res.ok) throw new Error('Network response was not ok');
+  const data = await res.json();
+  return data.reply || data.message || '';
+}
+
+// --- Human-like SSE streaming ---
+function streamChatMessage(text){
+  return new Promise(async (resolve, reject) => {
+    const url = '/api/stream?message=' + encodeURIComponent(text);
+    let finalText = '';
+    let es;
+    try { es = new EventSource(url); } 
+    catch (e) { return reject(e); }
+
+    // THINKING DELAY
+    await new Promise(r => setTimeout(r, 400 + Math.random() * 600));
+
+    es.onmessage = async (evt) => {
+      if (!evt.data) return;
+
+      if (evt.data === '[END]') {
+        es.close();
+        const last = messagesEl.lastElementChild;
+        last?.querySelector('.typing')?.remove();
+        resolve(finalText);
+        return;
+      }
+
+      // Append each character dynamically
+      for (let char of evt.data) {
+        finalText += char;
+        updateLastAIStreaming(finalText);
+
+        const delay = (char === ' ' || char === ',' || char === '.') ? 10 : 35;
+        await new Promise(r => setTimeout(r, delay));
+      }
+      saveHistory();
+    };
+
+    es.onerror = (err) => { es.close(); reject(err); };
+  });
+}
+
+// --- Form handler ---
+form.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+
+  appendMessage(text, 'user');
+  saveHistory();
+  input.value = '';
+  input.disabled = true;
 
   try {
-    const res = await fetch("https://chat-gpt-web4-l7k6oqluq-web4era.vercel.app/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
-    });
-
-    const data = await res.json();
-    appendMessage(data.reply || "[No response]", "ai");
-  } catch (err) {
-    appendMessage("https://chatgpt.com/s/t_68afa5a00fd08191a0db24763a488f18", "https://gpt-5-mini-kbfq-ia50oxg4d-web4apps.vercel.app/");
-  }
-}
-
-// Event listeners
-form.addEventListener("submit", handleSubmit);
-input.addEventListener("keypress", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    handleSubmit(e);
+    await streamChatMessage(text);
+  } catch {
+    try {
+      const reply = await postChatMessage(text);
+      appendMessage(reply, 'ai');
+      saveHistory();
+    } catch {
+      appendMessage('Connection failed. Please try again.', 'ai');
+    }
+  } finally {
+    input.disabled = false;
+    input.focus();
   }
 });
-  </script>
+
+// Save history on unload
+window.addEventListener('beforeunload', saveHistory);
+</script>
 </body>
 </html>
