@@ -25,7 +25,7 @@ Usage
 4. Test:
    - POST:
      ```
-     curl -X POST -H "Content-Type: application/json" -d '{"message":"hello"}' http://localhost:3000/api/chat
+     curl -X POST -H "Content-Type: application/json" -d '{"message":"hello"}' http://localhost:8000/api/app
      ```
    - SSE (streaming chunks):
      ```
